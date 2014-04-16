@@ -21,7 +21,7 @@ public class FaxContact implements Serializable {
     @GeneratedValue
     int id;
     String faxNumber;
-
+    
     public FaxContact(String faxNumber) {
         this.faxNumber = faxNumber;
     }

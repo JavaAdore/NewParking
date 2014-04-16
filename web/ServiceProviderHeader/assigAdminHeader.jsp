@@ -28,14 +28,14 @@
                     <div class="12u" id="menu">
                         <nav class="mobileUI-site-nav">
                             <ul>
-                                <li ><a href="addadmin.jsp">Add Employee</a></li>
-                                <li><a href="removeadmin.jsp">Remove Employee</a></li>
-                                <li ><a href="addgarage.jsp">Add Garage</a></li>
-                                <li><a href="LoadAllGaragesInitializer?toPage=updategarageinfo.jsp">Update Garage Info</a></li>
+                                <li><a href="addadmin.jsp">Add Emp</a></li>
+                                <li ><a href="LoadAllEmployeesInitializer?toPage=removeadmin.jsp">Remove Emp</a></li>
+                                <li><a href="addgarage.jsp">Add Garage</a></li>
+                                <li><a href="LoadAllGaragesInitializer?toPage=updategarageinfo.jsp">Update Garage</a></li>
                                 <li><a href="drawgaragemap.jsp">Drawing Tool</a></li>
-                                <li  ><a href="LoadAllGaragesInitializer?toPage=removegarage.jsp">Remove Garage</a></li>
-                                <li class="current_page_item"><a href="AssignAdminHandler">Assign Employee To Garage</a></li>
-                                <li><a href="update.jsp">Update Employees Profiles</a></li>
+                                <li><a href="LoadAllGaragesInitializer?toPage=removegarage.jsp">Remove Garage</a></li>
+                                <li class="current_page_item"><a href="AssignAdminHandler">Assign Emp To Garage</a></li>
+                                <li><a href="LoadAllEmployeesInitializer?toPage=update.jsp">Update Profile</a></li>
                             </ul>
                         </nav>
                     </div>

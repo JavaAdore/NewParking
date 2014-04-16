@@ -37,10 +37,22 @@ public class Utils {
         garageDao = GarageImp.getInstance();
     }
 
-    public static Date totDate(String dateAsString) {
-        SimpleDateFormat formatedDate = new SimpleDateFormat("yyyy-MM-dd");
+//    public static Date totDate(String dateAsString) {
+//        SimpleDateFormat formatedDate = new SimpleDateFormat("yyyy-MM-dd");
+//        Date date;
+//        try {
+//            date = formatedDate.parse(dateAsString);
+//        } catch (ParseException ex) {
+//            return null;
+//        }
+//        return date;
+//    }
+    public static Date totDate(String dateAsString, String format) {
+        SimpleDateFormat formatedDate = new SimpleDateFormat(format);
         Date date;
         try {
+            formatedDate.setLenient(false);
+
             date = formatedDate.parse(dateAsString);
         } catch (ParseException ex) {
             return null;
@@ -117,15 +129,20 @@ public class Utils {
         return stringBuilder.toString();
     }
 
-    public static Date getMinDate(ArrayList<ReportsInterface> dailyhistoryRecord, ArrayList<ReportsInterface> monthlyHistoryRecord, ArrayList<ReportsInterface> yearlyHistoryRecord) {
+    public static Date[] extractMinMaxDate(ArrayList<ReportsInterface> dailyhistoryRecord, ArrayList<ReportsInterface> monthlyHistoryRecord, ArrayList<ReportsInterface> yearlyHistoryRecord) {
+        Date[] dates = new Date[2];
         if (yearlyHistoryRecord.size() > 0) {
-            return yearlyHistoryRecord.get(0).getRecordDate();
+            dates[0] = yearlyHistoryRecord.get(0).getRecordDate();
         } else if (monthlyHistoryRecord.size() > 0) {
-            return monthlyHistoryRecord.get(0).getRecordDate();
+            dates[0] = monthlyHistoryRecord.get(0).getRecordDate();
         } else if (dailyhistoryRecord.size() > 0) {
-            return dailyhistoryRecord.get(0).getRecordDate();
+            dates[0] = dailyhistoryRecord.get(0).getRecordDate();
+            dates[1] = dailyhistoryRecord.get(0).getRecordDate();
+        } else {
+            dates[0] = new Date();
+            dates[1] = new Date();
         }
-        return new Date();
+        return dates;
     }
 
     public static ArrayList< ReportsInterface> mergeHistoryReports(ArrayList<ArrayList<ReportsInterface>> merged) {
@@ -138,6 +155,26 @@ public class Utils {
             }
         }
         return result;
+    }
+
+    public static int olderThan(String birthdate) {
+
+        Date date = totDate(birthdate, "MM/dd/yyyy");
+        if (date == null) {
+            return Constants.IS_NOT_A_DATE;
+        }
+        if (!isDateBefore(date, Constants.MINIMUM_ACCEPTED_AGE, Constants.YEAR)) {
+            return Constants.VOLITILE_MINIMUM_ACCEPTED_AGE;
+        }
+        return Constants.SUCCESS;
+
+    }
+
+    public static void main(String[] args) {
+
+        int olderThan = olderThan("1/1/2011");
+        System.out.println(olderThan);
+
     }
 
     public String loadAllMapsAsList(String identifier) {
@@ -246,12 +283,6 @@ public class Utils {
     public void test() {
     }
 
-    public static void main(String[] args) {
-
-        toTime(new Date());
-
-    }
-
     public static JsonObject ConvertStepToJson(Step step) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("stepOrder", step.getId());
@@ -328,8 +359,8 @@ public class Utils {
         double hours = 0;
         double income = 0;
 
-        Date minDate = correctDates(totDate(from), totDate(to), "min");
-        Date maxDate = correctDates(totDate(from), totDate(to), "max");
+        Date minDate = correctDates(totDate(from, "MM/dd/yyyy"), totDate(to, "MM/dd/yyyy"), "min");
+        Date maxDate = correctDates(totDate(from, "MM/dd/yyyy"), totDate(to, "MM/dd/yyyy"), "max");
 
         for (ReportsInterface reportInterface : list) {
             if ((reportInterface.getRecordDate().after(minDate) || reportInterface.getRecordDate().equals(minDate)) && (reportInterface.getRecordDate().before(maxDate) || reportInterface.getRecordDate().equals(maxDate))) {
@@ -352,8 +383,8 @@ public class Utils {
 
         HashMap<GarageStatus, ReportHistoryRecord> result = new HashMap();
 
-        Date minDate = correctDates(totDate(from), totDate(to), "min");
-        Date maxDate = correctDates(totDate(from), totDate(to), "max");
+        Date minDate = correctDates(totDate(from, "MM/dd/yyyy"), totDate(to, "MM/dd/yyyy"), "min");
+        Date maxDate = correctDates(totDate(from, "MM/dd/yyyy"), totDate(to, "MM/dd/yyyy"), "max");
         int counter = 0;
         double hours = 0;
         double income = 0;
@@ -460,7 +491,10 @@ public class Utils {
         for (WrappedGarageSlotsStatus wrappedGarageSlotsStatus : result) {
             obj = new JSONObject();
             obj.put("slotId", wrappedGarageSlotsStatus.getSlotId());
+            obj.put("slotName", wrappedGarageSlotsStatus.getSlotName());
+
             obj.put("status", wrappedGarageSlotsStatus.getSlotStatus());
+
             obj.put("x", wrappedGarageSlotsStatus.getX());
             obj.put("y", wrappedGarageSlotsStatus.getY());
             list.add(obj);
@@ -503,9 +537,60 @@ public class Utils {
     public static String toTime(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy HH:mm:ss a");
         String time = sdf.format(date);
-        
+
         System.out.println(time);
         return time;
+    }
+
+    public static boolean isDateWithin(Date date) {
+        return new Date().after(date);
+
+    }
+
+    public static boolean isDateBefore(Date date, int number, String identifier) {
+
+        Calendar c = Calendar.getInstance();
+        switch (identifier) {
+            case Constants.DAY:
+                c.add(Calendar.DAY_OF_MONTH, -1 * number);
+                break;
+            case Constants.MONTH:
+                c.add(Calendar.MONTH, -1 * number);
+                break;
+            case Constants.YEAR:
+                c.add(Calendar.YEAR, -1 * number);
+                break;
+        }
+
+        return date.before(c.getTime());
+
+    }
+
+    public static CustomDate populateDate(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return new CustomDate(c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR));
+
+    }
+
+    public static String populateString(CustomDate customDate) {
+
+        return String.format("%d-%d-%d", customDate.getYear(), customDate.getMonth(), customDate.getDay());
+    }
+
+    public static int numberOfRoleHolders(List<Employees> employees) {
+        int counter = 0;
+        for (Employees emp : employees) {
+            if (!emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
+                counter++;
+            }
+        }
+        return counter;
+
+    }
+
+    public static double hoursBetween(Date date1, Date date2) {
+        return (date2.getTime() - date1.getTime()) / (1000 * 60 * 60);
     }
 
 }

@@ -7,6 +7,7 @@ package webservices;
 
 import DAOS.GarageImp;
 import DAOS.GarageSlotsStatusImp;
+import DAOS.UserImp;
 import java.util.ArrayList;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -17,6 +18,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import pojo.Garage;
+import pojo.Users;
 import utils.Utils;
 import utils.WrappedGarageSlotsStatus;
 
@@ -32,10 +35,21 @@ public class GarageOverView {
 
     @POST
     @Produces(MediaType.TEXT_PLAIN)
-    public String getGarageOverView(@FormParam(value = "id") String id) {
+    public String getGarageOverView(@FormParam(value = "garageId") final String gId, @FormParam(value = "userId") final String uId) {
 
-        if (id != null) {
-            int garageId = Integer.parseInt(id);
+        System.out.println("garage id = "+ gId + " userId= "+uId );
+        if (gId != null) {
+            final int garageId = Integer.parseInt(gId);
+            if (uId != null) {
+                final int userId = Integer.parseInt(uId);
+                new Thread() {
+                    @Override
+                    public void run() {
+                        UserImp.getInstance().addVisit(new Users(userId), new Garage(garageId));
+                    }
+                }.start();
+
+            }
             return Utils.prepareGarageOverView(garageId).toString();
         }
         return new JSONObject().toString();

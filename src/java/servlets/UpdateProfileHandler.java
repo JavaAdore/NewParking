@@ -1,6 +1,7 @@
 package servlets;
 
 import DAOS.EmployeesImp;
+import DAOS.GarageImp;
 import errors.ErrorMessage;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -8,50 +9,55 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import pojo.Employees;
+import pojo.Garage;
 import utils.EmployeeRole;
 import utils.EmployeeWrapper;
 import utils.Utils;
 
 public class UpdateProfileHandler extends HttpServlet {
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Utils.checkCurrentUserStatus(request);
         Utils.checkSession(request);
         EmployeeWrapper me = (EmployeeWrapper) request.getSession().getAttribute("emp");
         String email = request.getParameter("email");
-        
+
         String password = request.getParameter("password");
-        
-        EmployeesImp Dao = EmployeesImp.getInstance();
-        
-        Employees emp = Dao.getEmployee(email);
-        
+        String garage = request.getParameter("garage");
+        String isActive = request.getParameter("isActive");
+        ;
+
+        Employees emp = EmployeesImp.getInstance().getEmployee(email);
+
         if (emp != null) {
-            emp.setPassword(password);
-            
-            int result = Dao.updateEmployeeWithoutRetriving(emp);
+            int garageId = Integer.parseInt(garage);
+            if (emp.getGarage().getGarageId() != garageId) {
+                emp.setGarage(GarageImp.getInstance().getGarage(garageId));
+            }
+            emp.setActive(Integer.parseInt(isActive));
+            int result = EmployeesImp.getInstance().updateEmployeeWithoutRetriving(emp);
             switch (result) {
-                
+
                 case -1:
                     request.setAttribute("error", new ErrorMessage("Looks Like some error happend please contact adminstrator"));
                     break;
                 case 0:
                     request.setAttribute("error", new ErrorMessage("Data updated"));
-                    
+
                     break;
             }
         }
         switch (me.getRoles().getRoleName()) {
             case EmployeeRole.SERVICE_PROVIDER:
-                request.getRequestDispatcher("update.jsp").forward(request, response);
+                request.getRequestDispatcher("LoadAllEmployeesInitializer?toPage=update.jsp").forward(request, response);
                 break;
             case EmployeeRole.ADMIN:
-                request.getRequestDispatcher("editprofile.jsp").forward(request, response);
+                request.getRequestDispatcher("LoadAllEmployeesInitializer?toPage=editprofile.jsp").forward(request, response);
                 break;
-            
+
         }
-        
+
     }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

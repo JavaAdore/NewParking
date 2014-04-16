@@ -96,6 +96,22 @@
         <servlet-name>EditGarageInitializer</servlet-name>
         <servlet-class>servlets.EditGarageInitializer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdateGarageHandler</servlet-name>
+        <servlet-class>servlets.UpdateGarageHandler</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadAllEmployeesInitializer</servlet-name>
+        <servlet-class>servlets.LoadAllEmployeesInitializer</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ValidateDate</servlet-name>
+        <servlet-class>ajax.ValidateDate</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InitializeEmployee</servlet-name>
+        <servlet-class>servlets.InitializeEmployee</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -187,6 +203,22 @@
     <servlet-mapping>
         <servlet-name>EditGarageInitializer</servlet-name>
         <url-pattern>/EditGarageInitializer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateGarageHandler</servlet-name>
+        <url-pattern>/UpdateGarageHandler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadAllEmployeesInitializer</servlet-name>
+        <url-pattern>/LoadAllEmployeesInitializer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ValidateDate</servlet-name>
+        <url-pattern>/ValidateDate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InitializeEmployee</servlet-name>
+        <url-pattern>/InitializeEmployee</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

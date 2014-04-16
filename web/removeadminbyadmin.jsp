@@ -25,6 +25,18 @@
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
+        <script>
+           function submitMethod()
+            {
+                
+                    if( areYouSure('#adminInfo','Are you sure that you want to delete ?'))
+                    {   
+                        
+                        $('#removeadminform').submit();
+                        
+                    }
+            }
+            </script>
     </head><body class="column1">
         <jsp:include page="adminHeaders\removeemployee.jsp"/>
         <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -34,7 +46,7 @@
                 <div id="page-bgbtm">
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
-                            <form method="post" action="RemoveAdminServlet" id="removeadminform" onsubmit= "return areYouSure('#adminInfo', 'Are you sure that you want to delete ?')">
+                            <form method="post" action="RemoveAdminServlet" id="removeadminform">
 
 
                                 <select  id='adminInfo' name='adminInfo'>
@@ -51,7 +63,7 @@
 
 
 
-                                <input type="submit" value="Delete Employee" />
+                                <input type="button" id="myButton3" value="Delete Employee" onclick="submitMethod()" />
 
                             </form>
                             <center> <c:out value="${error.getErrorBody()}"/></center>

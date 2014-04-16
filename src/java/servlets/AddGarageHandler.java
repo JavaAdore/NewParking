@@ -33,6 +33,7 @@ public class AddGarageHandler extends HttpServlet {
     private String theNameOfTheFile;
     private String fileExtention;
     String MapUrl = "";
+    double lon, lat;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, FileUploadException, Exception {
@@ -85,7 +86,7 @@ public class AddGarageHandler extends HttpServlet {
             } else {
                 out.print(fi.getFieldName() + " " + fi.getString());
                 parameterNames.add(fi.getFieldName());
-                parameterValues.add(fi.getString());
+                parameterValues.add(fi.getString().trim());
             }
         }
         int result = save();
@@ -99,7 +100,7 @@ public class AddGarageHandler extends HttpServlet {
                 request.getRequestDispatcher("addgarage.jsp").forward(request, response);
                 break;
             case 0:
-                file.renameTo(new File(jspFilePath + MapUrl));
+                file.renameTo(new File(jspFilePath + String.format("%s,%s.%s", lat, lon, FilenameUtils.getExtension(file.getName()))));
                 request.setAttribute("error", new ErrorMessage("Garage added"));
                 request.getRequestDispatcher("addgarage.jsp").forward(request, response);
                 break;
@@ -136,13 +137,13 @@ public class AddGarageHandler extends HttpServlet {
 
         String unit = parameterValues.get(6);
 
-        double lon = Double.parseDouble(parameterValues.get(7));
+        lat = Double.parseDouble(parameterValues.get(7));
+        lon = Double.parseDouble(parameterValues.get(8));
 
-        double lat = Double.parseDouble(parameterValues.get(8));
-        MapUrl = parameterValues.get(0) + "." + FilenameUtils.getExtension(file.getName());
+        MapUrl = String.format("%s,%s.%s", lat, lon, FilenameUtils.getExtension(file.getName()));
 
         Address address = new AddressConverter().getAddress(lat, lon);
-        
+
         g.setHourRateInRush(hourRateInRushHours);
         g.setHourRateOutOfRush(hourRateoutofRushHours);
         g.setLat(lat);

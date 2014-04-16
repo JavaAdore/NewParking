@@ -39,7 +39,7 @@ public class GarageSlotsStatusImp {
         try {
 
             GarageSlotsStatusSession.beginTransaction();
-            Query q = GarageSlotsStatusSession.createSQLQuery("select slotId , status , x , y from  GarageStatus where Garage_GarageId = ?");
+            Query q = GarageSlotsStatusSession.createSQLQuery("select slotId , status , x , y  ,  slotName from  GarageStatus where Garage_GarageId = ?");
             q.setInteger(0, garageId);
             List<Object[]> result = (List<Object[]>) q.list();
             for (Object[] obj : result) {
@@ -47,8 +47,8 @@ public class GarageSlotsStatusImp {
                 int status = new Integer(obj[1] + "");
                 int x = new Integer(obj[2] + "");
                 int y = new Integer(obj[3] + "");
-
-                output.add(new WrappedGarageSlotsStatus(slotId, status, x, y));
+                String slotName = new String(obj[4] + "");
+                output.add(new WrappedGarageSlotsStatus(slotId, slotName, status, x, y));
             }
 
         } catch (Exception ex) {
@@ -64,9 +64,5 @@ public class GarageSlotsStatusImp {
         return (GarageStatus) GarageSlotsStatusSession.get(GarageStatus.class, slotId);
 
     }
-    
-    
 
-    
-       
 }

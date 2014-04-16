@@ -12,13 +12,13 @@ package mobilegsons;
 public class visitHistory {
 
     String garageName;
-    int numberOfVisits;
+    String numberOfVisits;
     String lastVisitTime;
 
     public visitHistory() {
     }
 
-    public visitHistory(String garageName, int numberOfVisits, String lastVisitTime) {
+    public visitHistory(String garageName, String numberOfVisits, String lastVisitTime) {
         this.garageName = garageName;
         this.numberOfVisits = numberOfVisits;
         this.lastVisitTime = lastVisitTime;

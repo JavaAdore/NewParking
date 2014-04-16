@@ -1,6 +1,5 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="ServiceProviderHeader/removeAdminHeader.jsp"/>
 <%@page import= "utils.EmployeeWrapper" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -61,18 +60,27 @@
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
                             <form id="deleteAdminForm" method="post" action="RemoveAdminServlet"   >
-                                <table align="center">
+                                <table>
                                     <tr>
                                         <td>Choose Employee email: </td>
                                         <td>
                                             <select name="adminInfo"  id="adminInfo">
-                                                <%= admins%>             
+                                                <c:forEach items="${allEmployees}" var="employee">
+                                                    
+                                                        <c:if test="${employee.getRoles().getRoleId()!=1}" >
+                                                            <option value="${employee.getEmployeeId()}">(${employee.getFirstName()} ${employee.getLastName()}) ${employee.getEmail()} </option>
+                                                        </c:if>
+                                                   
+                                                </c:forEach>    
+                                                <c:if test="${numberOfEmployees==0}">
+                                                    <option value="-1">Currently there is no Employees</option>
+                                                </c:if>
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <button  type="button"  onclick="submitMethod()" >Delete</button>
+                                            <input type="button"  id="myButton4" onclick="submitMethod()" value="Delete"/>
                                         </td>
                                     </tr>
                                 </table>

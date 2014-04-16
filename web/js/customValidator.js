@@ -94,14 +94,29 @@ function areTheSame(firstField, secondField, errorField)
 
 function isAdate(dateField, dateError)
 {
-    var regex = /^\d{4}-\d{1,2}-\d{1,2}$/
-    if (regex.test($(dateField).val()))
+    var matches = /^(\d{2})[-\/](\d{2})[-\/](\d{4})$/.exec($(dateField).val());
+
+
+    if (matches == null)
     {
-        $(dateError).html("");
-        return true;
+        $(dateError).html("Please enter valid date like 31-12-1990 ");
+        return false;
     }
-    $(dateError).html("Please enter valid date like 31-12-1990 ");
-    return false;
+    $(dateError).html("");
+
+    $.ajax(
+            {url: "ValidateDate", async: false, data: 'birthdate=' + $(dateField).val(), success: function(result)
+                {
+                    $(dateError).html(result);
+
+
+
+                }
+            });
+
+
+
+    return true;
 
 
 }
@@ -130,7 +145,7 @@ function isEmailAvailable(email, feedback)
 
 function isAnumber(fieldId, feedback, min, max)
 {
-    if (!(isNaN($(fieldId).val()))||$(fieldId).val().length==0)
+    if (!(isNaN($(fieldId).val())) && $(fieldId).val().length != 0)
     {
         if ($(fieldId).val() >= min && $(fieldId).val() <= max)
         {
@@ -162,7 +177,7 @@ function isImage(fileId, fileError)
                 return true;
             }
         }
-       
+
     }
     $(fileError).html("Please choose an image to upload as garage map");
     return false;
@@ -193,3 +208,79 @@ function isGarageNameAvailable(garage, feedback)
     }
 }
 
+function isTextWithSpace(fieldId, fieldError)
+{
+    if ($(fieldId).val() != null)
+    {
+        var regex = /^[A-Za-z\d\s]+$/
+
+        if (regex.test($(fieldId).val()) && $(fieldId).val().length < 25)
+        {
+            $(fieldError).html("");
+
+            return true;
+        }
+        else
+            $(fieldError).html("Please enter this field maximum charactes are (25)");
+
+        return false;
+    }
+
+}
+
+function isImageAcceptNull(fileId, fileError)
+{
+    var fileName;
+    alert($(fileId).val());
+
+
+    fileName = $(fileId).val();
+    if (fileName.length !== 0)
+    {
+        var acceptedExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+        extension = fileName.substring(fileName.indexOf('.'), fileName.length);
+        for (i = 0; i < acceptedExtensions.length; i++)
+        {
+
+            if (extension.toLowerCase() == acceptedExtensions[i].toLowerCase())
+            {
+                $(fileError).html("");
+
+                return true;
+            } else
+            {
+                $(fileError).html("Please choose an image to upload as garage map");
+
+            }
+        }
+
+    } else {
+        $(fileError).html("");
+        return true;
+    }
+    return true;
+}
+
+
+function isPassword(password, error)
+{
+
+
+
+    if ($(password).val() != null)
+    {
+        var regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/
+        if (!$(password).val().match(regex))
+        {
+            $(error).html("password should be 6 characters containing at least one number, one lowercase and one uppercase letter ");
+            return false;
+        }
+        else {
+            $(error).html("");
+
+        }
+        return true;
+    }
+
+
+}

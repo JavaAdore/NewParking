@@ -17,10 +17,14 @@
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
+        <script src="js/customValidator.js"></script>
         <script type="text/javascript">
             function submitMethod()
             {
-                $('#updateProfileForm').submit();
+                if (areTheSame('#password', '#confirmPassword', '#confirmPasswordError'))
+                {
+                    $('#updateProfileForm').submit();
+                }
             }
         </script>
     </head><body>
@@ -41,12 +45,15 @@
                                             <td><input name="email" type="email" required readonly value ='${emp.getEmail()}'/> </td>
                                         </tr>
                                         <tr>
-                                            <td>New Password:</td>
-                                            <td><input name="password" type="password" required  /> </td>
+                                            <td>Password:</td>
+                                            <td><input id="password" name="password" type="password" onblur="validateLength('password', 'passwordError');
+                                                    areTheSame('#password', '#confirmPassword', '#confirmPasswordError')" /> </td>
+                                            <td><span id="passwordError"></span></td>
                                         </tr>
                                         <tr>
-                                            <td>Confirm New Password:</td>
-                                            <td><input name="confirmPassword" type="password" required /> </td>
+                                            <td>Confirm Password:</td>
+                                            <td><input id="confirmPassword" name="confirmPassword" type="password" onblur="areTheSame('#password', '#confirmPassword', '#confirmPasswordError')"/> </td>
+                                            <td><span id="confirmPasswordError"></span></td>
                                         </tr>
                                         <tr>
 

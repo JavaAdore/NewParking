@@ -6,6 +6,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="utils.Utils"%>
+<jsp:include page="ServiceProviderHeader\addGarageHeader.jsp"/>
 
 <html>
     <head>
@@ -21,15 +22,18 @@
         <link rel="stylesheet" href="css/style.css" />
         <link rel="stylesheet" href="css/style-desktop.css" />
         </noscript>
-        <noscript>
-        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
-        </noscript> 
+        <noscript>i
+        <meta http-equiv="refresh" content="0;  url=enablejavascript.jsp"/>
+        </noscript>
         <script src="css/5grid/jquery.js"></script>
         <!--        <script src="js/theMap.js"></script>-->
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none">
 
         </script>
         <script src="js/customValidator.js"></script>
+
+
+
         <style>
 
             span
@@ -215,7 +219,7 @@
 //                isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000);
 //                isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000);
 //                isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000);
-                if (isGarageNameAvailable('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000) && isImage('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 3000) && isAnumber('#height', '#heightError', 0, 3000) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
+                if (isTextWithSpace('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000) && isImage('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 99999) && isAnumber('#height', '#heightError', 0, 99999) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
                 {
                     if (map.getMapTypeId() == "satellite")
                     {
@@ -260,7 +264,6 @@
     <body class = "column2" >
 
 
-        <jsp:include page="ServiceProviderHeader\addGarageHeader.jsp"/>
         <div id = "page-wrapper" >
             <div id = "page-bgtop" >
                 <div id = "page-bgbtm" >
@@ -279,10 +282,6 @@
 
                                 <form action = "AddGarageHandler" method = "POST" id = "addGarageForm" enctype = "multipart/form-data" >
                                     <table >
-
-
-
-
                                         <tr >
                                             <th colspan = "2" >
                                                 <c:out value="${error.getErrorBody()}"/>
@@ -294,7 +293,7 @@
                                         </tr>
                                         <tr >
                                             <td > Garage Title </td>
-                                            <td > <input id="garageTitle" required  type = "text" name = "title" onblur="isGarageNameAvailable('#garageTitle', '#garageTitleError')" /> </td>
+                                            <td > <input id="garageTitle" required  type = "text" name = "title" onblur="isTextWithSpace('#garageTitle', '#garageTitleError')" /> </td>
                                             <td>  <span id="garageTitleError" > </span></td>
 
                                         </tr>
@@ -302,19 +301,19 @@
 
                                         <tr >
                                             <td > Hour rate in rush hours </td>
-                                            <td > <input id="hourRateInRushHours" required type = "number" value="1" name = "hourRateInRushHours"  value = "1" min = "1" onblur="isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000)"/> </td>
+                                            <td > <input id="hourRateInRushHours" required type = "text" name = "hourRateInRushHours"  value = "1"  onblur="isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000)"/> </td>
                                             <td>  <span id="hourRateInRushHoursError" > </span></td>
                                         </tr>
                                         <tr >
                                             <td > Hour rate out of  rush hours </td>
-                                            <td > <input id="hourRateOutOfRushHours" required type = "number" value = "1" name = "hourRateOutOfRushHours"  value = "1" min = "1" readonly onblur="isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000)" /> </td>
+                                            <td > <input id="hourRateOutOfRushHours" required type = "text"  name = "hourRateOutOfRushHours"  value ="1" readonly onblur="isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000)" /> </td>
                                             <td>  <span id="hourRateOutOfRushHoursError" > </span></td>
 
                                         </tr>
                                         <tr>
                                             <td > Map </td>
                                             <td >
-                                                <input type = "file" name = "file" id="file" required onchange="isImage('#file', '#fileError')" required />
+                                                <input type = "file" name = "file" id="file" required onchange="isImage('#file', '#fileError')" />
 
                                             </td>
                                             <td>
@@ -332,7 +331,7 @@
                                         <tr >
                                             <td > width </td>
                                             <td >
-                                                <input id="width" required type = "text" name = "width" value="1" onblur="isAnumber('#width', '#widthError', 0, 3000)"/>
+                                                <input id="width" required type = "text" name = "width" value="1" onblur="isAnumber('#width', '#widthError', 0, 99999)"/>
                                             </td>
                                             <td>
                                                 <span id="widthError"></span>
@@ -341,7 +340,7 @@
                                         <tr >
                                             <td > Height </td>
                                             <td >
-                                                <input id="height" type = "text" required name = "height" value="1" onblur="isAnumber('#height', '#heightError', 0, 3000)"/>
+                                                <input id="height" type = "text" required name = "height" value="1" onblur="isAnumber('#height', '#heightError', 0, 99999)"/>
                                             </td>
                                             <td> <span id="heightError"> </span></td>
                                         </tr>
@@ -370,7 +369,7 @@
 
                                         <tr >
                                             <td > <input type = "button" value = "Add" id = "myButton1" onclick = "submitMethod()" /> </td>
-                                            <td > <input type = "reset" value = "Cancel" id = "myButton2" /> </td>
+<!--                                            <td > <input type = "reset" value = "Cancel" id = "myButton2" /> </td>-->
                                         </tr>
 
                                     </table>

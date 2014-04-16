@@ -41,11 +41,11 @@
                 if ($(object).attr('checked'))
                 {
 
-                    enabled = 1;
+                    enabled = 0;
                 } else
                 {
 
-                    enabled = 0;
+                    enabled = 1;
                 }
 
                 $.ajax(

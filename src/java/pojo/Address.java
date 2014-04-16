@@ -6,6 +6,7 @@
 package pojo;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,7 +24,7 @@ public class Address implements Serializable {
     int id;
     String country;
     String city;
-    @OneToOne
+    @OneToOne(orphanRemoval = true , mappedBy = "address")
     Garage garage;
 
     public Garage getGarage() {

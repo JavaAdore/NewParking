@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -7,14 +8,29 @@ package DAOS;
 import Sessions.ConnectionHandler;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import pojo.Address;
+import pojo.ContactNumber;
+import pojo.DeleteEmployeeSchedule;
+import pojo.DeleteGarageSchedule;
+import pojo.EmailAddress;
+import pojo.FaxContact;
+import pojo.Feedback;
 import pojo.Garage;
+import pojo.GarageDoors;
+import pojo.GarageStatus;
 import pojo.Map;
+import pojo.Users;
+import utils.Constants;
 import utils.CoordinateHelper;
 import utils.GeoLocation;
+import utils.Regex;
+import utils.Utils;
 import utils.WrappedGarage;
 
 /**
@@ -63,24 +79,20 @@ public class GarageImp implements GarageDAO {
 
     }
 
-    public int deleteGarage(int garageId) {
+    public int deleteGarage(int garageId) 
+    {
         int result = 0;
         try {
+            garageSession.beginTransaction();
             Garage garage = (Garage) garageSession.get(Garage.class, garageId);
-            if (garage == null) {
-                result = -2;
-            } else {
-                if (garage.getGarageDoors().size() > 0) {
-                    Query q = garageSession.createQuery("delete from GarageSlotsDoors where doorId in :garageDoors");
-                    q.setParameterList("garageDoors", garage.getGarageDoors());
-                    q.executeUpdate();
-                }
-                garageSession.beginTransaction();
-//                garageSession.delete(garage.getMap());
+            if (garage != null) {
                 garageSession.delete(garage);
+                deleteFromDeletePlan(garageId);
+                System.out.println(String.format("dear mahmoud kindly be informed that garage %s has been deleted", garageId));
 
-                garageSession.getTransaction().commit();
             }
+            garageSession.getTransaction().commit();
+
         } catch (Exception ex) {
             ex.printStackTrace();
             result = -1;
@@ -93,19 +105,16 @@ public class GarageImp implements GarageDAO {
     public int addGarage(Map map, Garage garage, Address address) {
         int result = 0;
         try {
-            if (getGarage(garage.getTitle()) != null) {
-                return -2;
-            }
+//            if (getGarage(garage.getTitle()) != null) {
+//                return -2;
+//            }
 
             garageSession.beginTransaction();
-
             garageSession.persist(map);
             garageSession.persist(address);
-
-            garage.setAddress(address);
             garageSession.persist(garage);
-            map.setGarage(garage);
-
+            garage.setMap(map);
+            garage.setAddress(address);
             garageSession.getTransaction().commit();
 
         } catch (Exception ex) {
@@ -146,7 +155,18 @@ public class GarageImp implements GarageDAO {
 
     public static void main(String[] args) {
 
-        GarageImp.getInstance().deleteGarage(1);
+        GarageImp.getInstance().myFunction();
+
+    }
+
+    public void myFunction() {
+
+    }
+
+    public void add(Object obj) {
+        garageSession.beginTransaction();
+        garageSession.persist(obj);
+        garageSession.getTransaction().commit();
 
     }
 
@@ -166,7 +186,7 @@ public class GarageImp implements GarageDAO {
         double maxLat = coordinateHelper.getMaxLat();
         ArrayList<WrappedGarage> output = new ArrayList<WrappedGarage>();
         try {
-            Query q = garageSession.createSQLQuery(" select Garage.title , sum(GarageStatus.status), count(GarageStatus.status) ,Garage.Lat , Garage.Lon     from Garage , GarageStatus   where  Garage.lon>=? and Garage.lon<=? and Garage.lat >= ? and Garage.lat <= ? and Garage.garageid =  GarageStatus.garage_garageid  group by Garage.title ,Garage.slots , Garage.Lat ,Garage.lon  ");
+            Query q = garageSession.createSQLQuery(" select Garage.title , sum(GarageStatus.status), count(GarageStatus.status) ,Garage.Lat , Garage.Lon     from Garage , GarageStatus   where  Garage.lon>=? and Garage.lon<=? and Garage.lat >= ? and Garage.lat <= ? and Garage.garageid =  GarageStatus.garage_garageid  group by Garage.garageId ,Garage.title  , Garage.Lat ,Garage.lon  ");
             q.setDouble(0, coordinateHelper.getMinLon());
             q.setDouble(1, coordinateHelper.getMaxLon());
             q.setDouble(2, coordinateHelper.getMinLat());
@@ -229,8 +249,111 @@ public class GarageImp implements GarageDAO {
             garageSession.persist(garage);
             garageSession.getTransaction().commit();
         } catch (Exception ex) {
+            ex.printStackTrace();
             return -1;
         }
         return 0;
     }
+
+    public int addContact(int garageId, String contact, String type) {
+
+        try {
+            garageSession.beginTransaction();
+
+            Garage garage = (Garage) garageSession.get(Garage.class, garageId);
+            if (garage != null) {
+                switch (type) {
+                    case Constants.FAX:
+
+                        FaxContact fax = new FaxContact();
+                        if (Double.isNaN(new Double(contact))) {
+                            return Constants.NOT_PHONE_NUMBER;
+                        }
+                        FaxContact faxContact = new FaxContact(contact);
+                        garageSession.persist(faxContact);
+
+                        garage.getFaxNumbers().add(faxContact);
+                        break;
+                    case Constants.EMAIL:
+                        if (!contact.matches(Regex.EMAIL_REGEX)) {
+                            return Constants.NOT_AN__EMAIL;
+                        }
+                        EmailAddress emailAddress = new EmailAddress(contact);
+                        garageSession.persist(emailAddress);
+                        garage.getEmails().add(emailAddress);
+                        break;
+                    case Constants.PHONE:
+                        if (Double.isNaN(new Double(contact))) {
+                            return Constants.NOT_PHONE_NUMBER;
+                        }
+                        ContactNumber contactNumber = new ContactNumber(contact);
+                        garageSession.persist(contactNumber);
+                        garage.getContactNumbers().add(contactNumber);
+                        break;
+                }
+                garageSession.getTransaction().commit();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Constants.FAILED;
+        }
+        return Constants.SUCCESS;
+    }
+
+    public int addFeedback(int userId, int garageId, String feedbackBody) {
+        Feedback feedback = new Feedback(new Users(userId), new Garage(garageId), feedbackBody);
+
+        try {
+            garageSession.beginTransaction();
+            Garage garage = (Garage) garageSession.get(Garage.class, garageId);
+            if (garage != null) {
+
+                garageSession.persist(feedback);
+                garage.getFeedbacks().add(feedback);
+
+            }
+            garageSession.getTransaction().commit();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -1;
+        }
+        return 0;
+    }
+
+    public ArrayList<DeleteGarageSchedule> getDeleteGarageSchedule() {
+        return (ArrayList<DeleteGarageSchedule>) garageSession.createQuery("from  DeleteGarageSchedule").list();
+
+    }
+
+    public int addToDeletePlan(DeleteGarageSchedule deleteGarageSchedule) {
+
+        try {
+            garageSession.beginTransaction();
+            Garage tempGarage = (Garage) garageSession.get(Garage.class, deleteGarageSchedule.getGarageId());
+            if (tempGarage != null) {
+                tempGarage.setEnabled(0);
+                garageSession.persist(deleteGarageSchedule);
+
+            }
+            garageSession.getTransaction().commit();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return utils.Constants.FAILED;
+        }
+
+        return utils.Constants.SUCCESS;
+    }
+
+    public void deleteFromDeletePlan(int id) {
+        try {
+            Query query = garageSession.createQuery("delete from DeleteGarageSchedule where garageId=:id ");
+            query.setParameter("id", id);
+            query.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
 }

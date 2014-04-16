@@ -3,15 +3,12 @@ package pojo;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -22,15 +19,11 @@ public class Employees implements java.io.Serializable {
     @Id
     @GeneratedValue
     private int employeeId;
-
     @ManyToOne
     private Roles roles;
-
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Garage garage;
-
     private String firstName;
-
     private String lastName;
 
     private String email;
@@ -38,6 +31,8 @@ public class Employees implements java.io.Serializable {
     private String password;
 
     private String gender;
+
+    private int active = 1;
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date birthDate;
@@ -184,6 +179,14 @@ public class Employees implements java.io.Serializable {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 
 }

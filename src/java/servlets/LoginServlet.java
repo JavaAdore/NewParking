@@ -1,8 +1,16 @@
 package servlets;
 
+import DAOS.DailyHistoryReportImp;
 import DAOS.EmployeesImp;
+import DAOS.GarageImp;
+import DAOS.MonthlyHistoryReportImp;
+import DAOS.YearlyHistoryReportImp;
+import daosint.ReportsInterface;
 import errors.ErrorMessage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -31,6 +39,9 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("error", new ErrorMessage("Invaled email or password"));
             request.getRequestDispatcher("login.jsp").forward(request, response);
 
+        } else if (employee.getActive() == 0) {
+            request.setAttribute("error", new ErrorMessage("Sorry your account has been deactivated , for more info please contact adminstrator"));
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
 
             EmployeeWrapper employeeWrapper = Utils.getEmployeeWrapper(employee);
@@ -43,19 +54,71 @@ public class LoginServlet extends HttpServlet {
 
             String roleName = employeeWrapper.getRoles().getRoleName();
 
-            Cookie cookie = new Cookie("seal","seal");
+            Cookie cookie = new Cookie("seal", "seal");
             response.addCookie(cookie);
+            String uri = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + getServletContext().getContextPath();
             if (roleName.equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
 
                 response.sendRedirect("addadmin.jsp");
 
             } else if (roleName.equalsIgnoreCase(EmployeeRole.ADMIN)) {
+                if (employeeWrapper.getGarage() == null) {
+                    ErrorMessage error = new ErrorMessage("sorry you has not assigned to a garage yet");
+                    request.setAttribute("error", error);
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                } else if (employee.getGarage().getEnabled() == 0) {
+                    request.setAttribute("error", new ErrorMessage("Sorry the garage you are assigned to is deactevated"));
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                    initializeReport(request, response);
+                    response.sendRedirect("editprofile.jsp");
 
-                response.sendRedirect("editprofile.jsp");
+                } else {
+                    if (employeeWrapper.getGarage() == null) {
+                        ErrorMessage error = new ErrorMessage("sorry you has not assigned to a garage yet");
+                        request.setAttribute("error", error);
+                        request.getRequestDispatcher("accountant.jsp").forward(request, response);
+                    } else if (employee.getGarage().getEnabled() == 0) {
+                        request.setAttribute("error", new ErrorMessage("Sorry the garage you are assigned to is deactevated"));
+                        request.getRequestDispatcher("login.jsp").forward(request, response);
+                        initializeReport(request, response);
+                        response.sendRedirect("accountant.jsp");
 
-            } else {
-                response.sendRedirect("accountant.jsp");
+                    }
+
+                }
+
             }
+        }
+    }
+
+    public void initializeReport(HttpServletRequest request, HttpServletResponse response) {
+        ArrayList<ReportsInterface> dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord;
+        ArrayList<ArrayList<ReportsInterface>> merged = new ArrayList();
+        EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
+        Calendar c = Calendar.getInstance();
+        if (emp.getGarage() != null) {
+            dailyHistoryRecord = DailyHistoryReportImp.getInstance().getConsiceDailyHistory(emp.getGarage().getGarageId());
+            monthlyHistoryRecord = MonthlyHistoryReportImp.getInstance().getConsiceMonthlyHistory(emp.getGarage().getGarageId());
+            yearlyHistoryRecord = YearlyHistoryReportImp.getInstance().getConsiceYearlyHistory(emp.getGarage().getGarageId());
+            merged.add(dailyHistoryRecord);
+            merged.add(monthlyHistoryRecord);
+            merged.add(yearlyHistoryRecord);
+            ArrayList<ReportsInterface> mergeHistoryReports = Utils.mergeHistoryReports(merged);
+            Date[] extractMinMaxDate = Utils.extractMinMaxDate(dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord);
+            Date minDate = extractMinMaxDate[0];
+            request.getSession().setAttribute("minDate", Utils.populateDate(minDate));
+            Date maxDate = extractMinMaxDate[1];
+            if (emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.ADMIN)) {
+                request.getSession().setAttribute("detailed", Utils.detailed(emp.getGarage().getGarageId()));
+            }
+            String uri = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + getServletContext().getContextPath();
+
+            request.getSession().setAttribute("maxDate", Utils.populateDate(maxDate));
+            request.getSession().setAttribute("uri", uri);
+            String imageURL = GarageImp.getInstance().getImagePath(emp.getGarage().getGarageId());
+            request.getSession().setAttribute("imageURL", imageURL);
+            request.getSession().setAttribute("historyRecord", mergeHistoryReports);
+
         }
 
     }

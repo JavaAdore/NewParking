@@ -168,11 +168,10 @@ public class UserImp {
         JsonArray historyArray = new JsonArray();
         Gson gson = new Gson();
         Users user = (Users) userSession.get(Users.class, userId);
-
         if (user != null) {
             for (Visit v : user.getVisits()) {
 
-                JsonElement toJsonTree = gson.toJsonTree(new visitHistory(v.getGarage().getTitle(), v.getNumberOfVisits(), Utils.toTime(v.getVisitDate())), visitHistory.class);
+                JsonElement toJsonTree = gson.toJsonTree(new visitHistory(v.getGarage().getTitle(), v.getNumberOfVisits() + "", Utils.toTime(v.getVisitDate())), visitHistory.class);
                 historyArray.add(toJsonTree);
             }
 
@@ -205,8 +204,32 @@ public class UserImp {
         return null;
     }
 
+    public int addApplciationFeedback(int userId, String feedbackBody) {
+
+        if (feedbackBody != null) {
+            return addApplicationFeedback(new ApplicationFeedback(new Users(userId), feedbackBody));
+        }
+        return utils.Constants.INVALID_INPUTS;
+    }
+
+    public int addApplicationFeedback(ApplicationFeedback applicationFeedback) {
+        try {
+            userSession.beginTransaction();
+            userSession.persist(applicationFeedback);
+            userSession.getTransaction().commit();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return utils.Constants.FAILED;
+
+        }
+        return utils.Constants.SUCCESS;
+
+    }
+
     public static void main(String[] args) {
-        String passwordByUserName = UserImp.getInstance().getPasswordByUserName("acxzCxzhmed");
-        System.out.println();
+
+        new UserImp().addApplciationFeedback(8, "Your application is so bad");
+
     }
 }

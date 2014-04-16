@@ -25,9 +25,9 @@ public class GarageSlotsDoors implements Serializable {
     @Id
     @GeneratedValue
     int Id;
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     GarageStatus slotId;
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     GarageDoors doorId;
 
     @Column(length = 4000)

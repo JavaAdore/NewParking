@@ -28,5 +28,8 @@
     <mapping class="pojo.Image"/>
     <mapping class="pojo.Visit"/>
     <mapping class="pojo.Address"/>
+    <mapping class="pojo.DeleteEmployeeSchedule"/>
+    <mapping class="pojo.DeleteGarageSchedule"/>
+    <mapping class="pojo.ApplicationFeedback"/>
   </session-factory>
 </hibernate-configuration>

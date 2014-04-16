@@ -42,7 +42,7 @@ public class EditGarageInitializer extends HttpServlet {
                 if (garageId != -1) {
                     currentGarage = GarageImp.getInstance().getGarage(garageId);
                     if (currentGarage != null) {
-                        request.setAttribute("currentGarage", currentGarage);
+                        request.getSession().setAttribute("currentGarage", currentGarage);
                         request.getRequestDispatcher("editgarageinfo.jsp").forward(request, response);
                     } else {
                     response.sendRedirect("updategarageinfo.jsp");

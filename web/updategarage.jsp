@@ -1,4 +1,6 @@
 <%@page import="utils.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE HTML>
 <!--
         Aqueous: A responsive HTML5 website template by HTML5Templates.com

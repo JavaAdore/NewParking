@@ -52,12 +52,7 @@
                         <div id="page-content-wrapper">
 
 
-                            <%
-                                int empId = Integer.parseInt(request.getParameter("employee"));
-
-                                Employees c = utils.Utils.getEmployeeById(empId);
-
-                            %>
+                           
                             <center>   <form method="post" action="UpdateProfileHandler"  onsubmit="return myValidator()">
                                     <table>
                                         <th colspan="2">
@@ -65,16 +60,16 @@
                                         </th>
                                         <tr>
                                             <td>Email:</td>
-                                            <td><input name="email" type="email" readonly required class="textbox" value="<%=c.getEmail()%>"  ></td>
+                                            <td><input name="email" type="email" readonly required class="textbox" value="${employee.getEmail()}"  ></td>
                                         </tr>
 
                                         <tr>
                                             <td>Password:</td>
-                                            <td><input id="password" name="password" type="text" required class="textbox" value="<%=c.getPassword()%>"></td>
+                                            <td><input id="password" name="password" type="text" required class="textbox" value="${employee.getPassword()}"></td>
                                         </tr>
                                         <tr>
                                             <td>Confirm Password:</td>
-                                            <td><input id ="confirmPassword" name="confirmPassword" type="text" required  class="textbox" value="<%=c.getPassword()%>"></td>
+                                            <td><input id ="confirmPassword" name="confirmPassword" type="text" required  class="textbox" value="${employee.getPassword()}"></td>
                                         </tr>
                                         <tr>
                                             <td>Mobile Number:</td>
@@ -95,10 +90,6 @@
 
         </div>
 
-        <div id="copyright" class="5grid-layout">
-            <section>
-                <p>&copy; Your Site Name | Images: <a href="http://fotogrph.com/">Fotogrph</a> | Design: <a href="http://html5templates.com/">HTML5Templates.com</a></p>
-            </section>
-        </div>
+        
     </body>
 </html>

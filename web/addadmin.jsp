@@ -1,12 +1,15 @@
 <!DOCTYPE HTML>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="ServiceProviderHeader/addAdminHeader.jsp"/>
 
 <html>
     <head>
         <noscript>
         <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
         </noscript>
+         <link rel = "stylesheet" href = "css/mycss/jquery.ui.all.css" >
+        <link rel="stylesheet" href="css/mycss/demos.css">
         <title>Parking System</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="description" content="" />
@@ -15,11 +18,17 @@
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <script src="js/validators.js"></script>
         <script src="js/customValidator.js"></script>
+        <script src = "js/jquery-1.8.3.js" ></script>
+        <script src="js/ui/jquery.ui.core.js"></script>
+        <script src="js/ui/jquery.ui.widget.js"></script>
+        <script src="js/ui/jquery.ui.datepicker.js"></script>
+        
+
         <script type="text/javascript">
 
             function submitMethod()
             {
-                if (isText('#firstName', '#firstNameError') && isText('#lastName', '#lastNameError') && isEmailWithValidation('#email', '#emailError') && areTheSame('#password', '#confirmPassword', '#confirmPasswordError') && isAdate('#birthdate', '#birthdateError'))
+                if (isText('#firstName', '#firstNameError') && isText('#lastName', '#lastNameError') && isEmailWithValidation('#email', '#emailError') && areTheSame('#password', '#confirmPassword', '#confirmPasswordError') && isAdate('#datepicker', '#birthdateError'))
                 {
 
                     $("#addEmployeeForm").submit();
@@ -28,15 +37,47 @@
 
             }
 
+            
+            
+
 
         </script>
+
+
+        <!--check if browser suppot datePicker or not--> 
+
+
+        <script>
+            function checkInput(type) {
+                var input = document.createElement("input");
+                input.setAttribute("type", type);
+                return input.type === type;
+            }
+            if (!checkInput("date")) {
+
+                //                What if not ...?
+
+                $('input.date').datepicker();
+            }
+
+
+            $(document).ready(function()
+            {
+                $("#datepicker").datepicker({ maxDate: "-192m "});
+            });
+
+
+        </script>
+
+
+
+
         <noscript>
         <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
         </noscript> 
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
     </head>
     <body>
-        <jsp:include page="ServiceProviderHeader/addAdminHeader.jsp"/>
 
         <div id="page-wrapper">
             <div id="page-bgtop">
@@ -86,7 +127,7 @@
                                         </tr>
                                         <tr>
                                             <td>Birthday:</td>
-                                            <td><input id="birthdate" name="birthdate" type="date" onblur="isAdate('#birthdate', '#birthdateError')"/> </td>
+                                            <td> <input  id="datepicker" name="birthdate" readonly onchange="isAdate('#datepicker', '#birthdateError')"> </td>
                                             <td><span id="birthdateError"> </span>  </td>
                                         </tr>
 
@@ -95,7 +136,7 @@
                                             <td>
                                                 <select name="role" >
                                                     <option value="2">Administrator</option>
-                                                    <option value="3">Accountant</option>
+    <!--                                                    <option value="3">Accountant</option>-->
                                                 </select>
                                             </td>
                                         </tr>

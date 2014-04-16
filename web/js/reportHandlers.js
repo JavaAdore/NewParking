@@ -12,31 +12,43 @@ function getPeriod()
 }
 
 function assignListeners(from, to)
-{   
-    correctDates(from , to);
-    
-    $.ajax({url: "ReportInitializer", async: false, data: 'from=' + from + '&to=' + to, success: function(result)
+{
+    correctDates($(from).val(), $(to).val());
+
+    $.ajax({url: "ReportInitializer", async: false, data: 'from=' + $(from).val() + '&to=' + $(to).val(), success: function(result)
         {
         }});
 }
 function detailedReportInitializer(from, to)
-{   
-    correctDates(from , to);
-    
-    $.ajax({url: "DetailedReportInitializer", async: false, data: 'from=' + from + '&to=' + to, success: function(result)
+{
+    correctDates($(from).val(), $(to).val());
+
+    $.ajax({url: "DetailedReportInitializer", async: false, data: 'from=' + $(from).val() + '&to=' + $(to).val(), success: function(result)
         {
         }});
 }
 
-function viewReport(from , to)
+function viewReport(from, to, fromError, toError)
 {
-    assignListeners(from, to);
-    $('#reportBodyDiv').load("ReportBody.jsp");
+
+    var condition = isAdate(from, fromError) && isAdate(to, toError);
+    if (condition)
+    {
+        assignListeners(from, to);
+        $('#reportBodyDiv').load("ReportBody.jsp");
+        return;
+    }
+
+
 }
-function viewDetailedReport(from , to)
+function viewDetailedReport(from, to,fromError, toError)
 {
-    detailedReportInitializer(from, to);
-    $('#reportBodyDiv').load("detailedreportbody.jsp");
+    var condition = isAdate(from, fromError) && isAdate(to, toError);
+    if (condition)
+    {
+        detailedReportInitializer(from, to);
+        $('#reportBodyDiv').load("detailedreportbody.jsp");
+    }
 }
 function loadPeriod()
 {
@@ -73,8 +85,10 @@ function getToDate()
 }
 
 
-function correctDates(from , to )
+function correctDates(from, to)
 {
+    alert(from);
+    alert(to);
     var userMinDate = new Date(from);
     var userMaxDate = new Date(to);
 
@@ -114,8 +128,8 @@ function correctDates(from , to )
     from = dateToString(date1)
     to = dateToString(date2);
 
-    $('#minDate').html(dateToString(date1));
-    $('#maxDate').html(dateToString(date2));
+    $('#minDate').html("xx" + dateToString(date1));
+    $('#maxDate').html("xx" + dateToString(date2));
 }
 
 function dateSwapper(date1, date2, x)

@@ -13,6 +13,15 @@ public class WrappedGarageSlotsStatus {
 
     int slotId;
     int slotStatus;
+    String slotName;
+
+    public String getSlotName() {
+        return slotName;
+    }
+
+    public void setSlotName(String slotName) {
+        this.slotName = slotName;
+    }
     int x;
     int y;
 
@@ -35,8 +44,9 @@ public class WrappedGarageSlotsStatus {
     public WrappedGarageSlotsStatus() {
     }
 
-    public WrappedGarageSlotsStatus(int slotId, int slotStatus, int x, int y) {
+    public WrappedGarageSlotsStatus(int slotId, String slotName, int slotStatus, int x, int y) {
         this.slotId = slotId;
+        this.slotName = slotName;
         this.slotStatus = slotStatus;
         this.x = x;
         this.y = y;

@@ -27,14 +27,14 @@ public class Garage implements java.io.Serializable {
     @GeneratedValue
     private int garageId;
     private String title;
-    @OneToOne(mappedBy = "garage")
-    Address address;
     private double lon;
     private double lat;
     int enabled = 1;
-
-    @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER , mappedBy = "garage")
+    @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
+    private Address address;
+    @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
     private Map map;
+
     @OneToMany(mappedBy = "garage", orphanRemoval = true)
     @ElementCollection(fetch = FetchType.LAZY)
     private Collection< Employees> employees = new ArrayList<>();
@@ -45,7 +45,7 @@ public class Garage implements java.io.Serializable {
     @ElementCollection(fetch = FetchType.EAGER)
     private Collection< GarageStatus> garageStatus = new ArrayList<>();
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(mappedBy = "garage", orphanRemoval = true)
     @ElementCollection(fetch = FetchType.LAZY)
     private Collection< Feedback> feedbacks = new ArrayList<>();
 
@@ -55,8 +55,19 @@ public class Garage implements java.io.Serializable {
 
     @OneToMany(orphanRemoval = true)
     @ElementCollection(fetch = FetchType.LAZY)
-
     private Collection< FaxContact> faxNumbers = new ArrayList<>();
+
+    @OneToMany(orphanRemoval = true)
+    @ElementCollection(fetch = FetchType.LAZY)
+    private Collection<Visit> visits = new ArrayList<>();
+
+    public Collection<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(Collection<Visit> visits) {
+        this.visits = visits;
+    }
 
     public int getGarageId() {
         return garageId;

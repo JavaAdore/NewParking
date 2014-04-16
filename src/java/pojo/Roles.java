@@ -18,7 +18,7 @@ public class Roles implements java.io.Serializable {
     private String roleName;
     private String description;
     @ElementCollection(fetch = FetchType.LAZY)
-    @OneToMany(mappedBy = "roles" , cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "roles" )
     private Collection<Employees> employeeses = new HashSet<Employees>();
 
     public Roles(int roleId) {

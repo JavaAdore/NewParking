@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import reportsClasses.ReportHistoryRecord;
 import utils.EmployeeWrapper;
-import utils.Utils;
+import utils.*;
 
 /**
  *
@@ -31,8 +31,8 @@ public class ReportInitializer extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String from = request.getParameter("from");
             String to = request.getParameter("to");
-            String minDate = (String) request.getSession().getAttribute("minDate");
-            String maxDate = (String) request.getSession().getAttribute("maxDate");
+            String minDate = Utils.populateString((CustomDate) request.getSession().getAttribute("minDate"));
+            String maxDate = Utils.populateString((CustomDate) request.getSession().getAttribute("maxDate"));
             EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
             ArrayList<ReportsInterface> historyRecord;
 

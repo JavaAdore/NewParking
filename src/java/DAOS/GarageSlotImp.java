@@ -44,7 +44,9 @@ public class GarageSlotImp {
             if (result != null) {
                 result.setStatus(status);
                 if (status == 0) {
-                    garageSlotSession.getNamedQuery("update_Garage_status").setParameter("slotid", slotid).executeUpdate();
+//                    garageSlotSession.getNamedQuery("update_Garage_status").setParameter("slotid", slotid).executeUpdate();
+                    result.setConsumedHours(result.getConsumedHours() + utils.Utils.hoursBetween(result.getArrivalTime(), new Date()));
+                    System.out.println("supposed to update garage slot");
 
                 } else {
                     result.setArrivalTime(new Timestamp(new Date().getTime()));
@@ -64,8 +66,7 @@ public class GarageSlotImp {
 
     }
 
-    public GarageStatus getSlot(int slotId) 
-    {
+    public GarageStatus getSlot(int slotId) {
         return (GarageStatus) garageSlotSession.get(GarageStatus.class, slotId);
 
     }
@@ -75,9 +76,10 @@ public class GarageSlotImp {
         GarageStatus slot = getSlot(slotId);
         if (slot != null) {
             slot.setEnabled(enabled);
-           return  updateSlot(slot)+"";
-            }
-       
+
+            return updateSlot(slot) + "";
+        }
+
         return result;
     }
 
@@ -91,12 +93,12 @@ public class GarageSlotImp {
         }
         return 0;
     }
-    public ArrayList<GarageStatus> getGarageStatusList(int garageId)
-    {
-    
+
+    public ArrayList<GarageStatus> getGarageStatusList(int garageId) {
+
         Query query = garageSlotSession.createQuery("from GarageStatus where garage=:garage");
         query.setParameter("garage", new Garage(garageId));
-       return (ArrayList<GarageStatus>)query.list();
-        
+        return (ArrayList<GarageStatus>) query.list();
+
     }
 }

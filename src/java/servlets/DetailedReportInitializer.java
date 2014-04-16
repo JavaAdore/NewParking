@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import pojo.GarageStatus;
 import reportsClasses.ReportHistoryRecord;
+import utils.CustomDate;
 import utils.EmployeeWrapper;
 import utils.Utils;
 
@@ -34,17 +35,13 @@ public class DetailedReportInitializer extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String from = request.getParameter("from");
             String to = request.getParameter("to");
-            String minDate = (String) request.getSession().getAttribute("minDate");
-            String maxDate = (String) request.getSession().getAttribute("maxDate");
+            String minDate = Utils.populateString((CustomDate) request.getSession().getAttribute("minDate"));
+            String maxDate = Utils.populateString((CustomDate) request.getSession().getAttribute("maxDate"));
             EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
             HashMap<GarageStatus, List<ReportsInterface>> historyRecord;
-
             historyRecord = (HashMap<GarageStatus, List<ReportsInterface>>) request.getSession().getAttribute("detailed");
-
             if (historyRecord != null) {
-
                 HashMap<GarageStatus, ReportHistoryRecord> detailedReport = Utils.prepareSlotsHistoryRecord(historyRecord, (from.length() > 0) ? from : minDate, (to.length() > 0) ? to : maxDate, emp.getGarage().getGarageStatus().size());
-
                 request.getSession().setAttribute("detailedReport", detailedReport);
                 System.out.println();
             }

@@ -26,12 +26,12 @@ public class RemoveAdminServlet extends HttpServlet {
 
         if (adminId != -1) {
 
-            int result = employeesDao.deleteMemember(employeesDao.getEmployee(adminId));
+            int result = employeesDao.deleteMemember(adminId);
             switch (result) {
                 case 0:
                     request.setAttribute("error", new ErrorMessage(String.format("Employee deleted")));
                     break;
-
+                            
                 case -1:
                     request.setAttribute("error", new ErrorMessage(String.format("%looks like some error happend please contact adminstrator")));
                     break;
@@ -41,9 +41,9 @@ public class RemoveAdminServlet extends HttpServlet {
         }
 
         if (((EmployeeWrapper) request.getSession().getAttribute("emp")).getRoles().getRoleName().equals(EmployeeRole.SERVICE_PROVIDER)) {
-            request.getRequestDispatcher("removeadmin.jsp").forward(request, response);
+            request.getRequestDispatcher("LoadAllEmployeesInitializer?toPage=removeadmin.jsp").forward(request, response);
         } else {
-            request.getRequestDispatcher("removeadminbyadmin.jsp").forward(request, response);
+            request.getRequestDispatcher("RemoveAdminInitializer").forward(request, response);
         }
     }
 

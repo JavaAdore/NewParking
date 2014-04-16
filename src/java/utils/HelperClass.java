@@ -5,13 +5,19 @@
  */
 package utils;
 
+import DAOS.EmployeesImp;
+import DAOS.GarageImp;
 import DAOS.GarageSlotDoorsImp;
+import DAOS.UserImp;
 import GObjects.*;
 import java.util.ArrayList;
+import java.util.Date;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
+import pojo.DeleteEmployeeSchedule;
+import pojo.DeleteGarageSchedule;
 import pojo.Employees;
 import pojo.Roles;
 
@@ -83,9 +89,9 @@ public class HelperClass {
         Roles AC = new Roles(3, "AC", "Accountant");
 
         session.beginTransaction();
-        Employees mahmoud = new Employees("Mahmoud", "Mohamed", "mahmoud@gmail.com", "123456", "m", Utils.totDate("26-09-1990"), SP, null);
-        Employees ahmed = new Employees("ahmed", "Mohamed", "ahmed@gmail.com", "123456", "m", Utils.totDate("26-09-1990"), AD, null);
-        Employees lamia = new Employees("lamia", "Mohamed", "lamia@gmail.com", "123456", "m", Utils.totDate("26-09-1990"), AC, null);
+        Employees mahmoud = new Employees("Mahmoud", "Mohamed", "mahmoud@gmail.com", "123456", "m", new Date(), SP, null);
+        Employees ahmed = new Employees("ahmed", "Mohamed", "ahmed@gmail.com", "123456", "m", new Date(), AD, null);
+        Employees lamia = new Employees("lamia", "Mohamed", "lamia@gmail.com", "123456", "m", new Date(), AC, null);
 
         pojo.Garage ITI = new pojo.Garage("ITI", "Cairo", "Egypt", 150, 7, 1, 1, 30.071313, 31.0211796);
         pojo.Garage NTA = new pojo.Garage("NTA", "Cairo", "Egypt", 150, 5, 5, 1, 30.0718655, 31.0216892);
@@ -115,4 +121,14 @@ public class HelperClass {
 
     }
 
+    public void runDeleteSchedular() {
+
+        ArrayList<DeleteEmployeeSchedule> deleteEmployeeSchedule = EmployeesImp.getInstance().getDeleteEmployeeSchedule();
+        System.out.println("deleteEmployeeSchedule size ="+ deleteEmployeeSchedule.size());
+        ArrayList<DeleteGarageSchedule> deleteGarageSchedule = GarageImp.getInstance().getDeleteGarageSchedule();
+        System.out.println("deleteGarageSchedule size ="+ deleteGarageSchedule.size());
+    }
+    
+    
+    
 }

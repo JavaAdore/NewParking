@@ -29,7 +29,7 @@ public class Users implements java.io.Serializable {
     private Date birthDate;
     private String gender;
     private String phone;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user" , orphanRemoval = true )
     private Collection<Visit> visits;
 
     public Users() {

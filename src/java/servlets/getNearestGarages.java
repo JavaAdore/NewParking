@@ -51,6 +51,7 @@ public class getNearestGarages extends HttpServlet {
                     list.add(obj);
                 }
             }
+            
             out.print(list.toString());
 
         }

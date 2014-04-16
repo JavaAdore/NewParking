@@ -37,11 +37,7 @@ function checkEmail(emailTextBox)
     {
         $(document).ready(function()
         {
-
-
         });
-
-
     }
 
 

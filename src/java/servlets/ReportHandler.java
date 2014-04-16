@@ -37,40 +37,35 @@ public class ReportHandler extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
-            ArrayList<ReportsInterface> dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord;
-            ArrayList<ArrayList<ReportsInterface>> merged = new ArrayList();
-            EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-            Calendar c = Calendar.getInstance();
-            if (emp.getGarage() != null) {
-                dailyHistoryRecord = DailyHistoryReportImp.getInstance().getConsiceDailyHistory(emp.getGarage().getGarageId());
-                monthlyHistoryRecord = MonthlyHistoryReportImp.getInstance().getConsiceMonthlyHistory(emp.getGarage().getGarageId());
-                yearlyHistoryRecord = YearlyHistoryReportImp.getInstance().getConsiceYearlyHistory(emp.getGarage().getGarageId());
+             ArrayList<ReportsInterface> dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord;
+        ArrayList<ArrayList<ReportsInterface>> merged = new ArrayList();
+        EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
+        Calendar c = Calendar.getInstance();
+        if (emp.getGarage() != null) {
+            dailyHistoryRecord = DailyHistoryReportImp.getInstance().getConsiceDailyHistory(emp.getGarage().getGarageId());
+            monthlyHistoryRecord = MonthlyHistoryReportImp.getInstance().getConsiceMonthlyHistory(emp.getGarage().getGarageId());
+            yearlyHistoryRecord = YearlyHistoryReportImp.getInstance().getConsiceYearlyHistory(emp.getGarage().getGarageId());
 
-                merged.add(dailyHistoryRecord);
-                merged.add(monthlyHistoryRecord);
-                merged.add(yearlyHistoryRecord);
+            merged.add(dailyHistoryRecord);
+            merged.add(monthlyHistoryRecord);
+            merged.add(yearlyHistoryRecord);
 
-                ArrayList<ReportsInterface> mergeHistoryReports = Utils.mergeHistoryReports(merged);
-                Date minDate = Utils.getMinDate(dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord);
-                request.getSession().setAttribute("minDate", Utils.toString(minDate));
-                Date maxDate = new Date();
-                if (Utils.daysBetween(minDate, new Date()) > 0) {
-                    c.add(Calendar.DAY_OF_MONTH, -1);
-                    maxDate = c.getTime();
-                    System.out.println(maxDate);
+            ArrayList<ReportsInterface> mergeHistoryReports = Utils.mergeHistoryReports(merged);
+            
+            Date[] extractMinMaxDate = Utils.extractMinMaxDate(dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord);
+            Date minDate = extractMinMaxDate[0];
+            request.getSession().setAttribute("minDate", Utils.populateDate(minDate));
+            Date maxDate = extractMinMaxDate[1];
+            if (emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.ADMIN)) {
+                request.getSession().setAttribute("detailed", Utils.detailed(emp.getGarage().getGarageId()));
+            }
+            String uri = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + getServletContext().getContextPath();
 
-                }
-
-                if (emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.ADMIN)) {
-                    request.getSession().setAttribute("detailed", Utils.detailed(emp.getGarage().getGarageId()));
-                }
-                String uri = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + getServletContext().getContextPath();
-
-                request.getSession().setAttribute("maxDate", Utils.toString(maxDate));
-                request.getSession().setAttribute("uri", uri);
-                String imageURL = GarageImp.getInstance().getImagePath(emp.getGarage().getGarageId());
-                request.getSession().setAttribute("imageURL", imageURL);
-                request.getSession().setAttribute("historyRecord", mergeHistoryReports);
+            request.getSession().setAttribute("maxDate", Utils.populateDate(maxDate));
+            request.getSession().setAttribute("uri", uri);
+            String imageURL = GarageImp.getInstance().getImagePath(emp.getGarage().getGarageId());
+            request.getSession().setAttribute("imageURL", imageURL);
+            request.getSession().setAttribute("historyRecord", mergeHistoryReports);
                 out.print(String.format(" min= %s max=%s value=%s", Utils.toString(minDate), Utils.toString(maxDate), Utils.toString(maxDate)));
 
             }
@@ -79,6 +74,8 @@ public class ReportHandler extends HttpServlet {
 
     }
 
+    
+    
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

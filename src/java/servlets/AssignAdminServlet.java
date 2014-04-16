@@ -46,7 +46,7 @@ public class AssignAdminServlet extends HttpServlet {
         int result = employeesDao.updateProfile(employee);
         switch (result) {
             case 0:
-                request.setAttribute("error", new ErrorMessage(String.format(" %s %s (s) assigned as an adminstrator for garage  %s", employee.getFirstName(), employee.getLastName(), employee.getEmail(), tempGarage)));
+                request.setAttribute("error", new ErrorMessage(String.format(" %s %s (%s) assigned as an adminstrator for garage  %s", employee.getFirstName(), employee.getLastName(), employee.getEmail(), garage.getTitle())));
                 break;
 
             case -1:

@@ -7,16 +7,69 @@
 <%@page import="pojo.GarageStatus"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<noscript>
+<meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
+</noscript>
+<link rel = "stylesheet" href = "css/mycss/jquery.ui.all.css" >
+<link rel="stylesheet" href="css/mycss/demos.css">
+<title>Parking System</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<script src="css/5grid/jquery.js"></script>
+<script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
+<script src="js/validators.js"></script>
+<script src="js/customValidator.js"></script>
+<script src = "js/jquery-1.8.3.js" ></script>
+<script src="js/ui/jquery.ui.core.js"></script>
+<script src="js/ui/jquery.ui.widget.js"></script>
+<script src="js/ui/jquery.ui.datepicker.js"></script>
+<script src="js/reportHandlers.js"></script>
+<script src="js/jQuery.js"></script>
+<link rel = "stylesheet" href = "css/mycss/jquery.ui.all.css" >
+<link rel="stylesheet" href="css/mycss/demos.css">
+<noscript>
+<meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
+</noscript>
+<link rel = "stylesheet" href = "css/mycss/jquery.ui.all.css" >
+<link rel="stylesheet" href="css/mycss/demos.css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<script src="css/5grid/jquery.js"></script>
+<script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
+<script src="js/validators.js"></script>
+<script src="js/customValidator.js"></script>
+<script src = "js/jquery-1.8.3.js" ></script>
+<script src="js/ui/jquery.ui.core.js"></script>
+<script src="js/ui/jquery.ui.widget.js"></script>
+<script src="js/ui/jquery.ui.datepicker.js"></script>
+<script src="js/customValidator.js"></script>
 
 <script src="js/customValidator.js"></script>
-<style>
-    span{width:100px;}
-</style>
+
 <noscript>
 <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
 </noscript> 
+<style>
+    .highlyConsumed
+    {
+        position:absolute;
+        background-color:greenyellow;
+    }
+    .mediumConsumed
+    {
+        position:absolute;
+        background-color:plum;
+    }
+    .rearlyConsumed
+    {
+        position:absolute;
+        background-color:#99ccff;
+    }
 
+
+</style>
 
 <script type="text/javascript">
 
@@ -51,8 +104,8 @@
         </c:choose>
 
             var status = "";
-
-            var inner = "<div class=" + itemClass + " style=' left:${slot.key.getX()}px;top:" + y + "px ;position:absolute;width:40px;height:30px; '  >"+${slot.value.getHours()} +"</div>";
+            var inner = "<div class=" + itemClass + " style=' left:${slot.key.getX()}px;top:" + y + "px ;position:absolute;width:40px;height:30px;  '  >" +${slot.value.getHours()} + "</div>";
+            alert(inner);
             $('#mainDiv').append(inner);
 
     </c:forEach>
@@ -61,7 +114,9 @@
 
 
 </script>
-
+<div class='highlyConsumed' style='position:relative;font-size: 20px;'>Highly Consumed</div>
+<div class="mediumConsumed" style='position:relative;font-size: 20px;'>Medium Consumed</div>
+<div class="rearlyConsumed" style='position:relative;font-size: 20px;'>Rear Consumed</div>
 <div id="mainDiv">
 
     <img id="background"/>

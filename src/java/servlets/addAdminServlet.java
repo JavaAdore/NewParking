@@ -45,7 +45,7 @@ public class addAdminServlet extends HttpServlet {
 
         String birthdate = request.getParameter("birthdate");
 
-        String role = request.getParameter("roles");
+        String role = request.getParameter("role");
 
         EmployeeWrapper employeeWrapper = (EmployeeWrapper) request.getSession().getAttribute("emp");
 
@@ -63,7 +63,7 @@ public class addAdminServlet extends HttpServlet {
 
         employee.setGender(gender);
 
-        employee.setBirthDate(utils.Utils.totDate(birthdate));
+        employee.setBirthDate(utils.Utils.totDate(birthdate,"MM/dd/yyyy"));
 
         employee.setRoles(new Roles(Integer.parseInt(request.getParameter("role"))));
 

@@ -5,12 +5,14 @@
  */
 package webservices;
 
+import DAOS.GarageImp;
 import DAOS.UserImp;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import pojo.Users;
 import utils.Utils;
@@ -26,8 +28,7 @@ public class UserServices {
     @POST
     public String updateProfile(@FormParam("id") int id, @FormParam("userName") String userName, @FormParam("email") String email, @FormParam("password") String password) {
         System.out.println("update profile web service has been called");
-        if (password.length() >= 6 && password.length() <= 25) 
-        {
+        if (password.length() >= 6 && password.length() <= 25) {
             Users users = new Users(id, userName, email, password);
             return UserImp.getInstance().updateProfile(users) + "";
         }
@@ -111,17 +112,31 @@ public class UserServices {
         return obj.toString();
 
     }
-    
-    
+
     @Path("visitsHistory")
     @POST
-    public String getVisitHistory(@FormParam("id") int userId)
-    {
+    public String getVisitHistory(@FormParam("id") int userId) {
+
+        JSONObject json = new JSONObject();
+
         System.out.println("get history has been visited ");
-        return UserImp.getInstance().getVisitingHistory(userId);
+        return UserImp.getInstance().getVisitingHistory(userId).toString();
     }
-    
-    
-    
+
+    @Path("addApplicationFeedback")
+    @POST
+    public int addAppicationFeedback(@FormParam("id") int userId, @FormParam("message") String feedback) {
+
+        return UserImp.getInstance().addApplciationFeedback(userId, feedback);
+    }
+
+    @Path("addGarageFeedback")
+    @POST
+    public int addGarageFeedback(@FormParam("userId") int userId, @FormParam("garageId") int garageId, @FormParam("message") String feedback) 
+    {
+            return GarageImp.getInstance().addFeedback(userId, garageId, feedback);
+
+        
+    }
 
 }

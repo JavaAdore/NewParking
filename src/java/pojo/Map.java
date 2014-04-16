@@ -23,7 +23,7 @@ public class Map implements java.io.Serializable {
     private int width;
     private int height;
     private String unit;
-    @OneToOne
+    @OneToOne(orphanRemoval = true , mappedBy = "map")
     Garage garage;
 
     public Garage getGarage() {

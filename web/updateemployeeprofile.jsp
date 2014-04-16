@@ -1,5 +1,7 @@
 <%@page import="pojo.Employees"%>
 <%@page import="utils.EmployeeWrapper"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE HTML>
 <!--
         Aqueous: A responsive HTML5 website template by HTML5Templates.com
@@ -42,7 +44,16 @@
                 return false;
 
             }
+
+
+            function submitMethod()
+            {
+
+
+
+            }
         </script>
+        <script src="js/customValidator.js"></script>
     </head><body>
         <div id="header-wrapper">
             <header id="header">
@@ -81,47 +92,67 @@
                         <div id="page-content-wrapper">
 
 
-                            <%
-                                String empIdd = request.getParameter("employee");
-                                int empId = Integer.parseInt(empIdd);
-                                Employees c = utils.Utils.getEmployeeById(empId);
-                            %>
+
                             <center>   
                                 <form method="post" action="UpdateProfileHandler"  onsubmit="return myValidator()">
                                     <table>
                                         <tr>
                                             <td>Email:</td>
-                                            <td><input name="email" type="email" readonly required class="textbox" value="<%=c.getEmail()%>"  ></td>
+                                            <td><input name="email" type="email" readonly required class="textbox" value="${currentEmployee.getEmail()}"  ></td>
                                         </tr>
 
                                         <tr>
                                             <td>Password:</td>
-                                            <td><input id="password" name="password" type="text" required class="textbox" value="<%=c.getPassword()%>"></td>
+                                            <td><input id="password" name="password" type="password" required class="textbox" value="${currentEmployee.getPassword()}" onblur="isPassword('#password', '#passwordError')" ></td>
+                                            <td><span id="passwordError"></span></td>
+
                                         </tr>
                                         <tr>
                                             <td>Confirm Password:</td>
-                                            <td><input id ="confirmPassword" name="confirmPassword" type="text" required  class="textbox" value="<%=c.getPassword()%>"></td>
+                                            <td><input id ="confirmPassword" name="confirmPassword" type="password" required value="${currentEmployee.getPassword()}" class="textbox" onblur="areTheSame('#password', '#confirmPassword', '#confirmPasswordError')" ></td>
+                                            <td><span id="confirmPasswordError"></span></td>
                                         </tr>
+                                        <td>
+                                            Garage 
+                                        </td>
+                                        <td>
+
+                                            <select name="garage" id="garage">
+                                                <option value="-2" > </option>
+                                                <c:forEach items="${allGarages}" var="garage">
+                                                    <option value="${garage.getGarageId()}" <c:if test="${currentEmployee.getGarage().getGarageId()==garage.getGarageId()}" > selected </c:if> >${garage.getTitle()}</option>
+                                                </c:forEach>
+                                               
+
+                                        </td>
 
                                         <tr>
-                                            <td><input type="submit"  value="Save Changes" id="savechange"/></td>
+                                            <td>
+                                                Active
+                                            </td>
+                                            <td>
+                                                <select name="isActive" >
+                                                    <option value="0">Active</option>
+                                                    <option value="1"<c:if test="${currentEmployee.getActive()==0}" > selected </c:if> >Not Active</option>
+
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="button"  value="Save Changes" onclick="submitMethod()"/></td>
                                         </tr>
                                     </table>
                                 </form>
+
+
+
+
+
                             </center>
                         </div>
-
-
                     </div>
                 </div>
             </div>
-
-        </div>
-
-        <div id="copyright" class="5grid-layout">
-            <section>
-                <p>&copy; Your Site Name | Images: <a href="http://fotogrph.com/">Fotogrph</a> | Design: <a href="http://html5templates.com/">HTML5Templates.com</a></p>
-            </section>
         </div>
     </body>
 </html>

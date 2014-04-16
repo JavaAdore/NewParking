@@ -24,7 +24,11 @@
     <body>
 
 
-    <applet code="applets/DrawingTool.class" archive="DrawingTool.jar" width="1200"  height=650>
+    <applet code="applets/DrawingTool.class" archive="Drawing_Tool_2.jar" width="1200"  height=650>
+        <param name="ip" value="localhost" />
+        <param name="parking" value="NewParking" />
+        <param name="port" value="9999" />
+        
     </applet>
 
 </body>

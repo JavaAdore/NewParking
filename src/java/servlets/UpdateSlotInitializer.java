@@ -46,6 +46,10 @@ public class UpdateSlotInitializer extends HttpServlet {
                         request.getSession().setAttribute("uri", uri);
                         request.getRequestDispatcher("updateslotsstatus.jsp").forward(request, response);
                     }
+                }else
+                {
+                    response.sendRedirect(request.getHeader("Referer"));
+                
                 }
             }
 

@@ -9,4 +9,6 @@
 #page_Portfolio .col1{ width:135px;}
 #page_Portfolio .col2{ width:425px;}
 
-
+.move{
+    text-decoration-color: black;
+}

@@ -10,6 +10,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import pojo.AdminsActions;
+import pojo.DeleteEmployeeSchedule;
 import pojo.Employees;
 import pojo.Garage;
 import utils.EmployeeWrapper;
@@ -102,14 +103,14 @@ public class EmployeesImp implements EmployeesDAO {
 
     public static void main(String[] args) {
 
-//int result = EmployeesImp.getInstance().addEmployee("mahmoud", "mohamed", "mahmoud@gmail.com", "123456", "male", "12-12-2012", 1, 1);
-        System.out.println(getInstance().getAllAdminsInfo(false));
+        //EmployeesImp.getInstance().addToDeletePlan(new DeleteEmployeeSchedule(25));
 
     }
 
     public int updateEmployeeWithoutRetriving(Employees emp) {
         int result = 0;
         try {
+
             employeeSession.beginTransaction();
 
             employeeSession.saveOrUpdate(emp);
@@ -214,14 +215,14 @@ public class EmployeesImp implements EmployeesDAO {
         return result;
     }
 
-    public int deleteMemember(Employees employee) {
+    public int deleteMemember(int memeberId) {
 
         int result = 0;
         try {
 
             employeeSession.beginTransaction();
 
-            Employees emp = (Employees) employeeSession.get(Employees.class, employee.getEmployeeId());
+            Employees emp = (Employees) employeeSession.get(Employees.class, memeberId);
             Query q;
             if (emp != null) {
 
@@ -229,8 +230,9 @@ public class EmployeesImp implements EmployeesDAO {
                 q.setParameter("admin", emp);
                 q.setParameter("employee", emp);
                 q.executeUpdate();
-
+                
                 employeeSession.delete(emp);
+                deleteFromDeletePlan(memeberId);
             } else {
 
                 result = -2;
@@ -283,6 +285,42 @@ public class EmployeesImp implements EmployeesDAO {
         q.setParameter("garage", new Garage(garageId));
         ArrayList<Employees> employees = (ArrayList<Employees>) q.list();
         return employees;
+    }
+
+    public ArrayList<DeleteEmployeeSchedule> getDeleteEmployeeSchedule() {
+        return (ArrayList<DeleteEmployeeSchedule>) employeeSession.createQuery("from  DeleteEmployeeSchedule").list();
+
+    }
+
+    public int addToDeletePlan(DeleteEmployeeSchedule deleteEmployeeSchedule) {
+
+        try {
+            employeeSession.beginTransaction();
+            Employees employee = (Employees) employeeSession.get(Employees.class, deleteEmployeeSchedule.getEmployeeId());
+            if (employee != null) {
+                employee.setActive(0);
+                employeeSession.persist(deleteEmployeeSchedule);
+            }
+            employeeSession.getTransaction().commit();
+            System.out.println(String.format("dear mahmoud kindly be informed that user %s has been deleted",deleteEmployeeSchedule.getEmployeeId()));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return utils.Constants.FAILED;
+        }
+
+        return utils.Constants.SUCCESS;
+    }
+
+    public void deleteFromDeletePlan(int in) {
+        try {
+            Query query = employeeSession.createQuery("delete from DeleteEmployeeSchedule where employeeId=:id ");
+            query.setParameter("id", in);
+            query.executeUpdate();
+        } catch (Exception ex) {
+
+            ex.printStackTrace();
+
+        }
     }
 
 }

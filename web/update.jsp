@@ -7,6 +7,8 @@
 
 <%@page import="utils.Utils"%>
 <%@page import="DAOS.EmployeesImp"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE HTML>
 <!--
         Aqueous: A responsive HTML5 website template by HTML5Templates.com
@@ -33,6 +35,15 @@
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
+        <script>
+            function submitMethod()
+            {
+
+                $('#updateEmployeeForm').submit();
+
+
+            }
+        </script>
     </head>
     <body class="column1">
         <jsp:include page="ServiceProviderHeader/updateEmployeeDataHeader.jsp"/>
@@ -42,15 +53,38 @@
                 <div id="page-bgbtm">
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
-                            <center>
-                                <form method="post" action="updateemployeeprofile.jsp" onsubmit="isNotEmpty(this)">
-                                    "please choose employee do you want to update his / her data"
-                                    <select name="employee">
-                                        <%= Utils.loadAllEmployeesAsList("option")%> 
-                                    </select>
-                                    <input type="submit" value="update" id="removeMyButton"/>
-                                </form>
-                            </center>
+                            <form method="post" action="InitializeEmployee" id="updateEmployeeForm" >
+
+                                <table>
+                                    <tr>
+                                        <td colspan="2">
+                                    <center> <c:out value="${error.getErrorBody()}"/></center>
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            "please choose employee do you want to update his / her data"
+                                        </td>
+                                        <td>
+                                            <select name="employee">
+                                                <c:forEach items="${allEmployees}" var="employee">
+                                                    <option value="${employee.getEmployeeId()}">(${employee.getFirstName()} ${employee.getLastName()}) ${employee.getEmail()} </option>
+                                                </c:forEach>  
+                                            </select> 
+
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <input type="button" value="update" id="removeMyButton" onclick="submitMethod()"/>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                            </form>
+
+                                   
                         </div>
                     </div>
                 </div>
