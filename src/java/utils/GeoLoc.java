@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package utils;
 
 /**
@@ -11,19 +10,19 @@ package utils;
  * @author orcl
  */
 public class GeoLoc {
-    
+
     double lat;
     double lon;
-    
-    
-    public GeoLoc(){};
+
+    public GeoLoc() {
+    }
+
+    ;
 
     public GeoLoc(double lat, double lon) {
         this.lat = lat;
         this.lon = lon;
     }
-    
-   
 
     public double getLat() {
         return lat;
@@ -40,6 +39,10 @@ public class GeoLoc {
     public void setLon(double lon) {
         this.lon = lon;
     }
-    
-    
+
+    public String toString() {
+
+        return String.format("%s , %s", getLat(), getLon());
+    }
+
 }

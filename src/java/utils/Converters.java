@@ -33,7 +33,7 @@ public class Converters {
 
     public static void main(String[] args) {
 
-    GeoLoc geoLoc = getMyGeoLocation(30.071339,31.020892, 10 , 10);
+    GeoLoc geoLoc = getMyGeoLocation(30.071362,31.020893, 0 , .050);
     System.out.println(geoLoc.toString());
     
     }
@@ -44,9 +44,9 @@ public class Converters {
             customGeoLocation = CustomGeoLocation.fromDegrees(latitude, longitude, y);
             CustomGeoLocation[] boundingCoordinates = customGeoLocation.boundingCoordinates();
             coordinateHelper = new CustomCoordinateHelper(boundingCoordinates);
-            customGeoLocation = CustomGeoLocation.fromDegrees(coordinateHelper.getMinLat(),longitude, x);
+            //customGeoLocation = CustomGeoLocation.fromDegrees(coordinateHelper.getMinLat(),longitude, x);
             coordinateHelper = new CustomCoordinateHelper(customGeoLocation.boundingCoordinates());
-            return new GeoLoc(coordinateHelper.getMinLat(),coordinateHelper.getMaxLon());
+            return new GeoLoc(coordinateHelper.getMinLat(),longitude);
         
 
     }
