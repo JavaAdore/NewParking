@@ -8,15 +8,20 @@ package webservices;
 import DAOS.GarageImp;
 import DAOS.SlotsDetailsImp;
 import java.util.ArrayList;
-import javax.ws.rs.FormParam;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.hibernate.Query;
+
+import pojo.Garage;
 import pojo.GarageSlotsDoors;
 import utils.WrappedGarage;
 
@@ -33,15 +38,56 @@ public class GarageDetails {
     JSONArray list = new JSONArray();
     JSONObject obj;
 
-    @POST
+    @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String getgaragedetails(@FormParam("doorId") int doorId, @FormParam("slotId") int slotId) {
-        System.out.println("webservice has beeen called");
-        System.out.println(doorId + "  " + slotId);
+    public String getgaragedetails(@QueryParam("doorId") int doorId, @QueryParam("slotId") int slotId) 
+    {
         GarageSlotsDoors result = slotDetailsImp.getInstance().getSlotDetail(slotId, doorId);
         obj = new JSONObject();
-
-        return result.getPoints().replace("\\", "");
-
+        try {
+            obj.put("points", result.getPoints());
+        } catch (JSONException ex) {
+            Logger.getLogger(GarageDetails.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return obj.toString().replace("\\", "");
     }
+
+       
+    @Path("/garages")
+    @POST    
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getAllGaragesWs() {
+
+        ArrayList<Garage> garages = GarageImp.getInstance().getAllGarages();
+
+        JSONArray arr = new JSONArray() ; 
+        
+        for(Garage g :  garages)
+        {
+            try { 
+                JSONObject obj = new JSONObject() ; 
+                
+                obj.put("city", g.getCity()) ;
+                obj.put("country", g.getCountry()) ;
+                obj.put("doors", g.getGarageDoors().size()) ;
+                obj.put("id", g.getGarageId()) ;
+                obj.put("lat", g.getLat()) ;
+                obj.put("lon", g.getLon()) ;
+                obj.put("title", g.getTitle()) ; 
+                obj.put("slots", g.getGarageStatus().size()) ;
+                obj.put("mapURL", g.getMap().getMapUrl());
+                obj.put("height", g.getMap().getHeight());
+                obj.put("width", g.getMap().getWidth());
+                obj.put("ratio", g.getMap().getRatio());
+                obj.put("unit", g.getMap().getUnit());
+            
+                arr = arr.put(obj);
+            } catch (JSONException ex) {
+                Logger.getLogger(GarageDetails.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+        }
+        
+        return arr.toString(); 
+    }
+
 }

@@ -25,6 +25,7 @@
         <meta name="description" content="" />
         <meta name="keywords" content="" />
         <noscript>
+
         <link rel="stylesheet" href="css/5grid/core.css" />
         <link rel="stylesheet" href="css/5grid/core-desktop.css" />
         <link rel="stylesheet" href="css/5grid/core-1200px.css" />
@@ -32,12 +33,21 @@
         <link rel="stylesheet" href="css/style.css" />
         <link rel="stylesheet" href="css/style-desktop.css" />
         </noscript>
+        <noscript>
+        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
+        </noscript> 
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <script type="text/javascript">
-            
-            
-            
+
+            function submitMethod()
+            {
+                if (areYouSure('#adminInfo', 'Are you sure that you want to delete ?'))
+                {
+                    $('#deleteAdminForm').submit();
+                }
+            }
+
         </script>
 
 
@@ -50,18 +60,23 @@
                 <div id="page-bgbtm">
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
-                            <form method="post" action="RemoveAdminServlet"   onsubmit= "return areYouSure('#adminInfo', 'Are you sure that you want to delete ?')">
-                                Choose Employee email:  
-                                <select name="adminInfo"  id="adminInfo">
-
-                                    <%= admins%>             
-
-                                </select>
-
-                                <input type="submit" id="removeMyButton" value="Delete Employee" />
-
+                            <form id="deleteAdminForm" method="post" action="RemoveAdminServlet"   >
+                                <table align="center">
+                                    <tr>
+                                        <td>Choose Employee email: </td>
+                                        <td>
+                                            <select name="adminInfo"  id="adminInfo">
+                                                <%= admins%>             
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <button  type="button"  onclick="submitMethod()" >Delete</button>
+                                        </td>
+                                    </tr>
+                                </table>
                             </form>
-
                             <center> <c:out value="${error.getErrorBody()}"/></center>
                         </div>
                     </div>

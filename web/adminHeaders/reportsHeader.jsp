@@ -15,17 +15,7 @@
         <header id="header">
         <jsp:include page="../signoutForm.jsp"></jsp:include>
 
-        <div class="5grid-layout">
-            <div class="row">
-                <div class="12u" id="logo"> <!-- Logo -->
-                    <form action="LogOutServlet" method="Post">
-                        <input id="gobutton" type="submit" value="Sign Out" />
-                    </form>
-                    <h1><a href="#" class="mobileUI-site-name">Parking System</a></h1>
 
-                </div>
-            </div>
-        </div>
         <div id="menu-wrapper">
             <div class="5grid-layout">
                 <div class="row">
@@ -35,7 +25,9 @@
                                 <li ><a href="editprofile.jsp">Edit Profile</a></li>
                                 <li><a href="addadminbyadmin.jsp">Add Employee</a></li>
                                 <li ><a href="RemoveAdminInitializer">Remove Employee</a></li>
-                                <li class="current_page_item"><a href="accountant.jsp">View Reports</a></li>
+                                <li><a href="UpdateSlotInitializer">update slots status</a></li>
+
+                                <li class="current_page_item"><a href="viewreport.jsp">View Reports</a></li>
                             </ul>
                         </nav>
                     </div>

@@ -22,8 +22,8 @@ public class UpdateSlotStatus {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String updateSlot(@QueryParam("slotid") int slotid, @QueryParam("garageid") int garageid , @QueryParam("status") int status) {
-        return GarageSlotImp.getInstance().UpdateGarageSlot(slotid, garageid , status);
+    public String updateSlot(@QueryParam("slotid") int slotid,  @QueryParam("status") int status) {
+        return GarageSlotImp.getInstance().UpdateGarageSlot(slotid,  status);
     }
 
 }

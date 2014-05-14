@@ -10,7 +10,6 @@ import GObjects.Marker;
 import GObjects.Slot;
 import GObjects.Step;
 import Sessions.ConnectionHandler;
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import java.util.ArrayList;

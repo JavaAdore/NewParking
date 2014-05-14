@@ -74,7 +74,7 @@ public class HelperClass {
         return garage;
     }
 
-    public static void insertInitialDataPlease() {
+    public static void insertInitialData() {
         SessionFactory sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
         Session session = sessionFactory.openSession();
 

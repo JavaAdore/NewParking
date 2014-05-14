@@ -4,6 +4,7 @@
  */
 package Sessions;
 
+import org.hibernate.CacheMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
@@ -34,7 +35,7 @@ public class ConnectionHandler {
     }
 
     public static void destroySessions() {
-        
+
     }
 
     String hibernatePath = "";
@@ -65,6 +66,7 @@ public class ConnectionHandler {
     public static Session getRoleSession() {
         if (roleSession == null) {
             roleSession = sessionFactory.openSession();
+
         }
         return roleSession;
     }
@@ -79,13 +81,16 @@ public class ConnectionHandler {
     public static Session getGarageSession() {
         if (garageSession == null) {
             garageSession = sessionFactory.openSession();
+            garageSession.setCacheMode(CacheMode.NORMAL);
         }
         return garageSession;
+
     }
 
     public static Session getEmployeeSession() {
         if (employeeSession == null) {
             employeeSession = sessionFactory.openSession();
+            employeeSession.setCacheMode(CacheMode.NORMAL);
         }
         return employeeSession;
     }
@@ -93,6 +98,7 @@ public class ConnectionHandler {
     public static Session getActionHistorySession() {
         if (actionHistorySession == null) {
             actionHistorySession = sessionFactory.openSession();
+            actionHistorySession.setCacheMode(CacheMode.NORMAL);
         }
         return actionHistorySession;
     }
@@ -100,6 +106,7 @@ public class ConnectionHandler {
     public static Session getUserSession() {
         if (userSession == null) {
             userSession = sessionFactory.openSession();
+            userSession.setCacheMode(CacheMode.NORMAL);
         }
         return userSession;
     }
@@ -107,6 +114,7 @@ public class ConnectionHandler {
     public static Session getGarageSlotSession() {
         if (garageSlotSession == null) {
             garageSlotSession = sessionFactory.openSession();
+            garageSlotSession.setCacheMode(CacheMode.NORMAL);
         }
         return garageSlotSession;
     }
@@ -114,6 +122,8 @@ public class ConnectionHandler {
     public static Session getGarageSlotDoorsSession() {
         if (garageSlotDoorsSession == null) {
             garageSlotDoorsSession = sessionFactory.openSession();
+            garageSlotDoorsSession.setCacheMode(CacheMode.NORMAL);
+            
         }
         return garageSlotDoorsSession;
     }
@@ -121,6 +131,7 @@ public class ConnectionHandler {
     public static Session getGarageSlotStatusSession() {
         if (garageSlotStatusSession == null) {
             garageSlotStatusSession = sessionFactory.openSession();
+            garageSlotStatusSession.setCacheMode(CacheMode.NORMAL);
         }
         return garageSlotStatusSession;
     }
@@ -128,6 +139,7 @@ public class ConnectionHandler {
     public static Session garageSlotDetailsSession() {
         if (garageSlotDetailsSession == null) {
             garageSlotDetailsSession = sessionFactory.openSession();
+            garageSlotDetailsSession.setCacheMode(CacheMode.NORMAL);
         }
         return garageSlotDetailsSession;
     }
@@ -135,6 +147,7 @@ public class ConnectionHandler {
     public static Session getDailyHistoryReportSession() {
         if (dailyHistoryReportSession == null) {
             dailyHistoryReportSession = sessionFactory.openSession();
+            dailyHistoryReportSession.setCacheMode(CacheMode.NORMAL);
         }
         return dailyHistoryReportSession;
     }
@@ -142,6 +155,7 @@ public class ConnectionHandler {
     public static Session getMonthlyHistoryReportSession() {
         if (monthlyHistoryReportSession == null) {
             monthlyHistoryReportSession = sessionFactory.openSession();
+            monthlyHistoryReportSession.setCacheMode(CacheMode.NORMAL);
         }
         return monthlyHistoryReportSession;
     }
@@ -149,6 +163,7 @@ public class ConnectionHandler {
     public static Session getYearlyHistoryReportSession() {
         if (yearlyHistoryReportSession == null) {
             yearlyHistoryReportSession = sessionFactory.openSession();
+            yearlyHistoryReportSession.setCacheMode(CacheMode.NORMAL);
         }
         return yearlyHistoryReportSession;
     }

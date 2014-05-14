@@ -29,7 +29,7 @@
             {
                 if (isNotEmpty('#garage') && isNotEmpty('#admin'))
                     $('#assign').submit();
-                
+
             }
         </script>
     </head>
@@ -46,13 +46,22 @@
                                     Select Admin
                                     <select name="admin" id="admin">
 
-                                        <%= utils.Utils.getAllAdminsInfo(false)%> 
-
+                                        <c:forEach items="${admins}" var="admin">
+                                            <option value="${admin.getEmployeeId()}">${admin.getFirstName()}   ${admin.getLastName()} (   ${admin.getEmail()}   ) </option>
+                                        </c:forEach>
+                                        <c:if test="${empty admins}">
+                                            <option value=-1 >Currently there is unassigned  employees </option>
+                                        </c:if> 
                                     </select>
 
                                     Select Garage 
                                     <select name="garage" id="garage">
-                                        <%= utils.Utils.loadAllGaragesAsList("option")%> 
+                                        <c:forEach items="${garages}" var="garage">
+                                            <option value='${garage.getGarageId()}'>${garage.getTitle()}</option>
+                                        </c:forEach>
+                                        <c:if test="${empty garages}">
+                                            <option value= '-1' >Currently there is no garages </option>
+                                        </c:if>
                                     </select>
 
                                     <input type="button" value="Assign" id="removeMyButton1" onclick="submitForm()"/>

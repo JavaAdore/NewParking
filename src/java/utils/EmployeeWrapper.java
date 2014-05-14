@@ -13,21 +13,27 @@ import pojo.Roles;
  */
 public class EmployeeWrapper {
 
+    public EmployeeWrapper(Integer employeeId, String firstName, String lastName, String email) {
+        this.employeeId = employeeId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+
     private Integer employeeId;
-    
+
     private Roles roles;
-    
+
     private Garage garage;
-    
+
     private String firstName;
-    
+
     private String lastName;
-    
+
     private String email;
-    
-    
+
     public EmployeeWrapper(Integer employeeId, Roles roles, Garage garage, String firstName, String lastName, String email) {
-    
+
         this.employeeId = employeeId;
         this.roles = roles;
         this.garage = garage;
@@ -60,7 +66,6 @@ public class EmployeeWrapper {
         this.email = email;
     }
 
-    
     public Integer getEmployeeId() {
         return employeeId;
     }
@@ -84,6 +89,5 @@ public class EmployeeWrapper {
     public String getEmail() {
         return email;
     }
-
 
 }

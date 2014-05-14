@@ -13,5 +13,7 @@ import javax.persistence.FetchType;
 public class Constants {
     public static final double distance = .5; // referes to 100 meter
     
+    
+
    
 }

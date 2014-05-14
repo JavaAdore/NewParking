@@ -55,7 +55,7 @@ public class AssignAdminServlet extends HttpServlet {
 
         }
 
-        request.getRequestDispatcher("assign.jsp").forward(request, response);
+        request.getRequestDispatcher("AssignAdminServlet").forward(request, response);
 
     }
 

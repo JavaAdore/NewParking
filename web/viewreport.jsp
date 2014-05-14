@@ -1,26 +1,40 @@
+<jsp:include page="adminHeaders/reportsHeader.jsp"/>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<script src="css/5grid/jquery.js"></script>
+<script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script src="js/reportHandlers.js"></script>
+<script src="js/jQuery.js"></script>
+<noscript>
+<meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
+</noscript> 
+<script>
+    $(document).ready(function()
+    {
+        $.ajax({url: "ReportHandler", async: false, success: function(result)
+            {
+                if (result.length > 1)
+                {
+                    $("#fromSpan").html(" from :         <input id='from' type='date' " + result + " />");
+                    $("#toSpan").html(" to :         <input id='to' type='date' " + result + " />");
+                    $("#buttonSpan").html(" <input type = 'button' value = 'view report' />");
+                    $('#buttonSpan').click(function()
+                    {
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Parking System</title>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="description" content="" />
-        <meta name="keywords" content="" />
-        <script src="css/5grid/jquery.js"></script>
-        <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
-        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-        <script type="text/javascript">
-        </script>
-        <script src="js/reportHandlers.js"></script>
-        <link rel="stylesheet" href="css/BeatPicker.min.css"/>
-        <script src="js/jquery-2.1.0.min.js"></script>
-        <script src="js/BeatPicker.min.js"></script>
+                        viewReport($('#from').val(), $('#to').val());
+                    });
+                } else
+                {
+                    $("#fromSpan").html(" Sorry , No available reports related to your garage yet");
+                }
+            }});
 
 
-
+    });
+</script>
+<title>JSP Page</title> 
+</head>
+<body>
     <div id="page-wrapper">
         <div id="page-bgtop">
             <div id="page-bgbtm">
@@ -28,11 +42,15 @@
                     <center>
                         <div id="page-content-wrapper">
 
+                            <span id="fromSpan">
 
-                            from :         <input id="from" type="date"  />  <br/>
-                            to   :         <input id="to" type="date"/> <br/>
-                            <input type="button" value="view report" onclick="viewReport()">
+                            </span>
+                            <span id="toSpan">
 
+                            </span>
+                            <span id="buttonSpan">
+
+                            </span>
                             <div id="reportBodyDiv">
 
                             </div>
@@ -40,7 +58,7 @@
 
                             </div>
                             <div id="theChart"></div>
-                        </div>
+
                     </center>
                 </div>
                 <div id="copyright" class="5grid-layout">	

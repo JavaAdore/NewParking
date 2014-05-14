@@ -1,8 +1,3 @@
-<script>
-
-
-</script>
-
 <body>
 
     <script src="js/circle.js"></script>

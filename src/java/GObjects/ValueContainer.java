@@ -5,11 +5,13 @@
  */
 package GObjects;
 
+import java.io.Serializable;
+
 /**
  *
  * @author orcl
  */
-public class ValueContainer {
+public class ValueContainer implements Serializable{
 
     private double value;
 

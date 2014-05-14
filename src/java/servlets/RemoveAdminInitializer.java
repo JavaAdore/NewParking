@@ -36,12 +36,13 @@ public class RemoveAdminInitializer extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-            if (emp != null) {
+            if (emp != null && emp.getGarage() != null) {
                 ArrayList<Employees> employees = EmployeesImp.getInstance().getAllEmployeesByGarageId(emp.getGarage().getGarageId());
                 request.setAttribute("employees", employees);
-                request.getRequestDispatcher("removeadminbyadmin.jsp").forward(request, response);
-                        
+
             }
+            request.getRequestDispatcher("removeadminbyadmin.jsp").forward(request, response);
+
         }
     }
 

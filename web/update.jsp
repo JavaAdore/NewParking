@@ -20,6 +20,9 @@
         <meta name="description" content="" />
         <meta name="keywords" content="" />
         <noscript>
+        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
+        </noscript> 
+        <noscript>
         <link rel="stylesheet" href="css/5grid/core.css" />
         <link rel="stylesheet" href="css/5grid/core-desktop.css" />
         <link rel="stylesheet" href="css/5grid/core-1200px.css" />
@@ -32,7 +35,7 @@
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
     </head>
     <body class="column1">
-               <jsp:include page="ServiceProviderHeader/updateEmployeeDataHeader.jsp"/>
+        <jsp:include page="ServiceProviderHeader/updateEmployeeDataHeader.jsp"/>
 
         <div id="page-wrapper">
             <div id="page-bgtop">
@@ -43,7 +46,7 @@
                                 <form method="post" action="updateemployeeprofile.jsp" onsubmit="isNotEmpty(this)">
                                     "please choose employee do you want to update his / her data"
                                     <select name="employee">
-                                       <%= Utils.loadAllEmployeesAsList("option")%> 
+                                        <%= Utils.loadAllEmployeesAsList("option")%> 
                                     </select>
                                     <input type="submit" value="update" id="removeMyButton"/>
                                 </form>

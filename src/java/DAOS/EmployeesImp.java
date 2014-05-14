@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import pojo.AdminsActions;
 import pojo.Employees;
 import pojo.Garage;
+import utils.EmployeeWrapper;
 
 /**
  *
@@ -224,14 +225,11 @@ public class EmployeesImp implements EmployeesDAO {
             Query q;
             if (emp != null) {
 
-                
-                    q = employeeSession.createQuery("delete from AdminsActions where admin = :admin or  employee=:employee");
-                    q.setParameter("admin", emp);
-                    q.setParameter("employee", emp);
-                    q.executeUpdate();
+                q = employeeSession.createQuery("delete from AdminsActions where admin = :admin or  employee=:employee");
+                q.setParameter("admin", emp);
+                q.setParameter("employee", emp);
+                q.executeUpdate();
 
-                
-               
                 employeeSession.delete(emp);
             } else {
 
@@ -246,36 +244,29 @@ public class EmployeesImp implements EmployeesDAO {
         return result;
     }
 
-    public String getAllAdminsInfo(boolean assigned) {
-
+    public ArrayList<EmployeeWrapper> getAllAdminsInfo(boolean assigned) {
+        ArrayList<EmployeeWrapper> output = new ArrayList<EmployeeWrapper>();
         Query query;
 
         if (assigned) {
-            query = employeeSession.createQuery("select e.employeeId , e.firstName ,e.lastName  from Employees e where e.roles.roleId =2 and e.garage.garageId is not null");
+            query = employeeSession.createQuery("select e.employeeId , e.firstName ,e.lastName , e.email  from Employees e where e.roles.roleId =2 and e.garage.garageId is not null");
         } else {
-            query = employeeSession.createQuery("select e.employeeId , e.firstName ,e.lastName  from Employees e where e.roles.roleId =2 and e.garage.garageId is null");
+            query = employeeSession.createQuery("select e.employeeId , e.firstName ,e.lastName   , e.email from Employees e where e.roles.roleId =2 and e.garage.garageId is null");
         }
 
         List result = query.list();
 
-        StringBuilder str = new StringBuilder();
-
         for (int i = 0; i < result.size(); i++) {
+            int employeeId = (Integer) ((Object[]) result.get(i))[0];
+            String firstName = (String) ((Object[]) result.get(i))[1];
+            String lastName = (String) ((Object[]) result.get(i))[2];
+            String email = (String) ((Object[]) result.get(i))[3];
 
-            str.append((Integer) ((Object[]) result.get(i))[0]);
+            output.add(new EmployeeWrapper(employeeId, firstName, lastName, email));
 
-            str.append(":");
-
-            str.append((String) ((Object[]) result.get(i))[1]);
-
-            str.append(" ");
-
-            str.append((String) ((Object[]) result.get(i))[2]);
-
-            str.append(",");
         }
 
-        return str.toString();
+        return output;
     }
 
     public ArrayList<Employees> getAllEmployees() {

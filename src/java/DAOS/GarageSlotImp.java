@@ -33,19 +33,19 @@ public class GarageSlotImp {
     private GarageSlotImp() {
     }
     
-    public String UpdateGarageSlot(int slotid, int garageid, int status) {
+    public String UpdateGarageSlot(int slotid, int status) {
         String output = "";
         try {
             garageSlotSession.beginTransaction();
-            Query q = garageSlotSession.createQuery("from GarageStatus where slotid = :slotid and garage = :garage");
+            Query q = garageSlotSession.createQuery("from GarageStatus where slotid = :slotid ");
             q.setParameter("slotid", slotid);
-            q.setParameter("garage", new Garage(garageid));
+           
             
             GarageStatus result = (GarageStatus) q.uniqueResult();
             if (result != null) {
                 result.setStatus(status);
                 if (status == 0) {
-                    garageSlotSession.getNamedQuery("update_Garage_status").setParameter("slotid", slotid).setParameter("garageid", garageid).executeUpdate();
+                    garageSlotSession.getNamedQuery("update_Garage_status").setParameter("slotid", slotid).executeUpdate();
                     
                 } else {
                     result.setArrivalTime(new Timestamp(new Date().getTime()));

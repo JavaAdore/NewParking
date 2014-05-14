@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import pojo.DailyHistory;
 import pojo.Employees;
 import pojo.Garage;
@@ -65,37 +67,36 @@ public class Utils {
         return new EmployeeWrapper(employee.getEmployeeId(), employee.getRoles(), employee.getGarage(), employee.getFirstName(), employee.getLastName(), employee.getEmail());
     }
 
-    public static String getAllAdminsInfo(boolean assign) {
-
-        String res = empDao.getAllAdminsInfo(assign);
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (String str : res.split(",")) {
-
-            String infos[] = str.split(":");
-
-            if (infos.length == 2) {
-                stringBuilder.append("<option value=" + infos[0] + ">");
-
-                stringBuilder.append(infos[1]);
-
-                stringBuilder.append("</option>");
-            }
-
-        }
-        if (stringBuilder.length() == 0) {
-
-            stringBuilder.append("<option value= -1 >");
-
-            stringBuilder.append("currently there is no employees");
-
-            stringBuilder.append("</option>");
-        }
-
-        return stringBuilder.toString();
-    }
-
+//    public static String getAllAdminsInfo(boolean assign) {
+//
+//        String res = empDao.getAllAdminsInfo(assign);
+//
+//        StringBuilder stringBuilder = new StringBuilder();
+//
+//        for (String str : res.split(",")) {
+//
+//            String infos[] = str.split(":");
+//
+//            if (infos.length == 2) {
+//                stringBuilder.append("<option value=" + infos[0] + ">");
+//
+//                stringBuilder.append(infos[1]);
+//
+//                stringBuilder.append("</option>");
+//            }
+//
+//        }
+//        if (stringBuilder.length() == 0) {
+//
+//            stringBuilder.append("<option value= -1 >");
+//
+//            stringBuilder.append("currently there is no employees");
+//
+//            stringBuilder.append("</option>");
+//        }
+//
+//        return stringBuilder.toString();
+//    }
     public static String loadAllGaragesAsList(String identifier) {
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -346,7 +347,6 @@ public class Utils {
         result.setHours(hours);
         result.setFrom(toString(minDate));
         result.setTo(toString(maxDate));
-       
 
         result.setAvrageOrConsumption((hours / (((daysBetween(minDate, maxDate) + 1) * 24) * numberOfSlots)));
 
@@ -417,5 +417,27 @@ public class Utils {
 
         }
         return result;
+    }
+
+    public static JSONObject prepareGarageOverView(int id) {
+
+        JSONArray list = new JSONArray();
+        JSONObject obj, obj2;
+
+        String imagePath = GarageImp.getInstance().getImagePath(id);
+        obj2 = new JSONObject();
+        ArrayList<WrappedGarageSlotsStatus> result = GarageSlotsStatusImp.getInstance().getGarageSlotsStatus(id);
+        obj2.put("imagePath", imagePath);
+        for (WrappedGarageSlotsStatus wrappedGarageSlotsStatus : result) {
+            obj = new JSONObject();
+            obj.put("slotId", wrappedGarageSlotsStatus.getSlotId());
+            obj.put("status", wrappedGarageSlotsStatus.getSlotStatus());
+            obj.put("x", wrappedGarageSlotsStatus.getX());
+            obj.put("y", wrappedGarageSlotsStatus.getY());
+            list.add(obj);
+        }
+        obj2.put("slots", list);
+        return obj2;
+
     }
 }

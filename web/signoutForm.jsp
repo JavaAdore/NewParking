@@ -6,5 +6,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <form action="LogOutServlet" method="Post">
+
     <input id="gobutton" type="submit" value="Sign Out" />
 </form>

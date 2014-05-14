@@ -4,6 +4,7 @@
  */
 package GObjects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author orcl
  */
-public class Slot implements Marker {
+public class Slot implements Marker, Serializable {
 
     String slotName;
     int x;
@@ -21,9 +22,19 @@ public class Slot implements Marker {
     HashMap<Integer, ValueContainer> totalMonthlyConsumedHours;
     HashMap<Integer, ValueContainer> totalYearlyConsumedHours;
 
-    List<Step> path;
+    List<Step> path = new ArrayList<>();
 
     public Slot() {
+    }
+
+    public Slot(String slotName, int x, int y) {
+
+        this.slotName = slotName;
+
+        this.x = x;
+
+        this.y = y;
+
     }
 
     public Slot(String slotName, int x, int y, List<Step> path, HashMap<Integer, ValueContainer> totalDailyConsumedHours, HashMap<Integer, ValueContainer> totalMonthlyConsumedHours, HashMap<Integer, ValueContainer> totalYearlyConsumedHours) {
@@ -92,14 +103,24 @@ public class Slot implements Marker {
         this.path = path;
     }
 
+    public void addStep(Step step) {
+
+        path.add(step);
+
+    }
+
+    public void clearPath() {
+
+        path.clear();
+    }
+
     @Override
     public String getMarker() {
         return getSlotName();
     }
 
     @Override
-    public boolean equals(Object obj) 
-    {
+    public boolean equals(Object obj) {
         Slot slot = (Slot) obj;
         return ((((Slot) obj).getX() == getX()) && (((Slot) obj).getY() == getY()));
     }

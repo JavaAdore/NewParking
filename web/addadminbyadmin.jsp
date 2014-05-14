@@ -10,12 +10,21 @@
         <meta name="keywords" content="" />
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
+        <script src="js/customValidator.js"></script>
+        <style>
+            span{width:100px;}
+        </style>
+        <noscript>
+        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
+        </noscript> 
         <script type="text/javascript">
+            
             function submitMethod()
             {
-                //if () validated
+                if (isText('#firstName', '#firstNameError') && isText('#lastName', '#lastNameError') && isEmailWithValidation('#email', '#emailError') && areTheSame('#password', '#confirmPassword', '#confirmPasswordError') && isAdate('#birthdate', '#birthdateError'))
                 {
-                    $('#addAdmin').submit();
+
+                    $("#addAdmin").submit();
                 }
             }
         </script>
@@ -32,47 +41,52 @@
                                 <form  id = "addAdmin" action ="addAdminServlet" method="post">
                                     <table>
                                         <th colspan="2">
-                                        <center> <c:out value="${error.getErrorBody()}" /></center>
+                                            <c:out value="${error.getErrorBody()}"/>
                                         </th>
                                         <tr>
                                             <td>First Name:</td>
-                                            <td><input name="firstName" type="text"   ></td>
+                                            <td><input id ="firstName" name="firstName" type="text"   onblur="isText('#firstName', '#firstNameError')"></td>
+
+                                            <td><span id="firstNameError"></span></td>
                                         </tr>
                                         <tr>
                                             <td>Last Name:</td>
-                                            <td><input name="lastName" type="text"   ></td>
+                                            <td><input name="lastName" type="text" id="lastName" onblur="isText('#lastName', '#lastNameError')" ></td>
+                                            <td><span id="lastNameError"></span></td>
                                         </tr>
                                         <tr>
                                             <td>Email:</td>
-                                            <td><input name="email" type="email" required/> </td>
+                                            <td><input id="email" name="email" type="email" onblur="isEmailWithValidation('#email', '#emailError')" /> </td>
+                                            <td><span id="emailError"></span></td>
                                         </tr>
                                         <tr>
                                             <td>Password:</td>
-                                            <td><input name="password" type="password" required /> </td>
+                                            <td><input id="password" name="password" type="password" onblur="validateLength('password', 'passwordError');
+                                                    areTheSame('#password', '#confirmPassword', '#confirmPasswordError')" /> </td>
+                                            <td><span id="passwordError"></span></td>
                                         </tr>
                                         <tr>
                                             <td>Confirm Password:</td>
-                                            <td><input name="confirmPassword" type="password" required /> </td>
+                                            <td><input id="confirmPassword" name="confirmPassword" type="password" onblur="areTheSame('#password', '#confirmPassword', '#confirmPasswordError')"/> </td>
+                                            <td><span id="confirmPasswordError"></span></td>
                                         </tr>
                                         <tr>
                                             <td>gender:</td>
-                                            <td><input name="gender" type="radio"  value="m"checked />male <br>
+                                            <td><input name="gender" type="radio"  value="m" checked />male <br>
                                                 <input name="gender" type="radio"  value="f"/> female <br>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>Birthday:</td>
-                                            <td><input name="birthdate" type="date" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" placeholder="yyyy-mm-dd" required /> </td>
+                                            <td><input id="birthdate" name="birthdate" type="date" onblur="isAdate('#birthdate', '#birthdateError')"/> </td>
+                                            <td><span id="birthdateError"> </span>  </td>
                                         </tr>
-                                        <tr>
-                                            <td>Job:</td>
-                                            <td><input name="userJob" type="text"  maxlength="20" /> </td>
-                                        </tr>
+
                                         <tr>
                                             <td>Role:</td>
                                             <td>
-                                                <select name="role">
-                                                    <option value="2">Adminstrator</option>
+                                                <select name="role" >
+                                                    <option value="2">Administrator</option>
                                                     <option value="3">Accountant</option>
                                                 </select>
                                             </td>

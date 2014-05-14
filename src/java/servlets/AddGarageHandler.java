@@ -16,6 +16,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
 import pojo.Garage;
 import pojo.Map;
 
@@ -28,6 +29,7 @@ public class AddGarageHandler extends HttpServlet {
     private ArrayList<String> parameterNames = new ArrayList<String>();
     private ArrayList<String> parameterValues = new ArrayList<String>();
     private String theNameOfTheFile;
+    private String fileExtention;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, FileUploadException, Exception {
@@ -42,16 +44,9 @@ public class AddGarageHandler extends HttpServlet {
 
         out.println(jspFilePath);
 
-        // Check that we have a file upload request
         isMultipart = ServletFileUpload.isMultipartContent(request);
 
-        response.setContentType("text/html");
-
         DiskFileItemFactory factory = new DiskFileItemFactory();
-        // maximum size that will be stored in memory
-        // factory.setSizeThreshold(maxMemSize);
-        // Location to save data that is larger than maxMemSize.
-        factory.setRepository(new File("c:\\temp"));
 
         // Create a new file upload handler
         ServletFileUpload upload = new ServletFileUpload(factory);
@@ -63,12 +58,6 @@ public class AddGarageHandler extends HttpServlet {
         // Process the uploaded file items
         Iterator i = fileItems.iterator();
 
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<title>Servlet upload</title>");
-        out.println("</head>");
-        out.println("<body>");
-
         while (i.hasNext()) {
             FileItem fi = (FileItem) i.next();
             if (!fi.isFormField()) {
@@ -79,10 +68,10 @@ public class AddGarageHandler extends HttpServlet {
                 //  boolean isInMemory = fi.isInMemory();
                 long sizeInBytes = fi.getSize();
                 // Write the file
-                if (fileName.lastIndexOf("\\") >= 0) 
-                {
+                if (fileName.lastIndexOf("\\") >= 0) {
+                    fileExtention = fileName.substring(fileName.lastIndexOf("\\", fileName.length()));
                     file = new File(jspFilePath + fileName.substring(fileName.lastIndexOf("\\")));
-                            
+
                 } else {
 
                     file = new File(jspFilePath
@@ -107,6 +96,7 @@ public class AddGarageHandler extends HttpServlet {
                 request.getRequestDispatcher("addgarage.jsp").forward(request, response);
                 break;
             case 0:
+                file.renameTo(new File(jspFilePath + parameterValues.get(0)+"."+FilenameUtils.getExtension(file.getName())));
                 request.setAttribute("error", new ErrorMessage("Garage added"));
                 request.getRequestDispatcher("addgarage.jsp").forward(request, response);
                 break;
@@ -173,29 +163,3 @@ public class AddGarageHandler extends HttpServlet {
 
     }
 }
-//        try {
-//            
-//            title = request.getParameter("title");
-//            country = request.getParameter("country");
-//            city = request.getParameter("city");
-//            doors = Integer.parseInt(request.getParameter("doors"));
-//            mapid = Integer.parseInt(request.getParameterValues("map")[0]);
-//            lon = Double.parseDouble(request.getParameter("lon"));
-//            lat = Double.parseDouble(request.getParameter("lat"));
-//            
-//            Garage garage= new Garage(title, country, city, doors, doors, lon, lat);
-//            
-//            GarageImp garageImp = GarageImp.getInstance();
-//            result = garageImp.addGarage(mapid,garage);
-//            if(result==0)
-//            {
-//                response.sendRedirect("addgarage.jsp");
-//            }else
-//            {
-//                out.println("error");
-//            }
-//            
-//        } finally {
-//          
-//            out.close();
-//        }

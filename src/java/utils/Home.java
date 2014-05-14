@@ -13,10 +13,12 @@ import DAOS.GarageSlotsStatusImp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import pojo.Employees;
+import pojo.Garage;
 import reportsClasses.ReportHistoryRecord;
 
 /**
@@ -27,11 +29,8 @@ public class Home {
 
     public static void main(String[] args) {
 
-//        GObjects.Garage garage = GarageSlotDoorsImp.getInstance().generateGarageObject(4);
-//            System.out.println("Ay kalam");
-        // ArrayList<WrappedGarage> nearGarages = GarageImp.getInstance().getNearGarages(30.0712016,  31.0213405);
-        EmployeesImp.getInstance().deleteMemember(new Employees(61));
-        System.out.println("dd");
+        HelperClass.insertInitialData();
+
     }
 }
 

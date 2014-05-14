@@ -1,12 +1,14 @@
 function areYouSure(select, x)
 {
-
-    if (($(select).val() != "-1"))
+    if ($(select).length != 0)
     {
-        var r = confirm(x);
-        if (r == true)
+        if (($(select).val() != "-1"))
         {
-            return true;
+            var r = confirm(x);
+            if (r == true)
+            {
+                return true;
+            }
         }
     }
     return false;

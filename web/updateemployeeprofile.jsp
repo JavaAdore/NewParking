@@ -10,6 +10,9 @@
     <head>
         <title>Parking System</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <noscript>
+        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
+        </noscript> 
         <meta name="description" content="" />
         <meta name="keywords" content="" />
         <script src="css/5grid/jquery.js"></script>

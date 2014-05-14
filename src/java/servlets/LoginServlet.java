@@ -4,6 +4,7 @@ import DAOS.EmployeesImp;
 import errors.ErrorMessage;
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +43,8 @@ public class LoginServlet extends HttpServlet {
 
             String roleName = employeeWrapper.getRoles().getRoleName();
 
+            Cookie cookie = new Cookie("seal","seal");
+            response.addCookie(cookie);
             if (roleName.equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
 
                 response.sendRedirect("addadmin.jsp");

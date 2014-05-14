@@ -18,6 +18,9 @@
         <link rel="stylesheet" href="css/style.css" />
         <link rel="stylesheet" href="css/style-desktop.css" />
         </noscript>
+        <noscript>
+        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
+        </noscript> 
         <script src="js/validators.js"></script>
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
@@ -25,7 +28,7 @@
     </head><body class="column1">
         <jsp:include page="adminHeaders\removeemployee.jsp"/>
         <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-        
+
         <div id="page-wrapper">
             <div id="page-bgtop">
                 <div id="page-bgbtm">

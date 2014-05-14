@@ -12,6 +12,7 @@ import daosint.ReportsInterface;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,10 +34,11 @@ public class ReportHandler extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-       
+
             ArrayList<ReportsInterface> dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord;
             ArrayList<ArrayList<ReportsInterface>> merged = new ArrayList();
             EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
+            Calendar c = Calendar.getInstance();
             if (emp.getGarage() != null) {
                 dailyHistoryRecord = DailyHistoryReportImp.getInstance().getConsiceDailyHistory(emp.getGarage().getGarageId());
                 monthlyHistoryRecord = MonthlyHistoryReportImp.getInstance().getConsiceMonthlyHistory(emp.getGarage().getGarageId());
@@ -49,10 +51,18 @@ public class ReportHandler extends HttpServlet {
                 ArrayList<ReportsInterface> mergeHistoryReports = Utils.mergeHistoryReports(merged);
                 Date minDate = Utils.getMinDate(dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord);
                 request.getSession().setAttribute("minDate", Utils.toString(minDate));
-                request.getSession().setAttribute("maxDate", Utils.toString(new Date()));
+                Date maxDate  = new Date();
+                if (Utils.daysBetween(minDate, new Date()) > 0) {
+                    c.add(Calendar.DAY_OF_MONTH, -1);
+                    maxDate = c.getTime();
+                    System.out.println(maxDate);
+
+                }
+                request.getSession().setAttribute("maxDate", Utils.toString(maxDate));
+
                 request.getSession().setAttribute("report", null);
                 request.getSession().setAttribute("historyRecord", mergeHistoryReports);
-                out.print(mergeHistoryReports.size());
+                out.print(String.format(" min= %s max=%s value=%s", Utils.toString(minDate), Utils.toString(maxDate),Utils.toString(maxDate)));
 
             }
 

@@ -22,7 +22,7 @@ public class Home {
     public static void main(String[] args) {
         //  pojo.Garage garage = GarageImp.getInstance().getGarage("iti");
         //GarageImp.getInstance().deleteGarage(garage.getGarageId());
-        HelperClass.insertInitialDataPlease();
+        HelperClass.insertInitialData();
         //GarageSlotDoorsImp.getInstance().han dleThisGaragePlease(HelperClass.prepareMeGarageDemoPlease(4));
         //    GObjects.Garage g = GarageSlotDoorsImp.getInstance().generateGarageObject(4);
         //    System.out.println("dddd");

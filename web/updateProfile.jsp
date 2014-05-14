@@ -15,6 +15,9 @@
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
+        <noscript>
+        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
+        </noscript> 
         <script type="text/javascript">
             jQuery(document).ready(function($) {
                 $(".scroll").click(function(event) {

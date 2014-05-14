@@ -19,26 +19,29 @@
         <link rel="stylesheet" href="css/5grid/core-1200px.css" />
         <link rel="stylesheet" href="css/5grid/core-noscript.css" />
         <link rel="stylesheet" href="css/style.css" />
-        
+
 
         <link rel="stylesheet" href="css/style-desktop.css" />
         </noscript>
+        <noscript>
+        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
+        </noscript> 
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <script src=  "js/validators.js"></script>
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
     </head><body class="column1">
-        
+
         <div id="page-wrapper">
             <div id="page-bgtop">
                 <div id="page-bgbtm">
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
-                            <form action="RemoveGarageHandler" method="post" id="removegarageform" onsubmit="return areYouSure('#garage','confirm deleting garage ?')">
+                            <form action="RemoveGarageHandler" method="post" id="removegarageform" onsubmit="return areYouSure('#garage', 'confirm deleting garage ?')">
                                 <table>
                                     <th colspan="2">
                                     <center> <c:out value="${error.getErrorBody()}"/></center>
-                                    
+
                                     </th>
                                     <tr>
                                         <td>

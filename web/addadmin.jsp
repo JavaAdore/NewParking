@@ -1,10 +1,12 @@
-
 <!DOCTYPE HTML>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
     <head>
-
+        <noscript>
+        <meta http-equiv="refresh" content="0; url= enablejavascript.jsp" />
+        </noscript>
         <title>Parking System</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="description" content="" />
@@ -12,70 +14,25 @@
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <script src="js/validators.js"></script>
+        <script src="js/customValidator.js"></script>
         <script type="text/javascript">
-            var flag = false;
-            $(document).ready(function()
-            {
-
-                $("#email").change(function()
-                {
-                    var emailPattern = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
-
-                    var emailAddress = $("#email").val();
-                    if ((emailPattern.test(emailAddress)) == false)
-                    {
-
-                        $("#emailError").html("<h3 style 'color:red'>" + " Please enter email address like that someone@oracle.com</h3>");
-                        flag = false;
-                    } else
-                    {
-                        $.ajax(
-                                {url: "EmailChecking", async: false, data: 'email=' + $("#email").val(), success: function(result)
-                                    {
-
-                                        switch (result)
-                                        {
-                                            case "-1":
-                                                $("#emailError").html("<h3 style 'color:red'>" + $("#email").val() + " accepted</h3>");
-                                                flag = true;
-                                                break;
-                                            case "0" :
-                                                $("#emailError").html("<h3 style 'color:red'>" + $("#email").val() + " not accepted</h3>");
-                                                flag = false;
-                                                break;
-
-                                        }
-
-
-                                    }
-                                })
-                    }
-                })
-            });
-
-            $('addEmployeeForm').submit(new function()
-            {
-
-                if (flag)
-                {
-                    return true;
-
-                }
-                return false;
-            });
 
             function submitMethod()
             {
-
-                // if () validated
+                if (isText('#firstName', '#firstNameError') && isText('#lastName', '#lastNameError') && isEmailWithValidation('#email', '#emailError') && areTheSame('#password', '#confirmPassword', '#confirmPasswordError') && isAdate('#birthdate', '#birthdateError'))
                 {
-                    $('#addEmployeeForm').submit();
+
+                    $("#addEmployeeForm").submit();
                 }
 
 
             }
 
+
         </script>
+        <noscript>
+        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
+        </noscript> 
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
     </head>
     <body>
@@ -87,31 +44,39 @@
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
                             <center>
-                                <table>
-                                    <form  method="post" action="addAdminServlet" id="addEmployeeForm">
+
+                                <form  method="post" action="addAdminServlet" id="addEmployeeForm" name="myForm">
+                                    <table>
+
                                         <th colspan="2">
                                             <c:out value="${error.getErrorBody()}"/>
                                         </th>
                                         <tr>
                                             <td>First Name:</td>
-                                            <td><input name="firstName" type="text"></td>
+                                            <td><input id ="firstName" name="firstName" type="text"   onblur="isText('#firstName', '#firstNameError')"></td>
+
+                                            <td><span id="firstNameError"></span></td>
                                         </tr>
                                         <tr>
                                             <td>Last Name:</td>
-                                            <td><input name="lastName" type="text" required ></td>
+                                            <td><input name="lastName" type="text" id="lastName" onblur="isText('#lastName', '#lastNameError')" ></td>
+                                            <td><span id="lastNameError"></span></td>
                                         </tr>
                                         <tr>
                                             <td>Email:</td>
-                                            <td><input id="email" name="email" type="email" required/> </td>
+                                            <td><input id="email" name="email" type="email" onblur="isEmailWithValidation('#email', '#emailError')" /> </td>
                                             <td><span id="emailError"></span></td>
                                         </tr>
                                         <tr>
                                             <td>Password:</td>
-                                            <td><input name="password" type="password" required /> </td>
+                                            <td><input id="password" name="password" type="password" onblur="validateLength('password', 'passwordError');
+                                                    areTheSame('#password', '#confirmPassword', '#confirmPasswordError')" /> </td>
+                                            <td><span id="passwordError"></span></td>
                                         </tr>
                                         <tr>
                                             <td>Confirm Password:</td>
-                                            <td><input name="confirmPassword" type="password" required /> </td>
+                                            <td><input id="confirmPassword" name="confirmPassword" type="password" onblur="areTheSame('#password', '#confirmPassword', '#confirmPasswordError')"/> </td>
+                                            <td><span id="confirmPasswordError"></span></td>
                                         </tr>
                                         <tr>
                                             <td>gender:</td>
@@ -121,16 +86,14 @@
                                         </tr>
                                         <tr>
                                             <td>Birthday:</td>
-                                            <td><input name="birthdate" type="date" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" placeholder="yyyy-mm-dd" required /> </td>
+                                            <td><input id="birthdate" name="birthdate" type="date" onblur="isAdate('#birthdate', '#birthdateError')"/> </td>
+                                            <td><span id="birthdateError"> </span>  </td>
                                         </tr>
-                                        <tr>
-                                            <td>Job:</td>
-                                            <td><input name="userJob" type="text"  maxlength="20" /> </td>
-                                        </tr>
+
                                         <tr>
                                             <td>Role:</td>
                                             <td>
-                                                <select name="role">
+                                                <select name="role" >
                                                     <option value="2">Administrator</option>
                                                     <option value="3">Accountant</option>
                                                 </select>
@@ -139,7 +102,7 @@
                                         <tr>
                                             <td><input type="button" id="myButton" value="Register" onclick="submitMethod()" /> </td>
                                         </tr>
-                                </table>
+                                    </table>
                                 </form>
                             </center>
                         </div>

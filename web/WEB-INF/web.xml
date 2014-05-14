@@ -80,6 +80,14 @@
         <servlet-name>RemoveAdminInitializer</servlet-name>
         <servlet-class>servlets.RemoveAdminInitializer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AssignAdminHandler</servlet-name>
+        <servlet-class>servlets.AssignAdminHandler</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateSlotInitializer</servlet-name>
+        <servlet-class>servlets.UpdateSlotInitializer</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -155,6 +163,14 @@
     <servlet-mapping>
         <servlet-name>RemoveAdminInitializer</servlet-name>
         <url-pattern>/RemoveAdminInitializer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AssignAdminHandler</servlet-name>
+        <url-pattern>/AssignAdminHandler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateSlotInitializer</servlet-name>
+        <url-pattern>/UpdateSlotInitializer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

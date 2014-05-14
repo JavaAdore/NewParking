@@ -4,92 +4,15 @@
 
 <script src="js/jQuery.js"></script>
 <script type="text/javascript">
-    $(function()
-    {
 
-        var userMinDate = new Date(getStartDate());
-        var userMaxDate = new Date(getToDate());
-
-
-        if (userMinDate == "Invalid Date")
-        {
-
-            userMinDate = new Date('${minDate}');
-
-        }
-        if (userMaxDate == "Invalid Date")
-        {
-
-            userMaxDate = new Date('${maxDate}');
-        }
-
-
-        date1 = dateSwapper(userMinDate, userMaxDate, 0);
-
-        date2 = dateSwapper(userMinDate, userMaxDate, 1);
-
-      
-        if (date1 > new Date(${minDate}));
-        {
-            
-            date1 = new Date(${minDate});
-
-        }
-        if (date2 > new Date(${minDate}))
-        {
-            
-            date2 = new Date(${minDate});
-
-        }
-        
-        $('#minDate').html(dateToString(date1));
-        $('#maxDate').html(dateToString(date2));
-    });
-
-    function dateSwapper(date1, date2, x)
-    {
-
-        switch (x)
-        {
-            case
-                    1:
-                if (date1 > date2)
-                {
-
-                    return  date1;
-                } else
-                    return  date2;
-                break;
-            case 0:
-                if (date1 > date2)
-                {
-                    return date2;
-                }
-                return  date1;
-                break;
-
-        }
-
-
-    }
-
-    function dateToString(date)
-    {
-
-        var formattedDate = new Date(date);
-        var d = formattedDate.getDate();
-        var m = formattedDate.getMonth();
-        m += 1;  // JavaScript months are 0-11
-        var y = formattedDate.getFullYear();
-
-        return (d + "-" + m + "-" + y);
-
-    }
 
 
 </script>
 <script src="js/reportHandlers.js"></script>
-
+<script>
+    $('#minDate').html($('#from').val());
+    $('#maxDate').html($('#to').val());
+</script>
 
 
 <center>

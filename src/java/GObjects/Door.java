@@ -4,6 +4,7 @@
  */
 package GObjects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author orcl
  */
-public class Door implements Marker {
+public class Door implements Marker, Serializable {
 
     int doorId;
     String doorName;
@@ -20,6 +21,18 @@ public class Door implements Marker {
     double lon;
     int x;
     int y;
+
+    public Door(String doorName, int x, int y, double lat, double lon) {
+        this.doorName = doorName;
+        this.lat = lat;
+        this.lon = lon;
+        this.x = x;
+        this.y = y;
+    }
+     public void addSlot(Slot slot){
+        
+        slots.add(slot) ; 
+    }
 
     public int getDoorId() {
         return doorId;

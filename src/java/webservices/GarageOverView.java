@@ -17,6 +17,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import utils.Utils;
 import utils.WrappedGarageSlotsStatus;
 
 /**
@@ -28,28 +29,15 @@ public class GarageOverView {
 
     GarageSlotsStatusImp garageSlotsStatusImp = GarageSlotsStatusImp.getInstance();
     GarageImp garageImp = GarageImp.getInstance();
-    JSONArray list = new JSONArray();
-    JSONObject obj, obj2;
 
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     public String getGarageOverView(@FormParam(value = "id") String id) {
 
-        String imagePath = garageImp.getImagePath(Integer.parseInt(id));
-        obj2 = new JSONObject();
-        ArrayList<WrappedGarageSlotsStatus> result = garageSlotsStatusImp.getGarageSlotsStatus(Integer.parseInt(id));
-        obj2.put("imagePath", imagePath);
-        for (WrappedGarageSlotsStatus wrappedGarageSlotsStatus : result) 
-        {
-            obj = new JSONObject();
-            obj.put("slotId", wrappedGarageSlotsStatus.getSlotId());
-            obj.put("status", wrappedGarageSlotsStatus.getSlotStatus());
-            obj.put("x", wrappedGarageSlotsStatus.getX());
-            obj.put("y", wrappedGarageSlotsStatus.getY());
-            list.add(obj);
+        if (id != null) {
+            int garageId = Integer.parseInt(id);
+            return Utils.prepareGarageOverView(garageId).toString();
         }
-        obj2.put("slots", list);
-        System.out.println();
-        return obj2.toString();
+        return new JSONObject().toString();
     }
 }

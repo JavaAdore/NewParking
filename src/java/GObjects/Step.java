@@ -5,13 +5,14 @@
  */
 package GObjects;
 
+import java.io.Serializable;
 import utils.*;
 
 /**
  *
  * @author orcl
  */
-public class Step {
+public class Step implements Serializable{
 
     int id;
     int x;
