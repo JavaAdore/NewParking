@@ -4,7 +4,6 @@
     Author     : orcl
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <script src="js/jquery-1.5.1.min.js" ></script>
 

@@ -25,33 +25,94 @@ public class Garage implements java.io.Serializable {
 
     @Id
     @GeneratedValue
-    private Integer garageId;
+    private int garageId;
     private String title;
     private String country;
     private String city;
     private double lon;
     private double lat;
-    private int slots;
+    int enabled = 1;
+
     @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
     private Map map;
     @OneToMany(mappedBy = "garage", orphanRemoval = true)
     @ElementCollection(fetch = FetchType.LAZY)
-    private Collection< Employees> employees = new ArrayList< >();
+    private Collection< Employees> employees = new ArrayList<>();
     @OneToMany(mappedBy = "garage", orphanRemoval = true)
     @ElementCollection(fetch = FetchType.EAGER)
-    private Collection< GarageDoors> garageDoors = new ArrayList< >();
+    private Collection< GarageDoors> garageDoors = new ArrayList<>();
     @OneToMany(mappedBy = "garage", orphanRemoval = true)
     @ElementCollection(fetch = FetchType.EAGER)
-    private Collection< GarageStatus> garageStatus = new ArrayList< >();
+    private Collection< GarageStatus> garageStatus = new ArrayList<>();
 
+    @OneToMany(orphanRemoval = true)
+    @ElementCollection(fetch = FetchType.LAZY)
+    private Collection< Feedback> feedbacks = new ArrayList<>();
 
-    public int getSlots() {
-        return slots;
+    @OneToMany(orphanRemoval = true)
+    @ElementCollection(fetch = FetchType.LAZY)
+    private Collection< ContactNumber> contactNumbers = new ArrayList<>();
+
+    @OneToMany(orphanRemoval = true)
+    @ElementCollection(fetch = FetchType.LAZY)
+
+    private Collection< FaxContact> faxNumbers = new ArrayList<>();
+
+    public int getGarageId() {
+        return garageId;
     }
 
-    public void setSlots(int slots) {
-        this.slots = slots;
+    public void setGarageId(int garageId) {
+        this.garageId = garageId;
     }
+
+    public Collection<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+    public void setFeedbacks(Collection<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
+    }
+
+    public Collection<ContactNumber> getContactNumbers() {
+        return contactNumbers;
+    }
+
+    public void setContactNumbers(Collection<ContactNumber> contactNumbers) {
+        this.contactNumbers = contactNumbers;
+    }
+
+    public Collection<FaxContact> getFaxNumbers() {
+        return faxNumbers;
+    }
+
+    public void setFaxNumbers(Collection<FaxContact> faxNumbers) {
+        this.faxNumbers = faxNumbers;
+    }
+
+    public Collection<EmailAddress> getEmails() {
+        return emails;
+    }
+
+    public void setEmails(Collection<EmailAddress> emails) {
+        this.emails = emails;
+    }
+
+    public Collection<Image> getImages() {
+        return Images;
+    }
+
+    public void setImages(Collection<Image> Images) {
+        this.Images = Images;
+    }
+
+    @OneToMany(orphanRemoval = true)
+    @ElementCollection(fetch = FetchType.LAZY)
+    private Collection< EmailAddress> emails = new ArrayList<>();
+
+    @OneToMany(orphanRemoval = true)
+    @ElementCollection(fetch = FetchType.LAZY)
+    private Collection< Image> Images = new ArrayList<>();
 
     private double hourRateInRush;
     private double hourRateOutOfRush;
@@ -72,7 +133,6 @@ public class Garage implements java.io.Serializable {
         this.hourRateOutOfRush = hourRateOutOfRush;
     }
 
-    
     public Garage() {
         this.employees = new HashSet<Employees>();
     }
@@ -82,9 +142,7 @@ public class Garage implements java.io.Serializable {
         garageId = id;
     }
 
-    public Garage(Map map, String title, int slots, int lon, int lat) {
-        this.employees = new HashSet<Employees>();
-
+    public Garage(Map map, String title, int lon, int lat) {
         this.map = map;
         this.title = title;
 
@@ -140,10 +198,6 @@ public class Garage implements java.io.Serializable {
 
     public void setGarageDoors(Collection<GarageDoors> garageDoors) {
         this.garageDoors = garageDoors;
-    }
-
-    public Integer getGarageId() {
-        return this.garageId;
     }
 
     public void setGarageId(Integer garageId) {
@@ -204,6 +258,14 @@ public class Garage implements java.io.Serializable {
 
     public void setEmployeeses(Collection< Employees> employees) {
         this.employees = employees;
+    }
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
     }
 
 }

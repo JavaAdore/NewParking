@@ -30,6 +30,7 @@ public class AddGarageHandler extends HttpServlet {
     private ArrayList<String> parameterValues = new ArrayList<String>();
     private String theNameOfTheFile;
     private String fileExtention;
+    String MapUrl = "";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, FileUploadException, Exception {
@@ -96,7 +97,7 @@ public class AddGarageHandler extends HttpServlet {
                 request.getRequestDispatcher("addgarage.jsp").forward(request, response);
                 break;
             case 0:
-                file.renameTo(new File(jspFilePath + parameterValues.get(0)+"."+FilenameUtils.getExtension(file.getName())));
+                file.renameTo(new File(jspFilePath + MapUrl));
                 request.setAttribute("error", new ErrorMessage("Garage added"));
                 request.getRequestDispatcher("addgarage.jsp").forward(request, response);
                 break;
@@ -125,11 +126,9 @@ public class AddGarageHandler extends HttpServlet {
 
         String city = parameterValues.get(2);
 
-        int slots = Integer.parseInt(parameterValues.get(3));
+        int hourRateInRushHours = Integer.parseInt(parameterValues.get(3));
 
-        int hourRateInRushHours = Integer.parseInt(parameterValues.get(4));
-
-        String MapUrl = file.getName();
+        int hourRateoutofRushHours = Integer.parseInt(parameterValues.get(4));
 
         double ratio = Double.parseDouble(parameterValues.get(5));
 
@@ -142,13 +141,15 @@ public class AddGarageHandler extends HttpServlet {
         double lon = Double.parseDouble(parameterValues.get(9));
 
         double lat = Double.parseDouble(parameterValues.get(10));
+        MapUrl = parameterValues.get(0) + "." + FilenameUtils.getExtension(file.getName());
 
         g.setCity(city);
         g.setCountry(country);
         g.setHourRateInRush(hourRateInRushHours);
+        g.setHourRateOutOfRush(hourRateoutofRushHours);
         g.setLat(lat);
         g.setLon(lon);
-        g.setSlots(slots);
+        g.setHourRateOutOfRush(ratio);
         g.setTitle(garageName);
 
         Map map = new Map();

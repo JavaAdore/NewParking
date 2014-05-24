@@ -56,7 +56,7 @@ public class RemoveGarageHandler extends HttpServlet {
                 }
             }
         } finally {
-            request.getRequestDispatcher(String.format("removegarage.jsp", new Date())).forward(request, response);
+            request.getRequestDispatcher("/LoadAllGaragesInitializer?toPage=removegarage.jsp").forward(request, response);
             out.close();
 
         }

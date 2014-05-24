@@ -2,11 +2,13 @@ package pojo;
 // Generated Mar 28, 2014 6:28:10 PM by Hibernate Tools 3.2.1.GA
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
 /**
@@ -17,7 +19,7 @@ public class Users implements java.io.Serializable {
 
     @Id
     @GeneratedValue
-    private Integer userId;
+    private int userId;
     private String userName;
     private String firstName;
     private String lastName;
@@ -27,7 +29,22 @@ public class Users implements java.io.Serializable {
     private Date birthDate;
     private String gender;
     private String phone;
+    @OneToMany(mappedBy = "user")
+    private Collection<Visit> visits;
+
     public Users() {
+    }
+    public Users(int id)
+    {
+    
+        this.userId= id;
+    }
+    public Users(int id, String userName, String email, String password) {
+        this.userId = id;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+
     }
 
     public Users(String userName, String email, String password) {
@@ -40,14 +57,14 @@ public class Users implements java.io.Serializable {
         this.userName = userName;
         this.email = email;
         this.password = password;
-       
+
     }
 
-    public Integer getUserId() {
-        return this.userId;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -113,5 +130,13 @@ public class Users implements java.io.Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Collection<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(Collection<Visit> visits) {
+        this.visits = visits;
     }
 }

@@ -26,6 +26,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import pojo.*;
+import utils.Converters;
+import utils.GeoLoc;
 import utils.HaversineAlgorithm;
 import utils.Utils;
 
@@ -222,6 +224,7 @@ public class GarageSlotDoorsImp {
             HashMap<String, GarageStatus> slots = new HashMap<>();
 
             deleteOldDoorsAndSlots(garage.getGarageId());
+            Garage garage1 = GarageImp.getInstance().getGarage(garage.getGarageId());
             for (GObjects.Door door : garage.getDoors()) {
                 GarageDoors tempDoor = new GarageDoors(garage.getGarageId(), door.getDoorName(), door.getX(), door.getY(), door.getLon(), door.getLat());
                 tempDoor = addGarageDoor(tempDoor);
@@ -229,9 +232,9 @@ public class GarageSlotDoorsImp {
                     for (GObjects.Slot slot : door.getSlots()) {
                         GarageSlotsDoors path;
                         GarageStatus currentSlot = null;
-                        if (!slotIsAddedBefore(slot, slots)) 
-                        {
-                            currentSlot = new GarageStatus(slot.getSlotName(), garage.getGarageId(), slot.getX(), slot.getY());
+                        if (!slotIsAddedBefore(slot, slots)) {
+                            GeoLoc myGeoLocation = Converters.getMyGeoLocation(garage1.getLat(), garage1.getLon(), (slot.getX() * 0.002154195011337868), (slot.getY() * 0.000204082));
+                            currentSlot = new GarageStatus(slot.getSlotName(), garage.getGarageId(), slot.getX(), slot.getY(), myGeoLocation.getLat(), myGeoLocation.getLon());
                             currentSlot = addGarageSlot(currentSlot);
 
                             if (currentSlot != null) {
@@ -339,22 +342,16 @@ public class GarageSlotDoorsImp {
 
     public GObjects.Garage generateGarageObject(int garageId) {
 
-        Collection<GarageDoors> doors;
-        Collection<GarageStatus> slots;
-        Collection<GarageSlotsDoors> garageSlotsDoors;
         GObjects.Garage garage = null;
         try {
-            garageSlotDoorsSession.beginTransaction();
-            Query q = garageSlotDoorsSession.createQuery("from GarageDoors where garage =:garage ");
-            q.setParameter("garage", new Garage(garageId));
-            doors = (Collection<GarageDoors>) q.list();
-            q = garageSlotDoorsSession.createQuery("from GarageStatus where garage =:garage ");
-            q.setParameter("garage", new Garage(garageId));
-            slots = (Collection<GarageStatus>) q.list();
-            q = garageSlotDoorsSession.createQuery("from GarageSlotsDoors where slotId  in  :slots and doorId in :doors");
+
+            Garage myGarage = GarageImp.getInstance().getGarage(garageId);
+            Collection<GarageStatus> slots = myGarage.getGarageStatus();
+            Collection<GarageDoors> doors = myGarage.getGarageDoors();
+            Query q = garageSlotDoorsSession.createQuery("from GarageSlotsDoors where slotId  in  :slots and doorId in :doors");
             q.setParameterList("slots", slots);
             q.setParameterList("doors", doors);
-            garageSlotsDoors = (Collection<GarageSlotsDoors>) q.list();
+            Collection<GarageSlotsDoors> garageSlotsDoors = q.list();
 
             garage = new GObjects.Garage(garageId);
 
@@ -390,9 +387,6 @@ public class GarageSlotDoorsImp {
             ex.printStackTrace();
             garageSlotDoorsSession.getTransaction().rollback();
 
-        } finally {
-
-            garageSlotDoorsSession.getTransaction().commit();
         }
         return garage;
     }
@@ -410,7 +404,8 @@ public class GarageSlotDoorsImp {
     public <T extends Marker> boolean contains(ArrayList<T> list, Object obj) {
 
         for (T door : list) {
-            if (door.getMarker().equals(obj.toString())) {
+            if (door.getMarker().equals(obj.toString())) 
+            {
                 return true;
             }
 
@@ -419,7 +414,7 @@ public class GarageSlotDoorsImp {
     }
 
     public static void main(String[] args) {
-        GObjects.Garage garage = new GarageSlotDoorsImp().generateGarageObject(67);
+        GObjects.Garage garage = new GarageSlotDoorsImp().generateGarageObject(252);
 
         System.out.println("sss");
 

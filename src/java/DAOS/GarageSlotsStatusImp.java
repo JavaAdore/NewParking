@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import pojo.Garage;
 import pojo.GarageStatus;
 import utils.WrappedGarageSlotsStatus;
 
@@ -63,5 +64,9 @@ public class GarageSlotsStatusImp {
         return (GarageStatus) GarageSlotsStatusSession.get(GarageStatus.class, slotId);
 
     }
+    
+    
 
+    
+       
 }

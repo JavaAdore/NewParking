@@ -27,8 +27,10 @@
                         <li ><a href="addadmin.jsp">Add Employee</a></li>
                         <li ><a href="removeadmin.jsp">Remove Employee</a></li>
                         <li><a href="addgarage.jsp">Add Garage</a></li>
+                        <li><a href="LoadAllGaragesInitializer?toPage=updategarageinfo.jsp">Update Garage Info</a></li>
+
                         <li><a href="drawgaragemap.jsp">Drawing Tool</a></li>
-                        <li  ><a href="removegarage.jsp">Remove Garage</a></li>
+                        <li  ><a href="LoadAllGaragesInitializer?toPage=removegarage.jsp">Remove Garage</a></li>
                         <li><a href="AssignAdminHandler">Assign Employee To Garage</a></li>
                         <li class="current_page_item"><a href="update.jsp">Update Employees Profiles</a></li>
                     </ul>

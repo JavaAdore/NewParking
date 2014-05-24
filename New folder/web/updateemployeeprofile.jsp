@@ -1,0 +1,127 @@
+<%@page import="pojo.Employees"%>
+<%@page import="utils.EmployeeWrapper"%>
+<!DOCTYPE HTML>
+<!--
+        Aqueous: A responsive HTML5 website template by HTML5Templates.com
+        Released for free under the Creative Commons Attribution 3.0 license (html5templates.com/license)
+        Visit http://html5templates.com for more great templates or follow us on Twitter @HTML5T
+-->
+<html>
+    <head>
+        <title>Parking System</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <noscript>
+        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
+        </noscript> 
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <script src="css/5grid/jquery.js"></script>
+        <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
+        <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
+        <script type="text/javascript">
+            jQuery(document).ready(function($) {
+                $(".scroll").click(function(event) {
+                    event.preventDefault();
+                    $('html,body').animate({scrollTop: $(this.hash).offset().top}, 1200);
+                });
+            });
+
+            function myValidator()
+            {
+
+                var pass = document.getElementById("password").value;
+                var confirm = document.getElementById("confirmPassword").value;
+
+                if (pass == confirm)
+                {
+                    return true;
+
+                }
+
+                alert("please confirm password");
+                return false;
+
+            }
+        </script>
+    </head><body>
+        <div id="header-wrapper">
+            <header id="header">
+                <div class="5grid-layout">
+                    <div class="row">
+                        <div class="12u" id="logo"> <!-- Logo -->
+                            <form action="LogOutServlet" method="Post">
+                                <input id="gobutton" type="submit" value="Sign Out" />
+                            </form>
+                            <h1><a href="#" class="mobileUI-site-name">Parking System</a></h1>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="menu-wrapper">
+                    <div class="5grid-layout">
+                        <div class="row">
+                            <div class="12u" id="menu">
+                                <nav class="mobileUI-site-nav">
+                                    <ul>
+                                        <li class="current_page_item"><a href="editprofile.jsp">Edit Profile</a></li>
+                                        <li><a href="addadmin.jsp">Control Area</a></li>
+
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div id="page-wrapper">
+            <div id="page-bgtop">
+                <div id="page-bgbtm">
+                    <div id="page" class="5grid-layout">
+                        <div id="page-content-wrapper">
+
+
+                            <%
+                                String empIdd = request.getParameter("employee");
+                                int empId = Integer.parseInt(empIdd);
+                                Employees c = utils.Utils.getEmployeeById(empId);
+                            %>
+                            <center>   
+                                <form method="post" action="UpdateProfileHandler"  onsubmit="return myValidator()">
+                                    <table>
+                                        <tr>
+                                            <td>Email:</td>
+                                            <td><input name="email" type="email" readonly required class="textbox" value="<%=c.getEmail()%>"  ></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Password:</td>
+                                            <td><input id="password" name="password" type="text" required class="textbox" value="<%=c.getPassword()%>"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Confirm Password:</td>
+                                            <td><input id ="confirmPassword" name="confirmPassword" type="text" required  class="textbox" value="<%=c.getPassword()%>"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><input type="submit"  value="Save Changes" id="savechange"/></td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </center>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="copyright" class="5grid-layout">
+            <section>
+                <p>&copy; Your Site Name | Images: <a href="http://fotogrph.com/">Fotogrph</a> | Design: <a href="http://html5templates.com/">HTML5Templates.com</a></p>
+            </section>
+        </div>
+    </body>
+</html>

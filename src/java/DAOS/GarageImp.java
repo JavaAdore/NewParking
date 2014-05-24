@@ -38,7 +38,7 @@ public class GarageImp implements GarageDAO {
     // will be called withing another session
     public Garage getGarage(int garageId) {
         Garage garage = (Garage) garageSession.get(Garage.class, garageId);
-
+        garageSession.refresh(garage);
         return garage;
     }
 
@@ -207,5 +207,35 @@ public class GarageImp implements GarageDAO {
             ex.printStackTrace();
         }
         return garagePath;
+    }
+
+    public String setEnabled(int garageId, int enabled) {
+        String result = "no such garage";
+        Garage garage = getGarage(garageId);
+
+        if (garage != null) {
+            garage.setEnabled(enabled);
+            switch (updateGarage(garage)) {
+                case 0:
+                    result = "garage availability updated";
+                    break;
+                case -1:
+                    result = "looks like some error happend please contact admistrator";
+                    break;
+            }
+        }
+        return result;
+
+    }
+
+    public int updateGarage(Garage garage) {
+        try {
+            garageSession.beginTransaction();
+            garageSession.persist(garage);
+            garageSession.getTransaction().commit();
+        } catch (Exception ex) {
+            return -1;
+        }
+        return 0;
     }
 }

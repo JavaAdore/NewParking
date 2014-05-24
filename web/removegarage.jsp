@@ -45,8 +45,15 @@
                                     </th>
                                     <tr>
                                         <td>
-                                            garages:<select name="garage" id="garage">
-                                                <%= Utils.loadAllGaragesAsList("option")%> 
+                                            <select name="garage" id="garage">
+                                                <c:forEach items="${allGarages}" var="garage">
+                                                    <option value="${garage.getGarageId()}">${garage.getTitle()}</option>
+                                                </c:forEach>
+                                                <c:if test="${empty allGarages}">
+                                                    <option value="-1">currently their is no garages</option>
+
+                                                </c:if>
+
                                             </select>
                                         </td>
                                         <td>

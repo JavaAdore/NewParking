@@ -1,6 +1,7 @@
 {
     "attributes": {},
     "elements": {
+        "c:foreach": {},
         "c:out": {},
         "c:import": {}
     }

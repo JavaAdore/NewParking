@@ -15,7 +15,7 @@
         <header id="header">
         <jsp:include page="../signoutForm.jsp"></jsp:include>
 
-        
+
         <div id="menu-wrapper">
             <div class="5grid-layout">
                 <div class="row">
@@ -26,7 +26,8 @@
                                 <li><a href="addadminbyadmin.jsp">Add Employee</a></li>
                                 <li ><a href="RemoveAdminInitializer">Remove Employee</a></li>
                                 <li class="current_page_item"><a href="UpdateSlotInitializer">update slots status</a></li>
-                                
+                                <li><a href="viewdetailedreport.jsp">View Detailed Reports</a></li>
+
                                 <li ><a href="viewreport.jsp">View Reports</a></li>
                             </ul>
                         </nav>

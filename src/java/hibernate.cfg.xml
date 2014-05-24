@@ -21,5 +21,11 @@
     <mapping class="pojo.DailyHistory"/>
     <mapping class="pojo.MonthlyHistory"/>
     <mapping class="pojo.YearlyHistory"/>
+    <mapping class="pojo.ContactNumber"/>
+    <mapping class="pojo.EmailAddress"/>
+    <mapping class="pojo.FaxContact"/>
+    <mapping class="pojo.Feedback"/>
+    <mapping class="pojo.Image"/>
+    <mapping class="pojo.Visit"/>
   </session-factory>
 </hibernate-configuration>

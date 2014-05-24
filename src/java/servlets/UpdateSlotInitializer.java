@@ -6,6 +6,7 @@
 package servlets;
 
 import DAOS.GarageImp;
+import DAOS.GarageSlotImp;
 import DAOS.GarageSlotsStatusImp;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,27 +27,18 @@ import utils.WrappedGarageSlotsStatus;
  */
 public class UpdateSlotInitializer extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-            if (emp != null) {
+            if (emp != null)
+            {
 
-                if (emp.getGarage() != null) 
-                {
+                if (emp.getGarage() != null) {
                     if (emp.getRoles().getRoleName().equalsIgnoreCase(utils.EmployeeRole.ADMIN)) {
                         String uri = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + getServletContext().getContextPath();
-                        Collection<GarageStatus> garageSlots = GarageImp.getInstance().getGarage(emp.getGarage().getGarageId()).getGarageStatus();
+                        Collection<GarageStatus> garageSlots = GarageSlotImp.getInstance().getGarageStatusList(emp.getGarage().getGarageId());
                         System.out.println("size is " + garageSlots.size());
                         String imageURL = GarageImp.getInstance().getImagePath(emp.getGarage().getGarageId());
                         request.setAttribute("imageURL", imageURL);

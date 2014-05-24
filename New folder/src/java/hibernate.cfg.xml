@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+    <property name="hibernate.connection.driver_class">oracle.jdbc.OracleDriver</property>
+    <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:XE</property>
+    <property name="hibernate.connection.username">temp</property>
+    <property name="hibernate.connection.password">temp</property>
+    <property name="hibernate.hbm2ddl.auto">update</property>
+    <mapping class="pojo.AdminsActions"/>
+    <mapping class="pojo.Employees"/>
+    <mapping class="pojo.Garage"/>
+    <mapping class="pojo.Map"/>
+    <mapping class="pojo.Roles"/>
+    <mapping class="pojo.Users"/>
+    <mapping class="pojo.GarageStatus"/>
+    <mapping class="pojo.SlotDoorId"/>
+    <mapping class="pojo.GarageSlotsDoors"/>
+    <mapping class="pojo.GarageDoors"/>
+    <mapping class="pojo.DailyHistory"/>
+    <mapping class="pojo.MonthlyHistory"/>
+    <mapping class="pojo.YearlyHistory"/>
+  </session-factory>
+</hibernate-configuration>

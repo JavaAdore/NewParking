@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="ServiceProviderHeader/drawingToolHeader.jsp"/>
 
 <html>
     <head>
@@ -21,13 +22,20 @@
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
     </head>
     <body>
-        <jsp:include page="ServiceProviderHeader/drawingToolHeader.jsp"/>
 
-    <center>
-        <applet code="applets/DrawingTool.class" archive="DrawingTool.jar" width="1200" height="660">
-        </applet>
-    </center>
+
+    <applet code="applets/DrawingTool.class" archive="DrawingTool.jar" width="1200"  height=650>
+    </applet>
+
 </body>
+</html>
+
+
+
+</html>
+
+
+
 
 
 

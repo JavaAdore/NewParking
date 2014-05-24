@@ -19,13 +19,25 @@ function assignListeners(from, to)
         {
         }});
 }
+function detailedReportInitializer(from, to)
+{   
+    correctDates(from , to);
+    
+    $.ajax({url: "DetailedReportInitializer", async: false, data: 'from=' + from + '&to=' + to, success: function(result)
+        {
+        }});
+}
 
 function viewReport(from , to)
 {
     assignListeners(from, to);
     $('#reportBodyDiv').load("ReportBody.jsp");
 }
-
+function viewDetailedReport(from , to)
+{
+    detailedReportInitializer(from, to);
+    $('#reportBodyDiv').load("detailedreportbody.jsp");
+}
 function loadPeriod()
 {
 

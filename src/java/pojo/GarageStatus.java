@@ -39,15 +39,21 @@ public class GarageStatus implements java.io.Serializable, Marker {
     private Garage garage;
     private int status;
     @Temporal(TemporalType.TIMESTAMP )
-    
     private Date arrivalTime = new Timestamp(new Date().getTime());
-
     private double consumedHours = 0;
     int x;
     int y;
-    
     double lat;
     double lon;
+    int enabled=1;
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
+    }
 
     public double getLat() {
         return lat;
@@ -117,11 +123,13 @@ public class GarageStatus implements java.io.Serializable, Marker {
 
     }
 
-    public GarageStatus(String slotName, int garageId, int x, int y) {
+    public GarageStatus(String slotName, int garageId, int x, int y,double lat , double lon) {
         this.slotName = slotName;
         this.garage = new Garage(garageId);
         this.x = x;
         this.y = y;
+        this.lat= lat;
+        this.lon= lon;
 
     }
 
@@ -218,18 +226,18 @@ public class GarageStatus implements java.io.Serializable, Marker {
         return getSlotId() + "";
     }
 
-    public HashMap<Integer, ValueContainer>  getTotalDailyConsumedHours() {
+    public HashMap<Date, ValueContainer>  getTotalDailyConsumedHours() {
         return Utils.getTotalConsumedHours(getDailyHistory());
 
     }
 
-    public HashMap<Integer, ValueContainer>  getTotalMonthlyConsumedHours() {
+    public HashMap<Date, ValueContainer>  getTotalMonthlyConsumedHours() {
         return Utils.getTotalConsumedHours(getMonthlyHistory());
 
     }
 
-    public HashMap<Integer, ValueContainer>  getTotalYearlyConsumedHours() {
+    public HashMap<Date, ValueContainer>  getTotalYearlyConsumedHours() 
+    {
         return Utils.getTotalConsumedHours(getYearlyHistorys());
-
     }
 }

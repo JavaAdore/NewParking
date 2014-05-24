@@ -5,7 +5,7 @@
 <html>
     <head>
         <noscript>
-        <meta http-equiv="refresh" content="0; url= enablejavascript.jsp" />
+        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
         </noscript>
         <title>Parking System</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />

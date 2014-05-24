@@ -63,9 +63,9 @@ public class DailyHistoryReportImp {
             q.setParameterList("slotid", garage.getGarageStatus());
             ArrayList<Object[]> res = (ArrayList<Object[]>) q.list();
             
-            for (Object[] obj : res) {
-                result.add(new DailyHistory((Date) obj[0], Double.valueOf(obj[1].toString()), Double.valueOf(obj[2].toString())));
-                
+            for (Object[] obj : res) 
+            {
+                result.add(new DailyHistory((Date) obj[0], Double.valueOf(obj[1].toString()), Double.valueOf(obj[2].toString())));                
             }
             
         } catch (Exception ex) {

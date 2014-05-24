@@ -6,6 +6,7 @@
 package servlets;
 
 import DAOS.DailyHistoryReportImp;
+import DAOS.GarageImp;
 import DAOS.MonthlyHistoryReportImp;
 import DAOS.YearlyHistoryReportImp;
 import daosint.ReportsInterface;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import pojo.DailyHistory;
 import reportsClasses.CustomDate;
 import reportsClasses.ReportHistoryRecord;
+import utils.EmployeeRole;
 import utils.EmployeeWrapper;
 import utils.Utils;
 
@@ -51,18 +53,25 @@ public class ReportHandler extends HttpServlet {
                 ArrayList<ReportsInterface> mergeHistoryReports = Utils.mergeHistoryReports(merged);
                 Date minDate = Utils.getMinDate(dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord);
                 request.getSession().setAttribute("minDate", Utils.toString(minDate));
-                Date maxDate  = new Date();
+                Date maxDate = new Date();
                 if (Utils.daysBetween(minDate, new Date()) > 0) {
                     c.add(Calendar.DAY_OF_MONTH, -1);
                     maxDate = c.getTime();
                     System.out.println(maxDate);
 
                 }
-                request.getSession().setAttribute("maxDate", Utils.toString(maxDate));
 
-                request.getSession().setAttribute("report", null);
+                if (emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.ADMIN)) {
+                    request.getSession().setAttribute("detailed", Utils.detailed(emp.getGarage().getGarageId()));
+                }
+                String uri = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + getServletContext().getContextPath();
+
+                request.getSession().setAttribute("maxDate", Utils.toString(maxDate));
+                request.getSession().setAttribute("uri", uri);
+                String imageURL = GarageImp.getInstance().getImagePath(emp.getGarage().getGarageId());
+                request.getSession().setAttribute("imageURL", imageURL);
                 request.getSession().setAttribute("historyRecord", mergeHistoryReports);
-                out.print(String.format(" min= %s max=%s value=%s", Utils.toString(minDate), Utils.toString(maxDate),Utils.toString(maxDate)));
+                out.print(String.format(" min= %s max=%s value=%s", Utils.toString(minDate), Utils.toString(maxDate), Utils.toString(maxDate)));
 
             }
 

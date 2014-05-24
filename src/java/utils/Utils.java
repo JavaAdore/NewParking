@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.json.simple.JSONArray;
@@ -20,6 +22,7 @@ import org.json.simple.JSONObject;
 import pojo.DailyHistory;
 import pojo.Employees;
 import pojo.Garage;
+import pojo.GarageStatus;
 import pojo.Map;
 import pojo.Users;
 import reportsClasses.CustomDate;
@@ -248,12 +251,8 @@ public class Utils {
     }
 
     public static void main(String[] args) {
-        //   int result = GarageSlotDoorsImp.getInstance().addGarageSlot("asmaa slot", 140, 140, 1);
-        //GarageSlotDoorsImp.getInstance().handleThisGaragePlease(GObjects.Home.prepareMeGarageDemoPlease(24));
-//        prepareMeAPathPlease();
 
-        ArrayList<ReportsInterface> d = DailyHistoryReportImp.getInstance().getDailyHistory(4);
-        System.out.println();
+        toTime(new Date());
 
     }
 
@@ -353,6 +352,39 @@ public class Utils {
         return result;
     }
 
+    public static HashMap<GarageStatus, ReportHistoryRecord> prepareSlotsHistoryRecord(HashMap<GarageStatus, List<ReportsInterface>> detailedReport, String from, String to, int numberOfSlots) {
+
+        HashMap<GarageStatus, ReportHistoryRecord> result = new HashMap();
+
+        Date minDate = correctDates(totDate(from), totDate(to), "min");
+        Date maxDate = correctDates(totDate(from), totDate(to), "max");
+        int counter = 0;
+        double hours = 0;
+        double income = 0;
+        for (List<ReportsInterface> reportInterfaces : detailedReport.values()) {
+
+            for (ReportsInterface reportInterface : reportInterfaces) {
+
+                if ((reportInterface.getRecordDate().after(minDate) || reportInterface.getRecordDate().equals(minDate)) && (reportInterface.getRecordDate().before(maxDate) || reportInterface.getRecordDate().equals(maxDate))) {
+                    hours += reportInterface.getHours();
+                    income += reportInterface.getIncome();
+                }
+
+            }
+            ReportHistoryRecord tempReportHistoryRecord = new ReportHistoryRecord();
+            tempReportHistoryRecord.setIncome(income);
+            tempReportHistoryRecord.setRecordDate(new Date());
+            tempReportHistoryRecord.setHours(hours);
+            tempReportHistoryRecord.setAvrageOrConsumption((hours / (((daysBetween(minDate, maxDate) + 1) * 24) * numberOfSlots)));
+            result.put((GarageStatus) detailedReport.keySet().toArray()[counter], tempReportHistoryRecord);
+            counter++;
+            hours = 0;
+            income = 0;
+        }
+
+        return result;
+    }
+
     public static int daysBetween(Date d1, Date d2) {
         int result = (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
         return result;
@@ -380,18 +412,19 @@ public class Utils {
         return tempDate;
     }
 
-    public static HashMap<Integer, ValueContainer> getTotalConsumedHours(Set list) {
+    public static HashMap<Date, ValueContainer> getTotalConsumedHours(Set list) {
         double result = 0;
         Set<ReportsInterface> tempList = (Set<ReportsInterface>) list;
-        HashMap<Integer, ValueContainer> history = new HashMap<>();
+        HashMap<Date, ValueContainer> history = new HashMap<>();
         for (ReportsInterface rep : tempList) {
+
             int temp = extractIdentifierValue(rep);
             if (history.containsKey(temp)) {
                 ValueContainer tempValueContainer = history.get(temp);
                 history.get(temp).setValue(tempValueContainer.getValue() + rep.getHours());
 
             } else {
-                history.put(temp, new ValueContainer(rep.getHours()));
+                history.put(rep.getRecordDate(), new ValueContainer(rep.getHours()));
 
             }
         }
@@ -440,4 +473,43 @@ public class Utils {
         return obj2;
 
     }
+
+    public static HashMap<GarageStatus, List<ReportsInterface>> detailed(int garageId) {
+
+        Garage garage = GarageImp.getInstance().getGarage(garageId);
+        HashMap slotsHistory = new HashMap<GarageStatus, List<ReportsInterface>>();
+        List reports = new ArrayList();
+
+        for (GarageStatus slot : garage.getGarageStatus()) {
+            reports.clear();
+
+            reports.add(slot.getDailyHistory());
+            reports.add(slot.getMonthlyHistory());
+            reports.add(slot.getYearlyHistorys());
+            slotsHistory.put(slot, mergeSlotsHistory(reports));
+        }
+        return slotsHistory;
+    }
+
+    public static List<ReportsInterface> mergeSlotsHistory(List reports) {
+        List result = new ArrayList();
+        for (Object report : reports) {
+            Set<DailyHistory> temp = (Set<DailyHistory>) report;
+            for (ReportsInterface tempRep : temp) {
+
+                result.add(tempRep);
+            }
+
+        }
+        return result;
+    }
+
+    public static String toTime(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy HH:mm:ss a");
+        String time = sdf.format(date);
+        
+        System.out.println(time);
+        return time;
+    }
+
 }

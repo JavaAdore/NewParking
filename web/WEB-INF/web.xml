@@ -53,10 +53,6 @@
         <servlet-class>servlets.getNearestGarages</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ReportsHandler</servlet-name>
-        <servlet-class>servlets.ReportsHandler</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ReportHandler</servlet-name>
         <servlet-class>servlets.ReportHandler</servlet-class>
     </servlet>
@@ -87,6 +83,18 @@
     <servlet>
         <servlet-name>UpdateSlotInitializer</servlet-name>
         <servlet-class>servlets.UpdateSlotInitializer</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DetailedReportInitializer</servlet-name>
+        <servlet-class>servlets.DetailedReportInitializer</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadAllGaragesInitializer</servlet-name>
+        <servlet-class>servlets.LoadAllGaragesInitializer</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditGarageInitializer</servlet-name>
+        <servlet-class>servlets.EditGarageInitializer</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -137,10 +145,6 @@
         <url-pattern>/getNearestGarages</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ReportsHandler</servlet-name>
-        <url-pattern>/ReportsHandler</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>ReportHandler</servlet-name>
         <url-pattern>/ReportHandler</url-pattern>
     </servlet-mapping>
@@ -171,6 +175,18 @@
     <servlet-mapping>
         <servlet-name>UpdateSlotInitializer</servlet-name>
         <url-pattern>/UpdateSlotInitializer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DetailedReportInitializer</servlet-name>
+        <url-pattern>/DetailedReportInitializer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadAllGaragesInitializer</servlet-name>
+        <url-pattern>/LoadAllGaragesInitializer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditGarageInitializer</servlet-name>
+        <url-pattern>/EditGarageInitializer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
