@@ -6,6 +6,7 @@
 package webservices;
 
 import DAOS.UserImp;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -22,10 +23,11 @@ import utils.Utils;
 public class UserServices {
 
     @Path("updateProfile")
-    @GET
-    public String updateProfile(@QueryParam("id") int id, @QueryParam("userName") String userName, @QueryParam("email") String email, @QueryParam("password") String password) {
-
-        if (password.length() >= 6 && password.length() <= 25) {
+    @POST
+    public String updateProfile(@FormParam("id") int id, @FormParam("userName") String userName, @FormParam("email") String email, @FormParam("password") String password) {
+        System.out.println("update profile web service has been called");
+        if (password.length() >= 6 && password.length() <= 25) 
+        {
             Users users = new Users(id, userName, email, password);
             return UserImp.getInstance().updateProfile(users) + "";
         }
@@ -109,5 +111,17 @@ public class UserServices {
         return obj.toString();
 
     }
+    
+    
+    @Path("visitsHistory")
+    @POST
+    public String getVisitHistory(@FormParam("id") int userId)
+    {
+        System.out.println("get history has been visited ");
+        return UserImp.getInstance().getVisitingHistory(userId);
+    }
+    
+    
+    
 
 }

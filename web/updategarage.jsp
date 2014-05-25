@@ -19,8 +19,6 @@
         <link rel="stylesheet" href="css/5grid/core-1200px.css" />
         <link rel="stylesheet" href="css/5grid/core-noscript.css" />
         <link rel="stylesheet" href="css/style.css" />
-
-
         <link rel="stylesheet" href="css/style-desktop.css" />
         </noscript>
         <noscript>

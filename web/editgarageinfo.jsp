@@ -109,7 +109,7 @@
                 
                 mapOptions = {
                     center: new google.maps.LatLng(${currentGarage.getLat()},${currentGarage.getLon()}),
-                    zoom: 12
+                    zoom: 19
                 };
                 map = new google.maps.Map(document.getElementById('map-canvas'),
                         mapOptions);

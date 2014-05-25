@@ -12,7 +12,6 @@ import Sessions.ConnectionHandler;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,7 +70,6 @@ public class UserImp {
     public Users login(String userName, String password) {
         Users user = null;
         try {
-            userSession.beginTransaction();
             Query q = userSession.createQuery("from Users where lower(userName) like ? and password like ?");
             q.setString(0, userName.toLowerCase());
             q.setString(1, password);
@@ -80,7 +78,6 @@ public class UserImp {
         } catch (Exception ex) {
         } finally {
 
-            userSession.getTransaction().commit();
         }
         return user;
     }
@@ -186,6 +183,7 @@ public class UserImp {
 
     public static void main(String[] args) {
 
+        UserImp.getInstance().addVisit(new Users(49), new Garage(4));
         UserImp.getInstance().getVisitingHistory(49);
     }
 }

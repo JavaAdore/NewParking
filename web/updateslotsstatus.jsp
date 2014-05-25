@@ -41,11 +41,11 @@
                 if ($(object).attr('checked'))
                 {
 
-                    enabled = 0;
+                    enabled = 1;
                 } else
                 {
 
-                    enabled = 1;
+                    enabled = 0;
                 }
 
                 $.ajax(
@@ -113,7 +113,7 @@
                         var inner = "<div style=' left:${slot.getX()}px;top:" + y + "px ;position:absolute;width:100px;height:50px;background-color:yellow;'  ><input id=" +${slot.getSlotId()} + " type='checkbox' " + status + " id='${slot.getSlotId()}' onchange='updateStatus(this)' >busy</input><br><input type='checkbox' " + enabled + " id=" +${slot.getSlotId()} + " onchange='updateSlotAvailability(this," +${slot.getSlotId()} + ")' >Not Available</input>"+${slot.getSlotId()}+"</div>";
                         $('#mainDiv').append(inner);
 
-                        if (checked2 == 1)
+                        if (checked2 == 0)
                         {
                             var temp = '#' + ${slot.getSlotId()};
                             $(temp).prop("disabled", true);

@@ -37,7 +37,7 @@
                             <form method="post" action="RemoveAdminServlet" id="removeadminform" onsubmit= "return areYouSure('#adminInfo', 'Are you sure that you want to delete ?')">
 
 
-                                <select name='adminInfo'>
+                                <select  id='adminInfo' name='adminInfo'>
 
                                     <c:forEach items="${employees}" var="tempEmp">
                                         <c:if test="${tempEmp.getEmployeeId() != emp.getEmployeeId()}">

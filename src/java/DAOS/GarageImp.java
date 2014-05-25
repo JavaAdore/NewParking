@@ -65,7 +65,6 @@ public class GarageImp implements GarageDAO {
     public int deleteGarage(int garageId) {
         int result = 0;
         try {
-            garageSession.beginTransaction();
             Garage garage = (Garage) garageSession.get(Garage.class, garageId);
             if (garage == null) {
                 result = -2;
@@ -75,6 +74,8 @@ public class GarageImp implements GarageDAO {
                     q.setParameterList("garageDoors", garage.getGarageDoors());
                     q.executeUpdate();
                 }
+                garageSession.beginTransaction();
+                garageSession.delete(garage.getMap());
                 garageSession.delete(garage);
 
                 garageSession.getTransaction().commit();
@@ -142,16 +143,7 @@ public class GarageImp implements GarageDAO {
 
     public static void main(String[] args) {
 
-//        Map map = GarageImp.getInstance().generateMap("d:\\myimage.jpg", 1.7, 100, 100, "meter");
-//
-//        Garage garage = GarageImp.getInstance().generateGarage("iti garage", "egypt", "cairo", 100, 1, 12.6, 177.5);
-//
-//        int result = GarageImp.getInstance().addGarage(map, garage);
-//
-        //   GarageImp.getInstance().getImagePath(6);
-        //   ArrayList<WrappedGarage> result = GarageImp.getInstance().getNearGarages(30.071531, 31.020756);
-        //   System.out.println("cc");
-        GarageImp.getInstance().deleteGarage("NTA");
+        GarageImp.getInstance().deleteGarage(1);
 
     }
 
