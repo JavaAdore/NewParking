@@ -27,5 +27,6 @@
     <mapping class="pojo.Feedback"/>
     <mapping class="pojo.Image"/>
     <mapping class="pojo.Visit"/>
+    <mapping class="pojo.Address"/>
   </session-factory>
 </hibernate-configuration>

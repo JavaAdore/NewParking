@@ -92,9 +92,9 @@ public class LoadMapsDialog extends javax.swing.JDialog {
 
         titleField.setText(selectedGarage.getTitle());
 
-        countryField.setText(selectedGarage.getCountry());
+        countryField.setText(selectedGarage.getAddress().getCountry());
 
-        cityField.setText(selectedGarage.getCity());
+        cityField.setText(selectedGarage.getAddress().getCity());
 
         slotsField.setText(selectedGarage.getGarageStatus().size() + "");
 

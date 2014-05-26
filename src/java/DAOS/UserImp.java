@@ -181,9 +181,32 @@ public class UserImp {
         return historyArray.toString();
     }
 
-    public static void main(String[] args) {
+    public String getPasswordByEmail(String email) {
 
-        UserImp.getInstance().addVisit(new Users(49), new Garage(4));
-        UserImp.getInstance().getVisitingHistory(49);
+        Query q = userSession.createQuery("from Users where upper(email) like ?");
+        q.setString(0, email.toUpperCase());
+        return getPassword((Users) q.uniqueResult());
+
+    }
+
+    public String getPasswordByUserName(String userName) {
+
+        Query q = userSession.createQuery("from Users where upper(userName) like ?");
+        q.setString(0, userName.toUpperCase());
+        return getPassword((Users) q.uniqueResult());
+
+    }
+
+    public String getPassword(Users user) {
+
+        if (user != null) {
+            return user.getPassword();
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        String passwordByUserName = UserImp.getInstance().getPasswordByUserName("acxzCxzhmed");
+        System.out.println();
     }
 }

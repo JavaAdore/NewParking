@@ -2,6 +2,7 @@ package servlets;
 
 import DAOS.GarageImp;
 import errors.ErrorMessage;
+import geolocator.AddressConverter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,6 +18,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
+import pojo.Address;
 import pojo.Garage;
 import pojo.Map;
 
@@ -122,29 +124,25 @@ public class AddGarageHandler extends HttpServlet {
 
         String garageName = parameterValues.get(0);
 
-        String country = parameterValues.get(1);
+        int hourRateInRushHours = Integer.parseInt(parameterValues.get(1));
 
-        String city = parameterValues.get(2);
+        int hourRateoutofRushHours = Integer.parseInt(parameterValues.get(2));
 
-        int hourRateInRushHours = Integer.parseInt(parameterValues.get(3));
+        double ratio = Double.parseDouble(parameterValues.get(3));
 
-        int hourRateoutofRushHours = Integer.parseInt(parameterValues.get(4));
+        int width = Integer.parseInt(parameterValues.get(4));
 
-        double ratio = Double.parseDouble(parameterValues.get(5));
+        int heigth = Integer.parseInt(parameterValues.get(5));
 
-        int width = Integer.parseInt(parameterValues.get(6));
+        String unit = parameterValues.get(6);
 
-        int heigth = Integer.parseInt(parameterValues.get(7));
+        double lon = Double.parseDouble(parameterValues.get(7));
 
-        String unit = parameterValues.get(8);
-
-        double lon = Double.parseDouble(parameterValues.get(9));
-
-        double lat = Double.parseDouble(parameterValues.get(10));
+        double lat = Double.parseDouble(parameterValues.get(8));
         MapUrl = parameterValues.get(0) + "." + FilenameUtils.getExtension(file.getName());
 
-        g.setCity(city);
-        g.setCountry(country);
+        Address address = new AddressConverter().getAddress(lat, lon);
+        
         g.setHourRateInRush(hourRateInRushHours);
         g.setHourRateOutOfRush(hourRateoutofRushHours);
         g.setLat(lat);
@@ -160,7 +158,7 @@ public class AddGarageHandler extends HttpServlet {
         map.setRatio(ratio);
         map.setMapUrl(MapUrl);
 
-        return GarageImp.getInstance().addGarage(map, g);
+        return GarageImp.getInstance().addGarage(map, g, address);
 
     }
 }

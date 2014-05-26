@@ -36,6 +36,7 @@ public class EditGarageInitializer extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
 
             String garage = request.getParameterValues("garage")[0];
+          
             if (garage != null) {
                 int garageId = Integer.parseInt(garage);
                 if (garageId != -1) {
@@ -44,14 +45,14 @@ public class EditGarageInitializer extends HttpServlet {
                         request.setAttribute("currentGarage", currentGarage);
                         request.getRequestDispatcher("editgarageinfo.jsp").forward(request, response);
                     } else {
-                        response.sendRedirect("editgarageinfo.jsp");
+                    response.sendRedirect("updategarageinfo.jsp");
                     }
                 } else {
-                    response.sendRedirect("editgarageinfo.jsp");
+                    response.sendRedirect("updategarageinfo.jsp");
                 }
             } else {
 
-                response.sendRedirect("editgarageinfo.jsp");
+                response.sendRedirect("updategarageinfo.jsp");
             }
         }
     }

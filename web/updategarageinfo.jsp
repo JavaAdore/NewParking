@@ -58,7 +58,7 @@
                 <div id="page-bgbtm">
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
-                            <form action="EditGarageInitializer" method="post" id="editGarageForm" >
+                            <form action="EditGarageInitializer" method="get" id="editGarageForm" >
                                 <table>
                                     <th colspan="2">
                                     <center> <c:out value="${error.getErrorBody()}"/></center>

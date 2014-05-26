@@ -6,14 +6,12 @@ import GObjects.ValueContainer;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import daosint.ReportsInterface;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
@@ -23,9 +21,7 @@ import pojo.DailyHistory;
 import pojo.Employees;
 import pojo.Garage;
 import pojo.GarageStatus;
-import pojo.Map;
 import pojo.Users;
-import reportsClasses.CustomDate;
 import reportsClasses.ReportHistoryRecord;
 
 public class Utils {

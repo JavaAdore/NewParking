@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import pojo.Address;
 import pojo.Garage;
 import pojo.Map;
 import utils.CoordinateHelper;
@@ -75,7 +76,7 @@ public class GarageImp implements GarageDAO {
                     q.executeUpdate();
                 }
                 garageSession.beginTransaction();
-                garageSession.delete(garage.getMap());
+//                garageSession.delete(garage.getMap());
                 garageSession.delete(garage);
 
                 garageSession.getTransaction().commit();
@@ -89,7 +90,7 @@ public class GarageImp implements GarageDAO {
     }
 
     // dont forget to make history table to trace up these stuffs
-    public int addGarage(Map map, Garage garage) {
+    public int addGarage(Map map, Garage garage, Address address) {
         int result = 0;
         try {
             if (getGarage(garage.getTitle()) != null) {
@@ -99,10 +100,12 @@ public class GarageImp implements GarageDAO {
             garageSession.beginTransaction();
 
             garageSession.persist(map);
+            garageSession.persist(address);
 
-            garage.setMap(map);
-
+            garage.setAddress(address);
             garageSession.persist(garage);
+            map.setGarage(garage);
+
             garageSession.getTransaction().commit();
 
         } catch (Exception ex) {

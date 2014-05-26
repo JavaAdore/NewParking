@@ -27,13 +27,13 @@ public class Garage implements java.io.Serializable {
     @GeneratedValue
     private int garageId;
     private String title;
-    private String country;
-    private String city;
+    @OneToOne(mappedBy = "garage")
+    Address address;
     private double lon;
     private double lat;
     int enabled = 1;
 
-    @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER , mappedBy = "garage")
     private Map map;
     @OneToMany(mappedBy = "garage", orphanRemoval = true)
     @ElementCollection(fetch = FetchType.LAZY)
@@ -64,6 +64,14 @@ public class Garage implements java.io.Serializable {
 
     public void setGarageId(int garageId) {
         this.garageId = garageId;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public Collection<Feedback> getFeedbacks() {
@@ -145,19 +153,14 @@ public class Garage implements java.io.Serializable {
     public Garage(Map map, String title, int lon, int lat) {
         this.map = map;
         this.title = title;
-
         this.lon = lon;
         this.lat = lat;
     }
 
     public Garage(Map map, String title, String country, String city, double lon, double lat) {
         this.employees = new HashSet<Employees>();
-
         this.map = map;
         this.title = title;
-        this.country = country;
-        this.city = city;
-
         this.lon = lon;
         this.lat = lat;
 
@@ -167,8 +170,7 @@ public class Garage implements java.io.Serializable {
         this.employees = new HashSet<Employees>();
 
         this.title = title;
-        this.country = country;
-        this.city = city;
+
         this.lon = lon;
         this.lat = lat;
         this.hourRateInRush = hourRateInRush;
@@ -218,22 +220,6 @@ public class Garage implements java.io.Serializable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getCountry() {
-        return this.country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return this.city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public double getLon() {

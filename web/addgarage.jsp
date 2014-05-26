@@ -100,34 +100,30 @@
         <script>
 
             var globalMap;
-
-
             var map;
             var mapOptions;
             function initialize() {
 
                 mapOptions = {
                     center: new google.maps.LatLng(30.060269713543075, 31.55865075937504),
-                    zoom: 8
+                    zoom: 8,
+                    mapTypeId: 'satellite'
+
                 };
                 map = new google.maps.Map(document.getElementById('map-canvas'),
                         mapOptions);
                 var input = /** @type {HTMLInputElement} */(
                         document.getElementById('pac-input'));
-
                 var types = document.getElementById('type-selector');
                 map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
                 map.controls[google.maps.ControlPosition.TOP_LEFT].push(types);
-
                 var autocomplete = new google.maps.places.Autocomplete(input);
                 autocomplete.bindTo('bounds', map);
-
                 var infowindow = new google.maps.InfoWindow();
                 var marker = new google.maps.Marker({
                     map: map,
                     anchorPoint: new google.maps.Point(0, -29)
                 });
-
                 google.maps.event.addListener(autocomplete, 'place_changed', function() {
                     infowindow.close();
                     marker.setVisible(false);
@@ -141,7 +137,7 @@
                         map.fitBounds(place.geometry.viewport);
                     } else {
                         map.setCenter(place.geometry.location);
-                        map.setZoom(17);  // Why 17? Because it looks good.
+                        map.setZoom(17); // Why 17? Because it looks good.
                     }
                     marker.setIcon(/** @type {google.maps.Icon} */({
                         url: place.icon,
@@ -152,7 +148,6 @@
                     }));
                     marker.setPosition(place.geometry.location);
                     marker.setVisible(true);
-
                     var address = '';
                     if (place.address_components) {
                         address = [
@@ -161,11 +156,15 @@
                             (place.address_components[2] && place.address_components[2].short_name || '')
                         ].join(' ');
                     }
-
                     infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
                     infowindow.open(map, marker);
                 });
-
+                google.maps.event.addListener(map, 'zoom_changed', function() {
+                    var zoomLevel = map.getZoom();
+                    $('#latMap').val(map.getCenter().lat());
+                    $('#lonMap').val(map.getCenter().lng());
+                    infowindow.setContent('Zoom: ' + zoomLevel);
+                });
                 // Sets a listener on a radio button to change the filter type on Places
                 // Autocomplete.
                 function setupClickListener(id, types) {
@@ -195,14 +194,12 @@
             }
 
             google.maps.event.addDomListener(window, 'load', initialize);
-
             function getZoomLevel()
             {
 
 
 
                 alert(getMap());
-
             }
             function submitMethod()
             {
@@ -218,12 +215,43 @@
 //                isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000);
 //                isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000);
 //                isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000);
-                if (isGarageNameAvailable('#garageTitle', '#garageTitleError') && isText('#country', '#countryError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000) && isImage('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 3000) && isAnumber('#height', '#heightError', 0, 3000) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
+                if (isGarageNameAvailable('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000) && isImage('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 3000) && isAnumber('#height', '#heightError', 0, 3000) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
                 {
+                    if (map.getMapTypeId() == "satellite")
+                    {
+                        alert(map.getMapTypeId());
+                        alert(map.getZoom());
+                        if (map.getZoom() !== 19)
+                        {
+                            alert('entered here');
+                            alert('please specify location exactely');
+                            return;
+                        } else
+                        {
+                            $("#addGarageForm").submit();
 
-                    $("#addGarageForm").submit();
+                        }
+
+                    } else
+                    {
+                        alert(map.getMapTypeId());
+                        alert(map.getZoom())
+
+                        if (map.getZoom() !== 21)
+                        {
+                            alert('entered here');
+                            alert('please specify location exactely');
+                            return;
+                        } else
+                        {
+                            $("#addGarageForm").submit();
+
+                        }
+
+                    }
+
                 }
-               
+
             }
         </script>
 
@@ -270,18 +298,7 @@
                                             <td>  <span id="garageTitleError" > </span></td>
 
                                         </tr>
-                                        <tr >
-                                            <td > country </td>
-                                            <td > <input id="country" required type = "text" name = "country"  value = "Egypt" readonly  onblur="isText('#country', '#countryError')"/> </td>
-                                            <td>  <span id="countryError" > </span></td>
 
-                                        </tr>
-                                        <tr>
-                                            <td > city </td>
-                                            <td > <input id="theCity" required type = "text" name = "city"  value = "cairo" readonly  onblur="isText('#theCity', '#cityError')" /> </td>
-                                            <td>  <span id="cityError" > </span></td>
-
-                                        </tr>
 
                                         <tr >
                                             <td > Hour rate in rush hours </td>
@@ -338,19 +355,19 @@
                                                 </select>
                                             </td>
                                         </tr>
-
-                                        <tr>
-                                            <td > Longitude </td>
-                                            <td > <input type = "text"  name = "lon" id = "lngMap" value="1" readonly onblur="isAnumber('#lngMap', '#lngMapError', -90, 90)"/> </td>
-                                            <td> <span id="lngMapError"> </span></td>
-
-                                        </tr>
                                         <tr>
                                             <td > Latitude </td>
-                                            <td > <input  type = "text"   name = "lat" id = "latMap" value="1" readonly  onblur="isAnumber('#latMap', '#latMapError', -90, 90)"/> </td>
+                                            <td > <input  type = "text"   name = "lat" id = "latMap" value="30.060269713543075" readonly  onblur="isAnumber('#latMap', '#latMapError', -90, 90)"/> </td>
                                             <td> <span id="latMapError"> </span></td>
 
                                         </tr>
+                                        <tr>
+                                            <td > Longitude </td>
+                                            <td > <input type = "text"  name = "lon" id = "lngMap" value="31.55865075937504" readonly onblur="isAnumber('#lngMap', '#lngMapError', -90, 90)"/> </td>
+                                            <td> <span id="lngMapError"> </span></td>
+
+                                        </tr>
+
                                         <tr >
                                             <td > <input type = "button" value = "Add" id = "myButton1" onclick = "submitMethod()" /> </td>
                                             <td > <input type = "reset" value = "Cancel" id = "myButton2" /> </td>

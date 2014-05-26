@@ -105,11 +105,10 @@
             var map;
             var mapOptions;
             function initialize() {
-             
-                
+
                 mapOptions = {
-                    center: new google.maps.LatLng(${currentGarage.getLat()},${currentGarage.getLon()}),
-                    zoom: 19
+                    center: new google.maps.LatLng(30.060269713543075, 31.55865075937504),
+                    zoom: 8
                 };
                 map = new google.maps.Map(document.getElementById('map-canvas'),
                         mapOptions);
@@ -162,9 +161,14 @@
                             (place.address_components[2] && place.address_components[2].short_name || '')
                         ].join(' ');
                     }
-
                     infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
                     infowindow.open(map, marker);
+                });
+                google.maps.event.addListener(map, 'zoom_changed', function() {
+                    var zoomLevel = map.getZoom();
+                    $('#latMap').val(map.getCenter().lat());
+                    $('#lonMap').val(map.getCenter().lng());
+                    infowindow.setContent('Zoom: ' + zoomLevel);
                 });
 
                 // Sets a listener on a radio button to change the filter type on Places
@@ -174,6 +178,7 @@
                     google.maps.event.addDomListener(radioButton, 'click', function() {
                         autocomplete.setTypes(types);
                     });
+
                 }
 
                 setupClickListener('changetype-all', []);
@@ -219,12 +224,21 @@
 //                isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000);
 //                isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000);
 //                isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000);
-                if (isGarageNameAvailable('#garageTitle', '#garageTitleError') && isText('#country', '#countryError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000) && isImage('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 3000) && isAnumber('#height', '#heightError', 0, 3000) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
+                if (isGarageNameAvailable('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000) && isImage('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 3000) && isAnumber('#height', '#heightError', 0, 3000) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
                 {
+                    if (map.getZoom() == "19")
+                    {
 
-                    $("#addGarageForm").submit();
+                        $("#addGarageForm").submit();
+
+                    } else
+                    {
+
+
+                        alert('please specify location exactely');
+                    }
                 }
-               
+
             }
         </script>
 
@@ -250,8 +264,7 @@
 
                             <center>
 
-                                <form action = "AddGarageHandler" method = "POST" id = "addGarageForm" enctype = "multipart/form-data" >
-                                    <table>
+                                <form action = "AddGarageHandler" method = "POST" id = "addGarageForm" enctype = "multipart/form-data" >                                  <table >
 
 
 
@@ -267,31 +280,20 @@
                                         </tr>
                                         <tr >
                                             <td > Garage Title </td>
-                                            <td > <input id="garageTitle" required  type = "text" name = "title" onblur="isGarageNameAvailable('#garageTitle', '#garageTitleError')" /> </td>
+                                            <td > <input id="garageTitle" required  type = "text"  name = "title" onblur="isGarageNameAvailable('#garageTitle', '#garageTitleError')" /> </td>
                                             <td>  <span id="garageTitleError" > </span></td>
 
                                         </tr>
-                                        <tr >
-                                            <td > country </td>
-                                            <td > <input id="country" required type = "text" name = "country"  value = "Egypt" readonly  onblur="isText('#country', '#countryError')"/> </td>
-                                            <td>  <span id="countryError" > </span></td>
 
-                                        </tr>
-                                        <tr>
-                                            <td > city </td>
-                                            <td > <input id="theCity" required type = "text" name = "city"  value = "cairo" readonly  onblur="isText('#theCity', '#cityError')" /> </td>
-                                            <td>  <span id="cityError" > </span></td>
-
-                                        </tr>
 
                                         <tr >
                                             <td > Hour rate in rush hours </td>
-                                            <td > <input id="hourRateInRushHours" required type = "number" value="1" name = "hourRateInRushHours"  value = "1" min = "1" onblur="isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000)"/> </td>
+                                            <td > <input id="hourRateInRushHours" required type = "text"  name = "hourRateInRushHours"  value = "1"  onblur="isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000)"/> </td>
                                             <td>  <span id="hourRateInRushHoursError" > </span></td>
                                         </tr>
                                         <tr >
                                             <td > Hour rate out of  rush hours </td>
-                                            <td > <input id="hourRateOutOfRushHours" required type = "number" value = "1" name = "hourRateOutOfRushHours"  value = "1" min = "1" readonly onblur="isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000)" /> </td>
+                                            <td > <input id="hourRateOutOfRushHours" required type = "text" name = "hourRateOutOfRushHours"   readonly onblur="isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000)" /> </td>
                                             <td>  <span id="hourRateOutOfRushHoursError" > </span></td>
 
                                         </tr>
@@ -308,7 +310,7 @@
                                         <tr >
                                             <td > Ratio </td>
                                             <td >
-                                                <input type = "text" name = "ratio"  id="ratio" value="1" required onblur="isAnumber('#ratio', '#ratioError', 0, 1)"/>
+                                                <input type = "text" name = "ratio"  id="ratio" value="${currentGarage.getRatio()}" required onblur="isAnumber('#ratio', '#ratioError', 0, 1)"/>
                                             </td>
                                             <td>  <span id="ratioError" > </span></td>
 
@@ -316,7 +318,7 @@
                                         <tr >
                                             <td > width </td>
                                             <td >
-                                                <input id="width" required type = "text" name = "width" value="1" onblur="isAnumber('#width', '#widthError', 0, 3000)"/>
+                                                <input id="width" required type = "text" name = "width" value="${currentGarage.getWidth()}" onblur="isAnumber('#width', '#widthError', 0, 3000)"/>
                                             </td>
                                             <td>
                                                 <span id="widthError"></span>
@@ -339,19 +341,19 @@
                                                 </select>
                                             </td>
                                         </tr>
-
-                                        <tr>
-                                            <td > Longitude </td>
-                                            <td > <input type = "text"  name = "lon" id = "lngMap" value="1" readonly onblur="isAnumber('#lngMap', '#lngMapError', -90, 90)"/> </td>
-                                            <td> <span id="lngMapError"> </span></td>
-
-                                        </tr>
                                         <tr>
                                             <td > Latitude </td>
-                                            <td > <input  type = "text"   name = "lat" id = "latMap" value="1" readonly  onblur="isAnumber('#latMap', '#latMapError', -90, 90)"/> </td>
+                                            <td > <input  type = "text"   name = "lat" id = "latMap" value="30.060269713543075" readonly  onblur="isAnumber('#latMap', '#latMapError', -90, 90)"/> </td>
                                             <td> <span id="latMapError"> </span></td>
 
                                         </tr>
+                                        <tr>
+                                            <td > Longitude </td>
+                                            <td > <input type = "text"  name = "lon" id = "lngMap" value="31.55865075937504" readonly onblur="isAnumber('#lngMap', '#lngMapError', -90, 90)"/> </td>
+                                            <td> <span id="lngMapError"> </span></td>
+
+                                        </tr>
+
                                         <tr >
                                             <td > <input type = "button" value = "Add" id = "myButton1" onclick = "submitMethod()" /> </td>
                                             <td > <input type = "reset" value = "Cancel" id = "myButton2" /> </td>

@@ -57,8 +57,8 @@ public class GarageDetails {
             try {
                 JSONObject obj = new JSONObject();
 
-                obj.put("city", g.getCity());
-                obj.put("country", g.getCountry());
+                obj.put("city", g.getAddress().getCity());
+                obj.put("country", g.getAddress().getCountry());
                 obj.put("doors", g.getGarageDoors().size());
                 obj.put("id", g.getGarageId());
                 obj.put("lat", g.getLat());
