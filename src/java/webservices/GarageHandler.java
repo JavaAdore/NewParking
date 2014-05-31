@@ -5,6 +5,7 @@
  */
 package webservices;
 
+import DAOS.GarageImp;
 import DAOS.GarageSlotDoorsImp;
 import GObjects.Garage;
 import com.google.gson.Gson;
@@ -31,10 +32,41 @@ public class GarageHandler {
 
     GarageSlotDoorsImp garageSlotDoorsImp = GarageSlotDoorsImp.getInstance();
 
-    public String handleThisGarage(String garageAsString) {
+    public String handleThisGarage(String garageAsString, char identifier) {
         Gson gson = new Gson();
+        String result = "";
+
         Garage garage = gson.fromJson(garageAsString, GObjects.Garage.class);
-        return garageSlotDoorsImp.handleThisGaragePlease(garage) + " ";
+
+        pojo.Garage garage1 = GarageImp.getInstance().getGarage(garage.getGarageId());
+        if (garage1 != null) {
+            if (garage1.getGarageStatus().size() == 0) {
+                int handleThisGaragePlease = garageSlotDoorsImp.handleThisGaragePlease(garage);
+                if (handleThisGaragePlease == 0) {
+                    result = "done";
+                } else {
+                    result = "failed";
+
+                }
+            } else {
+                if (identifier == 'p') {
+
+                    int handleThisGaragePlease = garageSlotDoorsImp.handleThisGaragePlease(garage);
+                    if (handleThisGaragePlease == 0) {
+                        result = "done";
+                    } else {
+                        result = "failed";
+                    }
+
+                } else {
+                    result = "hasData";
+
+                }
+
+            }
+
+        }
+        return result;
 
     }
 }

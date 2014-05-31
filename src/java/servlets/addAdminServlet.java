@@ -4,7 +4,6 @@
  */
 package servlets;
 
-import DAOS.EmployeesDAO;
 import DAOS.EmployeesImp;
 import errors.ErrorMessage;
 import java.io.IOException;
@@ -27,78 +26,87 @@ public class addAdminServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Utils.checkCurrentUserStatus(request);
-        Utils.checkSession(request);
-        EmployeeWrapper me = (EmployeeWrapper) request.getSession().getAttribute("emp");
+        try {
+            Utils.checkCurrentUserStatus(request);
+            Utils.checkSession(request);
+            EmployeeWrapper me = (EmployeeWrapper) request.getSession().getAttribute("emp");
 
-        String firstName = request.getParameter("firstName");
+            String firstName = request.getParameter("firstName");
 
-        String lastName = request.getParameter("lastName");
+            String lastName = request.getParameter("lastName");
 
-        String email = request.getParameter("email");
+            String email = request.getParameter("email");
 
-        String password = request.getParameter("password");
+            String password = request.getParameter("password");
 
-        String confirmPassword = request.getParameter("confirmPassword");
+            String confirmPassword = request.getParameter("confirmPassword");
 
-        String gender = request.getParameter("gender");
+            String gender = request.getParameter("gender");
 
-        String birthdate = request.getParameter("birthdate");
+            String birthdate = request.getParameter("birthdate");
 
-        String role = request.getParameter("role");
+            String role = request.getParameter("role");
 
-        EmployeeWrapper employeeWrapper = (EmployeeWrapper) request.getSession().getAttribute("emp");
+            boolean validateAdmin = utils.Validator.validateAdmin(firstName, lastName, email, password, confirmPassword, gender, birthdate, role);
+            EmployeeWrapper employeeWrapper = (EmployeeWrapper) request.getSession().getAttribute("emp");
 
-        String roleName = employeeWrapper.getRoles().getRoleName();
+            if (!validateAdmin) {
+                throw new exceptions.InputValidationException();
+            }
 
-        Employees employee = new Employees();
 
-        employee.setFirstName(firstName);
+            String roleName = employeeWrapper.getRoles().getRoleName();
 
-        employee.setLastName(lastName);
+            Employees employee = new Employees();
 
-        employee.setEmail(email);
+            employee.setFirstName(firstName);
 
-        employee.setPassword(password);
+            employee.setLastName(lastName);
 
-        employee.setGender(gender);
+            employee.setEmail(email);
 
-        employee.setBirthDate(utils.Utils.totDate(birthdate,"MM/dd/yyyy"));
+            employee.setPassword(password);
 
-        employee.setRoles(new Roles(Integer.parseInt(request.getParameter("role"))));
+            employee.setGender(gender);
 
-        if (roleName.equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
+            employee.setBirthDate(utils.Utils.totDate(birthdate, "MM/dd/yyyy"));
 
-            employee.setGarage(null);
+            employee.setRoles(new Roles(Integer.parseInt(role)));
 
-        } else {
+            if (employeeWrapper.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
+                employee.setGarage(null);
+            } else {
+                employee.setGarage(employeeWrapper.getGarage());
+            }
 
-            employee.setGarage(employeeWrapper.getGarage());
-        }
+            EmployeesImp employeesImp = EmployeesImp.getInstance();
 
-        EmployeesImp employeesImp = EmployeesImp.getInstance();
+            int result = employeesImp.addEmployee(me.getEmployeeId(), employee);
+            switch (result) {
+                case 0:
+                    request.setAttribute("error", new ErrorMessage(String.format("%s %s (%s) added", firstName, lastName, email)));
+                    break;
+                case -2:
+                    request.setAttribute("error", new ErrorMessage(String.format("%s  is already exists", email)));
+                    break;
+                case -1:
+                    request.setAttribute("error", new ErrorMessage(String.format("looks like some error happend please contact adminstrator")));
+                    break;
 
-        int result = employeesImp.addEmployee(me.getEmployeeId(), employee);
-        switch (result) {
-            case 0:
-                request.setAttribute("error", new ErrorMessage(String.format("%s %s (%s) added", firstName, lastName, email)));
-                break;
-            case -2:
-                request.setAttribute("error", new ErrorMessage(String.format("%s  is already exists", email)));
-                break;
-            case -1:
-                request.setAttribute("error", new ErrorMessage(String.format("%looks like some error happend please contact adminstrator")));
-                break;
+            }
 
-        }
+            if (roleName.equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
 
-        if (roleName.equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
+                request.getRequestDispatcher("addadmin.jsp").forward(request, response);
 
+            } else {
+
+                request.getRequestDispatcher("addadminbyadmin.jsp").forward(request, response);
+            }
+        } catch (exceptions.InputValidationException ex) {
+            System.out.println("exception has been called");
             request.getRequestDispatcher("addadmin.jsp").forward(request, response);
 
-        } else {
-
-            request.getRequestDispatcher("addadminbyadmin.jsp").forward(request, response);
         }
 
     }

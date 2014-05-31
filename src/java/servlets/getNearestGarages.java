@@ -41,6 +41,7 @@ public class getNearestGarages extends HttpServlet {
 
                 ArrayList<WrappedGarage> result = GarageImp.getInstance().getNearGarages(lat, lon);
                 for (WrappedGarage garage : result) {
+                    
                     obj = new JSONObject();
                     obj.put("id", garage.getGarageId());
                     obj.put("garageName", garage.getGarageName());

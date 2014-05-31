@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import pojo.DeleteEmployeeSchedule;
 import utils.EmployeeRole;
 import utils.EmployeeWrapper;
 import utils.Utils;
@@ -18,32 +19,40 @@ public class RemoveAdminServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         Utils.checkCurrentUserStatus(request);
         Utils.checkSession(request);
         String res = request.getParameter("adminInfo");
-        int adminId = Integer.parseInt(res);
+        try {
+            int adminId = Integer.parseInt(res);
 
-        if (adminId != -1) {
+            if (adminId != -1) {
 
-            int result = employeesDao.deleteMemember(adminId);
-            switch (result) {
-                case 0:
-                    request.setAttribute("error", new ErrorMessage(String.format("Employee deleted")));
-                    break;
-                            
-                case -1:
-                    request.setAttribute("error", new ErrorMessage(String.format("%looks like some error happend please contact adminstrator")));
-                    break;
+                int result = employeesDao.addToDeletePlan(new DeleteEmployeeSchedule(adminId));
+                switch (result) {
+                    case 0:
+                        request.setAttribute("error", new ErrorMessage(String.format("Employee deleted")));
+                        break;
+
+                    default:
+                        request.setAttribute("error", new ErrorMessage(String.format("%looks like some error happend please contact adminstrator")));
+                        break;
+
+                }
 
             }
 
-        }
+            if (((EmployeeWrapper) request.getSession().getAttribute("emp")).getRoles().getRoleName().equals(EmployeeRole.SERVICE_PROVIDER)) {
+                request.getRequestDispatcher("LoadAllEmployeesInitializer?toPage=removeadmin.jsp").forward(request, response);
+            } else {
+                request.getRequestDispatcher("RemoveAdminInitializer").forward(request, response);
+            }
+        } catch (Exception ex) {
 
-        if (((EmployeeWrapper) request.getSession().getAttribute("emp")).getRoles().getRoleName().equals(EmployeeRole.SERVICE_PROVIDER)) {
-            request.getRequestDispatcher("LoadAllEmployeesInitializer?toPage=removeadmin.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("RemoveAdminInitializer").forward(request, response);
+            if (((EmployeeWrapper) request.getSession().getAttribute("emp")).getRoles().getRoleName().equals(EmployeeRole.SERVICE_PROVIDER)) {
+                request.getRequestDispatcher("LoadAllEmployeesInitializer?toPage=removeadmin.jsp").forward(request, response);
+            } else {
+                request.getRequestDispatcher("RemoveAdminInitializer").forward(request, response);
+            }
         }
     }
 

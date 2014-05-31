@@ -47,15 +47,19 @@
                                         <td>
                                             <select name="garage" id="garage">
                                                 <c:forEach items="${allGarages}" var="garage">
-                                                    <option value="${garage.getGarageId()}">${garage.getTitle()}</option>
+                                                    <c:if test="${garage.getEnabled()==1}">
+                                                        <option value="${garage.getGarageId()}">${garage.getTitle()}</option>
+                                                    </c:if>
                                                 </c:forEach>
-                                                <c:if test="${empty allGarages}">
+                                                        
+                                                <c:if test="${numberOfInActiveGarages==allGarages.size() || (empty allGarages)}">
                                                     <option value="-1">currently their is no garages</option>
 
                                                 </c:if>
 
                                             </select>
                                         </td>
+                                        
                                         <td>
                                             <input type="submit" value="Delete Garage" id="removeMyButton" />
                                         </td>

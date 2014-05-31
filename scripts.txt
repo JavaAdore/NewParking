@@ -8,24 +8,49 @@ create needed sequenses
 
 create needed stored procedures 
 
+create or replace function getGarageHourRate (v_garage_id number)
+return number
+is 
+temp_hour_rate number;
+begin
+  select hourrateinrush into  temp_hour_rate from garage where garageid = v_garage_id;
+  return temp_hour_rate;
+end;
+
+
 
 create or replace
-PROCEDURE DAILY_HISTORY_UPDATOR
-IS
-BEGIN
+procedure daily_history_updator
+
+is
+v_garage_id number;
+v_garage_hour_rate number;
+
+begin
+
 FOR TEMP_REC IN (SELECT * FROM GARAGESTATUS) LOOP
-insert into  DAILYHISTORY  values(DAILY_HISTORY_SEQ.nextval,TEMP_REC.CONSUMEDhOURS,sysdate,TEMP_REC.SLOTID);
+
+if (v_garage_id is null) then
+v_garage_id:=temp_rec.garage_garageid;
+v_garage_hour_rate:=getGarageHourRate(v_garage_id);
+
+elsif (v_garage_id !=temp_rec.garage_garageid) then
+
+v_garage_id:=temp_rec.garage_garageid;
+v_garage_hour_rate:=getGarageHourRate(v_garage_id);
+  end if;
 IF(TEMP_REC.STATUS=0) THEN
 UPDATE GARAGESTATUS 
 SET 
-CONSUMEDhOURS = 0
-TEMP_REC.ARRIVALTIME=SYSDATE
+CONSUMEDHOURS = 0,
+ARRIVALTIME=SYSDATE
 WHERE SLOTID = TEMP_REC.SLOTID;
+insert into  DAILYHISTORY  values(DAILY_HISTORY_SEQ.nextval,TEMP_REC.CONSUMEDhOURS,TEMP_REC.CONSUMEDhOURS*v_garage_hour_rate,sysdate,TEMP_REC.SLOTID);
+
 END IF;
+end loop;
+end;
 
-
-END LOOP;
-END ;
 
 
 
@@ -33,8 +58,8 @@ create or replace
 PROCEDURE MONTHLY_HISTORY_UPDATOR
 IS
 BEGIN
-FOR TEMP_REC IN (SELECT slotid_slotid , sum(hours) as monthlyhours FROM DAILYHISTORY group by slotid_slotid) LOOP
-insert into  monthlyhistory  values(Monthly_HISTORY_SEQ.nextval,TEMP_REC.monthlyhours,sysdate,TEMP_REC.slotid_slotid);
+FOR TEMP_REC IN (SELECT slotid_slotid , sum(hours) as monthlyhours , SUM(income) as monthlyIncome FROM DAILYHISTORY group by slotid_slotid) LOOP
+insert into  monthlyhistory  values(Monthly_HISTORY_SEQ.nextval,TEMP_REC.monthlyhours,TEMP_REC.monthlyIncome,sysdate,TEMP_REC.slotid_slotid);
 END LOOP;
 delete from dailyhistory;
 END ;
@@ -46,8 +71,8 @@ create or replace
 PROCEDURE YEARLY_HISTORY_UPDATOR
 IS
 BEGIN
-FOR TEMP_REC IN (SELECT slotid_slotid , sum(hours) as YEARLYHOURS FROM MONTHLYHISTORY group by slotid_slotid) LOOP
-insert into  YEARLYHISTORY  values(YEARLY_HISTORY_SEQ.nextval,TEMP_REC.YEARLYHOURS,sysdate,TEMP_REC.slotid_slotid);
+FOR TEMP_REC IN (SELECT slotid_slotid , sum(hours) as YEARLYHOURS , SUM(income) as YEARLYINCOME FROM MONTHLYHISTORY group by slotid_slotid) LOOP
+insert into  YEARLYHISTORY  values(YEARLY_HISTORY_SEQ.nextval,TEMP_REC.YEARLYHOURS,TEMP_REC.YEARLYINCOME,sysdate,TEMP_REC.slotid_slotid);
 END LOOP;
 delete from MONTHLYHISTORY;
 END ;

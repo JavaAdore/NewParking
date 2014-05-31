@@ -6,7 +6,7 @@
         Visit http://html5templates.com for more great templates or follow us on Twitter @HTML5T
 -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="ServiceProviderHeader/removeGarageHeader.jsp"/>
+<jsp:include page="ServiceProviderHeader/updategarageheader.jsp"/>
 <html>
     <head>
         <title>Parking System</title>

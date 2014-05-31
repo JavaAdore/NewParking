@@ -8,6 +8,7 @@ package utils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
 
 /**
  *
@@ -17,13 +18,13 @@ public class MyLovelyClass {
 
     public MyLovelyClass() {
 
-        SessionFactory sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
+        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         Session session = sessionFactory.openSession();
-
+        
     }
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) 
+    {
         new MyLovelyClass();
     }
 

@@ -207,19 +207,8 @@
             }
             function submitMethod()
             {
-//                isGarageNameAvailable('#garageTitle', '#garageTitleError');
-                isAnumber('#height', '#heightError', 0, 1000);
-//                isText('#country', '#countryError');
-//                 isText('#city', '#cityError');
-//                isImage('#file', '#fileError');
-//                isAnumber('#width', '#width', 0, 1000);
-//                isAnumber('#height', '#heightError', 0, 1000);
-//                isAnumber('#lngMap', '#lngMapError', -90, 90);
-//                isAnumber('#latMap', '#latMapError', -90, 90);
-//                isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000);
-//                isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000);
-//                isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000);
-                if (isTextWithSpace('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000) && isImage('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 99999) && isAnumber('#height', '#heightError', 0, 99999) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
+
+                if (isTextWithSpace('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isImage('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 99999) && isAnumber('#height', '#heightError', 0, 99999) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
                 {
                     if (map.getMapTypeId() == "satellite")
                     {
@@ -293,7 +282,7 @@
                                         </tr>
                                         <tr >
                                             <td > Garage Title </td>
-                                            <td > <input id="garageTitle" required  type = "text" name = "title" onblur="isTextWithSpace('#garageTitle', '#garageTitleError')" /> </td>
+                                            <td > <input id="garageTitle" required  type = "text" name = "title" onblur="isGarageNameAvailable('#garageTitle', '#garageTitleError')" /> </td>
                                             <td>  <span id="garageTitleError" > </span></td>
 
                                         </tr>
@@ -304,12 +293,7 @@
                                             <td > <input id="hourRateInRushHours" required type = "text" name = "hourRateInRushHours"  value = "1"  onblur="isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000)"/> </td>
                                             <td>  <span id="hourRateInRushHoursError" > </span></td>
                                         </tr>
-                                        <tr >
-                                            <td > Hour rate out of  rush hours </td>
-                                            <td > <input id="hourRateOutOfRushHours" required type = "text"  name = "hourRateOutOfRushHours"  value ="1" readonly onblur="isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000)" /> </td>
-                                            <td>  <span id="hourRateOutOfRushHoursError" > </span></td>
-
-                                        </tr>
+                                        
                                         <tr>
                                             <td > Map </td>
                                             <td >

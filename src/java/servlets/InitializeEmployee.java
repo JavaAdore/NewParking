@@ -38,18 +38,27 @@ public class InitializeEmployee extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
 
             String emp = request.getParameter("employee");
-            if (emp != null) {
-                int id = Integer.parseInt(emp);
-                Employees employee = EmployeesImp.getInstance().getEmployee(id);
-                if (employee == null) {
-                    response.sendRedirect(request.getHeader("Referer"));
+
+            try {
+                if (emp != null) {
+                    int id = Integer.parseInt(emp);
+                    Employees employee = EmployeesImp.getInstance().getEmployee(id);
+                    if (employee == null) {
+                        request.getRequestDispatcher("LoadAllEmployeesInitializer?toPage=update.jsp").forward(request, response);
+                    }
+                    ArrayList<Garage> allGarages = GarageImp.getInstance().getAllGarages();
+                    request.setAttribute("allGarages", allGarages);
+                    request.setAttribute("currentEmployee", employee);
+                    request.getRequestDispatcher("updateemployeeprofile.jsp").forward(request, response);
+                }else
+                {
+                    throw new Exception();
                 }
-                ArrayList<Garage> allGarages = GarageImp.getInstance().getAllGarages();
-                request.setAttribute("allGarages", allGarages);
-                request.setAttribute("currentEmployee", employee);
-                request.getRequestDispatcher("updateemployeeprofile.jsp").forward(request, response);
+            } catch (Exception ex) {
+                request.getRequestDispatcher("LoadAllEmployeesInitializer?toPage=update.jsp").forward(request, response);
+
             }
-            response.sendRedirect(request.getHeader("Referer"));
+
         }
     }
 

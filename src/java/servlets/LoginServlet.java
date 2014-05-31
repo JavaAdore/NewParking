@@ -20,13 +20,13 @@ import javax.servlet.http.HttpSession;
 import pojo.Employees;
 import utils.EmployeeRole;
 import utils.EmployeeWrapper;
-import utils.Utils;
+import utils.*;
 
 public class LoginServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Utils.checkSession(request);
+       // Utils.checkSession(request);
         String email = request.getParameter("email");
 
         String password = request.getParameter("pass");
@@ -45,49 +45,52 @@ public class LoginServlet extends HttpServlet {
         } else {
 
             EmployeeWrapper employeeWrapper = Utils.getEmployeeWrapper(employee);
-
             HttpSession session = request.getSession(true);
-
             session.setAttribute("loggedIn", "true");
-
             session.setAttribute("emp", employeeWrapper);
+            System.out.println(employee + " employeeee");
+            System.out.println(employee + " employeeee Wrapper");
+            System.out.println(employee.getRoles().getRoleName() + " employeeee Wrapper Role  Name");
 
-            String roleName = employeeWrapper.getRoles().getRoleName();
+            String roleName = employee.getRoles().getRoleName();
 
             Cookie cookie = new Cookie("seal", "seal");
-            response.addCookie(cookie);
-            String uri = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + getServletContext().getContextPath();
+                response.addCookie(cookie);
             if (roleName.equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
-
+                request.getSession().setAttribute("defaultPage", Constants.SERVICE_PROVIDER_DEFAULT_PAGE);
                 response.sendRedirect("addadmin.jsp");
 
             } else if (roleName.equalsIgnoreCase(EmployeeRole.ADMIN)) {
-                if (employeeWrapper.getGarage() == null) {
+                if (employee.getGarage() == null) {
                     ErrorMessage error = new ErrorMessage("sorry you has not assigned to a garage yet");
                     request.setAttribute("error", error);
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                 } else if (employee.getGarage().getEnabled() == 0) {
                     request.setAttribute("error", new ErrorMessage("Sorry the garage you are assigned to is deactevated"));
                     request.getRequestDispatcher("login.jsp").forward(request, response);
-                    initializeReport(request, response);
-                    response.sendRedirect("editprofile.jsp");
 
                 } else {
-                    if (employeeWrapper.getGarage() == null) {
-                        ErrorMessage error = new ErrorMessage("sorry you has not assigned to a garage yet");
-                        request.setAttribute("error", error);
-                        request.getRequestDispatcher("accountant.jsp").forward(request, response);
-                    } else if (employee.getGarage().getEnabled() == 0) {
-                        request.setAttribute("error", new ErrorMessage("Sorry the garage you are assigned to is deactevated"));
-                        request.getRequestDispatcher("login.jsp").forward(request, response);
-                        initializeReport(request, response);
-                        response.sendRedirect("accountant.jsp");
+                    initializeReport(request, response);
+                    request.getSession().setAttribute("defaultPage", Constants.GARAGE_ADMIN_DEFAULT_PAGE);
+                    response.sendRedirect("editprofile.jsp");
+                }
 
-                    }
-
+            } else {
+                if (employee.getGarage() == null) {
+                    ErrorMessage error = new ErrorMessage("sorry you has not assigned to a garage yet");
+                    request.setAttribute("error", error);
+                    request.getRequestDispatcher("accountant.jsp").forward(request, response);
+                } else if (employee.getGarage().getEnabled() == 0) {
+                    request.setAttribute("error", new ErrorMessage("Sorry the garage you are assigned to is deactevated"));
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                } else {
+                    initializeReport(request, response);
+                    request.getSession().setAttribute("defaultPage", Constants.GARAGE_ACCOUNTATNT_DEFAULT_PAGE);
+                    response.sendRedirect("accountant.jsp");
                 }
 
             }
+
         }
     }
 

@@ -7,7 +7,9 @@ package webservices;
 
 import DAOS.GarageImp;
 import DAOS.GarageSlotImp;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -25,7 +27,24 @@ public class UpdateSlotStatus {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String updateSlot(@QueryParam("slotid") int slotid, @QueryParam("status") int status) {
+        System.out.println(String.format("webservice has been called and slotid is %s status is %s", slotid, status));
         return GarageSlotImp.getInstance().UpdateGarageSlot(slotid, status);
+    }
+
+    @Path("/changeSlotStatus")
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    public String updateSlotStatus(@FormParam("slotid") String slotid, @FormParam("status") String status) {
+        if (status != null) {
+            try {
+                return GarageSlotImp.getInstance().UpdateGarageSlot(Integer.parseInt(slotid), Integer.parseInt(status));
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return utils.Constants.FAILED+"";
+
     }
 
     @Path("/slotAvailability")

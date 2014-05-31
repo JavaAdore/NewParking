@@ -56,11 +56,13 @@
 
                                     Select Garage 
                                     <select name="garage" id="garage">
-                                        <c:forEach items="${garages}" var="garage">
-                                            <option value='${garage.getGarageId()}'>${garage.getTitle()}</option>
+                                        <c:forEach items="${allGarages}" var="garage">
+                                            <c:if test="${garage.getEnabled()==1}">
+                                                <option value='${garage.getGarageId()}'>${garage.getTitle()}</option>
+                                            </c:if>
                                         </c:forEach>
-                                        <c:if test="${empty garages}">
-                                            <option value= '-1' >Currently there is no garages </option>
+                                        <c:if test="${numberOfInActiveGarages==allGarages.size() || (empty allGarages)}">
+                                            <option value="-1">currently their is no Active garages</option>
                                         </c:if>
                                     </select>
 

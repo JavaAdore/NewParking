@@ -2,12 +2,14 @@ package servlets;
 
 import DAOS.EmployeesImp;
 import DAOS.GarageImp;
+import static com.sun.jmx.snmp.EnumRowStatus.active;
 import errors.ErrorMessage;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import pojo.DeleteEmployeeSchedule;
 import pojo.Employees;
 import pojo.Garage;
 import utils.EmployeeRole;
@@ -19,35 +21,36 @@ public class UpdateProfileHandler extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Utils.checkCurrentUserStatus(request);
-        Utils.checkSession(request);
+       
         EmployeeWrapper me = (EmployeeWrapper) request.getSession().getAttribute("emp");
         String email = request.getParameter("email");
-
         String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
+
         String garage = request.getParameter("garage");
         String isActive = request.getParameter("isActive");
-        ;
+        int result = -1;
+        if (me.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
 
-        Employees emp = EmployeesImp.getInstance().getEmployee(email);
+            result = EmployeesImp.getInstance().updateProfile(email, password, confirmPassword, garage, isActive);
 
-        if (emp != null) {
-            int garageId = Integer.parseInt(garage);
-            if (emp.getGarage().getGarageId() != garageId) {
-                emp.setGarage(GarageImp.getInstance().getGarage(garageId));
-            }
-            emp.setActive(Integer.parseInt(isActive));
-            int result = EmployeesImp.getInstance().updateEmployeeWithoutRetriving(emp);
-            switch (result) {
+        } else {
 
-                case -1:
-                    request.setAttribute("error", new ErrorMessage("Looks Like some error happend please contact adminstrator"));
-                    break;
-                case 0:
-                    request.setAttribute("error", new ErrorMessage("Data updated"));
+            result = EmployeesImp.getInstance().updateProfile(me.getEmployeeId(), password, confirmPassword);
 
-                    break;
-            }
         }
+
+        switch (result) {
+
+            case -1:
+                request.setAttribute("error", new ErrorMessage("Looks Like some error happend please contact adminstrator"));
+                break;
+            case 0:
+                request.setAttribute("error", new ErrorMessage("Data updated"));
+
+                break;
+        }
+
         switch (me.getRoles().getRoleName()) {
             case EmployeeRole.SERVICE_PROVIDER:
                 request.getRequestDispatcher("LoadAllEmployeesInitializer?toPage=update.jsp").forward(request, response);

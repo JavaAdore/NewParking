@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import pojo.Garage;
+import utils.Utils;
 
 /**
  *
@@ -39,6 +40,8 @@ public class LoadAllGaragesInitializer extends HttpServlet {
             String toUrl = request.getParameter("toPage");
             ArrayList<Garage> allGarages = GarageImp.getInstance().getAllGarages();
             request.setAttribute( "allGarages",allGarages);
+            int numberOfInActiveGarages = Utils.getNumberOfInActiveUsers(allGarages);
+            request.setAttribute("numberOfInActiveGarages",numberOfInActiveGarages);
             request.getRequestDispatcher(toUrl).forward(request, response);
         }
     }

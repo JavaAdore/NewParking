@@ -3,6 +3,7 @@ package utils;
 import DAOS.*;
 import GObjects.Step;
 import GObjects.ValueContainer;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import daosint.ReportsInterface;
@@ -10,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,10 +19,13 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import pojo.ContactNumber;
 import pojo.DailyHistory;
+import pojo.EmailAddress;
 import pojo.Employees;
 import pojo.Garage;
 import pojo.GarageStatus;
+import pojo.Map;
 import pojo.Users;
 import reportsClasses.ReportHistoryRecord;
 
@@ -37,16 +42,16 @@ public class Utils {
         garageDao = GarageImp.getInstance();
     }
 
-//    public static Date totDate(String dateAsString) {
-//        SimpleDateFormat formatedDate = new SimpleDateFormat("yyyy-MM-dd");
-//        Date date;
-//        try {
-//            date = formatedDate.parse(dateAsString);
-//        } catch (ParseException ex) {
-//            return null;
-//        }
-//        return date;
-//    }
+    public static Date totDate(String dateAsString) {
+        SimpleDateFormat formatedDate = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = formatedDate.parse(dateAsString);
+        } catch (ParseException ex) {
+            return null;
+        }
+        return date;
+    }
     public static Date totDate(String dateAsString, String format) {
         SimpleDateFormat formatedDate = new SimpleDateFormat(format);
         Date date;
@@ -75,39 +80,9 @@ public class Utils {
 
     public static EmployeeWrapper getEmployeeWrapper(Employees employee) {
 
-        return new EmployeeWrapper(employee.getEmployeeId(), employee.getRoles(), employee.getGarage(), employee.getFirstName(), employee.getLastName(), employee.getEmail());
+        return new EmployeeWrapper(employee.getEmployeeId(), employee.getRoles(), employee.getGarage(), employee.getFirstName(), employee.getLastName(), employee.getEmail(), employee.getActive());
     }
 
-//    public static String getAllAdminsInfo(boolean assign) {
-//
-//        String res = empDao.getAllAdminsInfo(assign);
-//
-//        StringBuilder stringBuilder = new StringBuilder();
-//
-//        for (String str : res.split(",")) {
-//
-//            String infos[] = str.split(":");
-//
-//            if (infos.length == 2) {
-//                stringBuilder.append("<option value=" + infos[0] + ">");
-//
-//                stringBuilder.append(infos[1]);
-//
-//                stringBuilder.append("</option>");
-//            }
-//
-//        }
-//        if (stringBuilder.length() == 0) {
-//
-//            stringBuilder.append("<option value= -1 >");
-//
-//            stringBuilder.append("currently there is no employees");
-//
-//            stringBuilder.append("</option>");
-//        }
-//
-//        return stringBuilder.toString();
-//    }
     public static String loadAllGaragesAsList(String identifier) {
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -172,23 +147,24 @@ public class Utils {
 
     public static void main(String[] args) {
 
-        int olderThan = olderThan("1/1/2011");
-        System.out.println(olderThan);
-
+//        String prepapreAboutUs = prepapreAboutUs(3);
+//        Gson g = new Gson();
+//        AboutUs fromJson = g.fromJson(prepapreAboutUs, AboutUs.class);
+//        System.out.println(fromJson.getWebsite());
     }
 
-    public String loadAllMapsAsList(String identifier) {
-        StringBuilder stringBuilder = new StringBuilder();
+    public static int getNumberOfInActiveUsers(ArrayList<Garage> allGarages) {
 
-//        for (Map map : mapsDao.getAllMaps()) {
-//            if (map.getGarages() == null) {
-//                stringBuilder.append(String.format("<%s value = %s >%s", identifier, map.getMapId(), map.getMapUrl()));
-//                stringBuilder.append(map.getMapUrl());
-//                stringBuilder.append(String.format("</%s>", identifier));
-//            }
-//        }
-        return stringBuilder.toString();
+        int counter = 0;
+        for (Garage garage : allGarages) {
+            if (garage.getEnabled() == 0) {
+                counter++;
+            }
+        }
+        return counter;
     }
+
+
 
     public static String loadAllEmployeesAsList(int myId, String identifier) {
 
@@ -492,9 +468,7 @@ public class Utils {
             obj = new JSONObject();
             obj.put("slotId", wrappedGarageSlotsStatus.getSlotId());
             obj.put("slotName", wrappedGarageSlotsStatus.getSlotName());
-
             obj.put("status", wrappedGarageSlotsStatus.getSlotStatus());
-
             obj.put("x", wrappedGarageSlotsStatus.getX());
             obj.put("y", wrappedGarageSlotsStatus.getY());
             list.add(obj);
@@ -581,8 +555,10 @@ public class Utils {
     public static int numberOfRoleHolders(List<Employees> employees) {
         int counter = 0;
         for (Employees emp : employees) {
-            if (!emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
-                counter++;
+            if (emp.getRoles() != null) {
+                if (!emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
+                    counter++;
+                }
             }
         }
         return counter;
@@ -591,6 +567,63 @@ public class Utils {
 
     public static double hoursBetween(Date date1, Date date2) {
         return (date2.getTime() - date1.getTime()) / (1000 * 60 * 60);
+
     }
 
+    public static String prepareGarageContactsDetails(int garageId) {
+        Garage garage = GarageImp.getInstance().getGarage(garageId);
+        if (garage != null) {
+            Collection<ContactNumber> contactNumbers = garage.getContactNumbers();
+            JsonArray contacts = new JsonArray();
+            Gson contact = new Gson();
+            for (ContactNumber c : contactNumbers) {
+
+                contacts.add(contact.toJsonTree(c));
+            }
+            return contacts.toString();
+        }
+        return new JsonArray().toString();
+    }
+
+    public static String prepareGarageEmailsList(int garageId) {
+        Garage garage = GarageImp.getInstance().getGarage(garageId);
+        if (garage != null) {
+            Collection<EmailAddress> emails = garage.getEmails();
+            JsonArray garageEmails = new JsonArray();
+            Gson contact = new Gson();
+            for (EmailAddress c : emails) {
+
+                garageEmails.add(contact.toJsonTree(c));
+            }
+            return garageEmails.toString();
+        }
+        return new JsonArray().toString();
+    }
+
+    public static String loadContacts(int garageId, String deleteButtonFormatingClass, String deleteButtonMethod) {
+        Garage garage = GarageImp.getInstance().getGarage(garageId);
+        StringBuilder stringBuilder = new StringBuilder();
+        if (garage != null) {
+
+            for (ContactNumber contactNumber : garage.getContactNumbers()) {
+                stringBuilder.append(String.format("<tr id=%s >", contactNumber.getId()));
+                stringBuilder.append(String.format("<td>%s</td>", contactNumber.getPhoneNumber()));
+                stringBuilder.append(String.format("<td><button class=%s onclick=%s(%s)> %s </button> </td>", deleteButtonFormatingClass, deleteButtonMethod, contactNumber.getId()));
+                stringBuilder.append(String.format("</tr>"));
+            }
+        }
+        return stringBuilder.toString();
+
+    }
+
+    public static int numberOfInActiveEmployees(Collection<Employees> employees) {
+        int counter = 0;
+        for (Employees emp : employees) {
+            if (emp.getActive() == 0) {
+                counter++;
+            }
+        }
+        System.out.println("number Of Inactive employees = " + counter);
+        return counter;
+    }
 }

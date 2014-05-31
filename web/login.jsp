@@ -37,11 +37,6 @@
             }
 
 
-            if (getCookie('seal') != "")
-            {
-                history.forward()
-
-            }
 
             function getCookie(cname)
             {
@@ -58,6 +53,19 @@
 
             $(document).ready(function()
             {
+                var toPage = '${defaultPage}';
+                if (toPage.length > 0)
+                {
+                    window.location.replace(toPage);
+
+
+                }
+
+                if (getCookie('seal') != "")
+                {
+                    history.forward();
+
+                }
 
                 document.cookie = "cookie=cookie";
                 if (getCookie('cookie') == "")

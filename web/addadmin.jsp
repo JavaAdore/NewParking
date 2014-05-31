@@ -28,7 +28,7 @@
 
             function submitMethod()
             {
-                if (isText('#firstName', '#firstNameError') && isText('#lastName', '#lastNameError') && isEmailWithValidation('#email', '#emailError') && areTheSame('#password', '#confirmPassword', '#confirmPasswordError') && isAdate('#datepicker', '#birthdateError'))
+                if (isText('#firstName', '#firstNameError') && isText('#lastName', '#lastNameError') && isEmailWithValidation('#email', '#emailError') && isPassword('#password','#passwordError')&&areTheSame('#password', '#confirmPassword', '#confirmPasswordError') && isAdate('#datepicker', '#birthdateError'))
                 {
 
                     $("#addEmployeeForm").submit();
@@ -110,7 +110,7 @@
                                         </tr>
                                         <tr>
                                             <td>Password:</td>
-                                            <td><input id="password" name="password" type="password" onblur="validateLength('password', 'passwordError');
+                                            <td><input id="password" name="password" type="password" onblur="isPassword('#password', '#passwordError');
                                                     areTheSame('#password', '#confirmPassword', '#confirmPasswordError')" /> </td>
                                             <td><span id="passwordError"></span></td>
                                         </tr>

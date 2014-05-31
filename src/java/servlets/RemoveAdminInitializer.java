@@ -39,7 +39,6 @@ public class RemoveAdminInitializer extends HttpServlet {
             if (emp != null && emp.getGarage() != null) {
                 ArrayList<Employees> employees = EmployeesImp.getInstance().getAllEmployeesByGarageId(emp.getGarage().getGarageId());
                 request.setAttribute("employees", employees);
-
             }
             request.getRequestDispatcher("removeadminbyadmin.jsp").forward(request, response);
 

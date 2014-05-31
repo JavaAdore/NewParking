@@ -128,7 +128,7 @@ public class UserImp {
     public int updateProfile(Users user) {
 
         Users u = (Users) userSession.get(Users.class, user.getUserId());
-        userSession.evict(u);
+        
         try {
             if (u != null) {
                 String email = user.getEmail();

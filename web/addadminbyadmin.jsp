@@ -6,12 +6,12 @@
     <head>
         <jsp:include page="adminHeaders\addemployeeheader.jsp"/>
 
-        
+
 
         <noscript>
         <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
         </noscript>
-        
+
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="description" content="" />
         <meta name="keywords" content="" />
@@ -23,9 +23,9 @@
         <script src="js/ui/jquery.ui.core.js"></script>
         <script src="js/ui/jquery.ui.widget.js"></script>
         <script src="js/ui/jquery.ui.datepicker.js"></script>
-         <link rel = "stylesheet" href = "css/mycss/jquery.ui.all.css" >
+        <link rel = "stylesheet" href = "css/mycss/jquery.ui.all.css" >
         <link rel="stylesheet" href="css/mycss/demos.css">
-        
+
 
         <script type="text/javascript">
 
@@ -33,7 +33,7 @@
 
             function submitMethod()
             {
-                if (isText('#firstName', '#firstNameError') && isText('#lastName', '#lastNameError') && isEmailWithValidation('#email', '#emailError') && areTheSame('#password', '#confirmPassword', '#confirmPasswordError') && isAdate('#datepicker', '#birthdateError'))
+                if (isText('#firstName', '#firstNameError') && isText('#lastName', '#lastNameError') && isEmailWithValidation('#email', '#emailError') && isPassword('#password', '#passwordError') &&  areTheSame('#password', '#confirmPassword', '#confirmPasswordError') && isAdate('#datepicker', '#birthdateError'))
                 {
 
                     $("#addAdmin").submit();
@@ -76,7 +76,7 @@
                                         </tr>
                                         <tr>
                                             <td>Password:</td>
-                                            <td><input id="password" name="password" type="password" onblur="validateLength('password', 'passwordError');
+                                            <td><input id="password" name="password" type="password" onblur="isPassword('#password', '#passwordError');
                                                     areTheSame('#password', '#confirmPassword', '#confirmPasswordError')" /> </td>
                                             <td><span id="passwordError"></span></td>
                                         </tr>

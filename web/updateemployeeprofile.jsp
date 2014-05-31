@@ -30,26 +30,19 @@
 
             function myValidator()
             {
-
                 var pass = document.getElementById("password").value;
                 var confirm = document.getElementById("confirmPassword").value;
-
                 if (pass == confirm)
                 {
                     return true;
-
                 }
-
                 alert("please confirm password");
                 return false;
-
             }
-
-
             function submitMethod()
             {
 
-
+                $(updateProfileForm).submit();
 
             }
         </script>
@@ -64,7 +57,6 @@
                                 <input id="gobutton" type="submit" value="Sign Out" />
                             </form>
                             <h1><a href="#" class="mobileUI-site-name">Parking System</a></h1>
-
                         </div>
                     </div>
                 </div>
@@ -74,9 +66,7 @@
                             <div class="12u" id="menu">
                                 <nav class="mobileUI-site-nav">
                                     <ul>
-                                        <li class="current_page_item"><a href="editprofile.jsp">Edit Profile</a></li>
-                                        <li><a href="addadmin.jsp">Control Area</a></li>
-
+                                        <li class="current_page_item" ><a href="addadmin.jsp">Control Area</a></li>
                                     </ul>
                                 </nav>
                             </div>
@@ -90,11 +80,8 @@
                 <div id="page-bgbtm">
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
-
-
-
                             <center>   
-                                <form method="post" action="UpdateProfileHandler"  onsubmit="return myValidator()">
+                                <form method="post" action="UpdateProfileHandler" id="updateProfileForm"  onsubmit="return myValidator()">
                                     <table>
                                         <tr>
                                             <td>Email:</td>
@@ -112,32 +99,31 @@
                                             <td><input id ="confirmPassword" name="confirmPassword" type="password" required value="${currentEmployee.getPassword()}" class="textbox" onblur="areTheSame('#password', '#confirmPassword', '#confirmPasswordError')" ></td>
                                             <td><span id="confirmPasswordError"></span></td>
                                         </tr>
-                                        <td>
-                                            Garage 
-                                        </td>
-                                        <td>
+                                        <c:if test="${currentEmployee.getRoles().getRoleId()!=1}">
 
-                                            <select name="garage" id="garage">
-                                                <option value="-2" > </option>
-                                                <c:forEach items="${allGarages}" var="garage">
-                                                    <option value="${garage.getGarageId()}" <c:if test="${currentEmployee.getGarage().getGarageId()==garage.getGarageId()}" > selected </c:if> >${garage.getTitle()}</option>
-                                                </c:forEach>
-                                               
-
-                                        </td>
-
-                                        <tr>
                                             <td>
-                                                Active
+                                                Garage 
                                             </td>
                                             <td>
-                                                <select name="isActive" >
-                                                    <option value="0">Active</option>
-                                                    <option value="1"<c:if test="${currentEmployee.getActive()==0}" > selected </c:if> >Not Active</option>
 
-                                                </select>
+                                                <select name="garage" id="garage">
+                                                    <option value="-2" >No Garage</option>
+                                                    <c:forEach items="${allGarages}" var="garage">
+                                                        <option value="${garage.getGarageId()}" <c:if test="${currentEmployee.getGarage().getGarageId()==garage.getGarageId()}" > selected </c:if> >${garage.getTitle()}</option>
+                                                    </c:forEach>
                                             </td>
-                                        </tr>
+                                            <tr>
+                                                <td>
+                                                    Active
+                                                </td>
+                                                <td>
+                                                    <select name="isActive"  >
+                                                        <option value="1">Active</option>
+                                                        <option value="0"<c:if test="${currentEmployee.getActive()==0}" > selected </c:if> >Not Active</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                        </c:if>
                                         <tr>
                                             <td><input type="button"  value="Save Changes" onclick="submitMethod()"/></td>
                                         </tr>

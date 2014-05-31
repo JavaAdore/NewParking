@@ -21,7 +21,7 @@
         <script type="text/javascript">
             function submitMethod()
             {
-                if (areTheSame('#password', '#confirmPassword', '#confirmPasswordError'))
+                if (isPassword('#password','#passwordError')&&areTheSame('#password', '#confirmPassword', '#confirmPasswordError'))
                 {
                     $('#updateProfileForm').submit();
                 }
@@ -46,7 +46,7 @@
                                         </tr>
                                         <tr>
                                             <td>Password:</td>
-                                            <td><input id="password" name="password" type="password" onblur="validateLength('password', 'passwordError');
+                                            <td><input id="password" name="password" type="password" onblur="isPassword('#password', '#passwordError');
                                                     areTheSame('#password', '#confirmPassword', '#confirmPasswordError')" /> </td>
                                             <td><span id="passwordError"></span></td>
                                         </tr>

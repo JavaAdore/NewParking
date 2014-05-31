@@ -44,7 +44,9 @@ public class LoadAllEmployeesInitializer extends HttpServlet {
             ArrayList<Employees> allEmployees = EmployeesImp.getInstance().getAllEmployees();
             
             request.setAttribute("numberOfEmployees", Utils.numberOfRoleHolders(allEmployees));
+            request.setAttribute("numberOfInActiveEmployees",Utils.numberOfInActiveEmployees(allEmployees));
             request.setAttribute("allEmployees", allEmployees);
+            
             request.getRequestDispatcher(toUrl).forward(request, response);
         }
     }

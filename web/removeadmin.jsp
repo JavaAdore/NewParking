@@ -67,13 +67,14 @@
                                             <select name="adminInfo"  id="adminInfo">
                                                 <c:forEach items="${allEmployees}" var="employee">
                                                     
-                                                        <c:if test="${employee.getRoles().getRoleId()!=1}" >
+                                                        <c:if test="${employee.getRoles().getRoleId()!=1&&employee.getActive()==1}" >
                                                             <option value="${employee.getEmployeeId()}">(${employee.getFirstName()} ${employee.getLastName()}) ${employee.getEmail()} </option>
                                                         </c:if>
                                                    
                                                 </c:forEach>    
-                                                <c:if test="${numberOfEmployees==0}">
-                                                    <option value="-1">Currently there is no Employees</option>
+                                                 <c:if test="${numberOfInActiveEmployees==numberOfEmployees || (empty allEmployees)}">
+                                                    <option value="-1">currently their is no Employees</option>
+
                                                 </c:if>
                                             </select>
                                         </td>

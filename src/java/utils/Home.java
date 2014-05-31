@@ -30,9 +30,7 @@ import reportsClasses.ReportHistoryRecord;
 public class Home {
 
     public static void main(String[] args) {
-        
-    
-        
+        GarageImp.getInstance().ActivateGarage(3);
         
        
     }

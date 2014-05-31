@@ -9,10 +9,13 @@ import DAOS.EmployeesImp;
 import DAOS.GarageImp;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import pojo.Garage;
+import utils.Utils;
 
 /**
  *
@@ -35,7 +38,10 @@ public class AssignAdminHandler extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
 
             request.getSession().setAttribute("admins", EmployeesImp.getInstance().getAllAdminsInfo(false));
-            request.getSession().setAttribute("garages", GarageImp.getInstance().getAllGarages());
+            ArrayList<Garage> allGarages = GarageImp.getInstance().getAllGarages();
+            request.setAttribute( "allGarages",allGarages);
+            int numberOfInActiveGarages = Utils.getNumberOfInActiveUsers(allGarages);
+            request.setAttribute("numberOfInActiveGarages",numberOfInActiveGarages);
             request.getRequestDispatcher("assign.jsp").forward(request, response);
 
         }

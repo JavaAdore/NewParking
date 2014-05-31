@@ -6,38 +6,40 @@
 package DAOS;
 
 import Sessions.ConnectionHandler;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import geolocator.AddressConverter;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.io.FilenameUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.Address;
 import pojo.ContactNumber;
-import pojo.DeleteEmployeeSchedule;
 import pojo.DeleteGarageSchedule;
 import pojo.EmailAddress;
 import pojo.FaxContact;
 import pojo.Feedback;
 import pojo.Garage;
-import pojo.GarageDoors;
-import pojo.GarageStatus;
+import pojo.InActivePeriod;
 import pojo.Map;
 import pojo.Users;
+import utils.AboutUs;
 import utils.Constants;
 import utils.CoordinateHelper;
 import utils.GeoLocation;
 import utils.Regex;
-import utils.Utils;
 import utils.WrappedGarage;
 
 /**
  *
  * @author Mahmoud Eltaieb
  */
-public class GarageImp implements GarageDAO {
+public class GarageImp {
 
     private final Session garageSession = ConnectionHandler.getGarageSession();
     private static GarageImp instance;
@@ -55,7 +57,9 @@ public class GarageImp implements GarageDAO {
     // will be called withing another session
     public Garage getGarage(int garageId) {
         Garage garage = (Garage) garageSession.get(Garage.class, garageId);
-        garageSession.refresh(garage);
+        if (garage != null) {
+//            garageSession.refresh(garage);
+        }
         return garage;
     }
 
@@ -79,8 +83,7 @@ public class GarageImp implements GarageDAO {
 
     }
 
-    public int deleteGarage(int garageId) 
-    {
+    public int deleteGarage(int garageId) {
         int result = 0;
         try {
             garageSession.beginTransaction();
@@ -89,7 +92,6 @@ public class GarageImp implements GarageDAO {
                 garageSession.delete(garage);
                 deleteFromDeletePlan(garageId);
                 System.out.println(String.format("dear mahmoud kindly be informed that garage %s has been deleted", garageId));
-
             }
             garageSession.getTransaction().commit();
 
@@ -161,6 +163,7 @@ public class GarageImp implements GarageDAO {
 
     public void myFunction() {
 
+        ActivateGarage(3);
     }
 
     public void add(Object obj) {
@@ -229,7 +232,10 @@ public class GarageImp implements GarageDAO {
         Garage garage = getGarage(garageId);
 
         if (garage != null) {
+            // if (enabled==0) {
+
             garage.setEnabled(enabled);
+            //  }
             switch (updateGarage(garage)) {
                 case 0:
                     result = "garage availability updated";
@@ -255,11 +261,88 @@ public class GarageImp implements GarageDAO {
         return 0;
     }
 
+    public synchronized int inActivateGarage(Garage garage) {
+
+        Transaction beginTransaction = null;
+        try {
+            beginTransaction = garageSession.beginTransaction();
+            garageSession.persist(garage);
+            garageSession.persist(new InActivePeriod(garage));
+            garageSession.getTransaction().commit();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -1;
+        } finally {
+            if (beginTransaction != null) {
+                beginTransaction.commit();
+            }
+
+        }
+        return 0;
+    }
+
+    public synchronized int ActivateGarage(int garageId) {
+        int result = Constants.FAILED;
+        Transaction trans = null;
+        try {
+            trans = garageSession.beginTransaction();
+            Garage garage = (Garage) garageSession.get(Garage.class, garageId);
+            if (garage != null) {
+                Query q = garageSession.createQuery("from InActivePeriod where garage=:garage order by id desc");
+
+                q.setParameter("garage", garage);
+                q.setMaxResults(1);
+                InActivePeriod tempGarage = (InActivePeriod) q.uniqueResult();
+                if (tempGarage != null) {
+                    tempGarage.setToDate(new Timestamp(new Date().getTime()));
+                }
+                deleteFromDeletePlan(garage.getGarageId());
+                garage.setEnabled(1);
+                result = Constants.SUCCESS;
+            }
+
+        } catch (Exception ex) {
+
+            ex.printStackTrace();
+        } finally {
+            if (trans != null) {
+                trans.commit();
+            }
+
+        }
+        return result;
+    }
+
+    public int deActivateGarage(int garageId) {
+        int result = Constants.FAILED;
+        Transaction beginTransaction = null;
+        try {
+            beginTransaction = garageSession.beginTransaction();
+            Garage garage = (Garage) garageSession.get(Garage.class, garageId);
+            if (garage != null) {
+                garageSession.persist(new InActivePeriod(garage));
+                garage.setEnabled(0);
+            }
+            result = Constants.SUCCESS;
+
+        } catch (Exception ex) {
+            result = Constants.FAILED;
+            ex.printStackTrace();
+        } finally {
+            if (beginTransaction != null) {
+                beginTransaction.commit();
+
+            }
+
+        }
+        return result;
+    }
+
     public int addContact(int garageId, String contact, String type) {
 
         try {
             garageSession.beginTransaction();
-
+            System.out.println(contact);
             Garage garage = (Garage) garageSession.get(Garage.class, garageId);
             if (garage != null) {
                 switch (type) {
@@ -327,33 +410,77 @@ public class GarageImp implements GarageDAO {
     }
 
     public int addToDeletePlan(DeleteGarageSchedule deleteGarageSchedule) {
-
+        int result = utils.Constants.SUCCESS;
+        Transaction transaction = null;
         try {
-            garageSession.beginTransaction();
+            transaction = garageSession.beginTransaction();
             Garage tempGarage = (Garage) garageSession.get(Garage.class, deleteGarageSchedule.getGarageId());
             if (tempGarage != null) {
                 tempGarage.setEnabled(0);
+                garageSession.persist(new InActivePeriod(new Garage(tempGarage.getGarageId())));
                 garageSession.persist(deleteGarageSchedule);
+            } else {
+
+                result = utils.Constants.NOT_FOUND;
 
             }
-            garageSession.getTransaction().commit();
+
         } catch (Exception ex) {
             ex.printStackTrace();
-            return utils.Constants.FAILED;
+            result = utils.Constants.FAILED;
+        } finally {
+            if (transaction != null) {
+                transaction.commit();
+            }
+
         }
 
-        return utils.Constants.SUCCESS;
+        return result;
     }
 
     public void deleteFromDeletePlan(int id) {
+
         try {
-            Query query = garageSession.createQuery("delete from DeleteGarageSchedule where garageId=:id ");
+
+            Query query = garageSession.createQuery("delete from DeleteGarageSchedule where garageId=:id");
             query.setParameter("id", id);
             query.executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
+    }
+
+    public String prepapreAboutUs(int garageId) {
+        Garage garage = GarageImp.getInstance().getGarage(garageId);
+        AboutUs aboutUs = new AboutUs();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.add(null, jsonObject);
+
+        if (garage != null) {
+            aboutUs.setName(garage.getTitle());
+
+            aboutUs.setImage(garage.getImage());
+            aboutUs.setDesc(garage.getDescription());
+
+            for (ContactNumber contact : garage.getContactNumbers()) {
+                aboutUs.setPhoneNubmers(nullHandler(aboutUs.getPhoneNubmers()) + contact.getPhoneNumber() + "\\n");
+
+            }
+            for (EmailAddress email : garage.getEmails()) {
+                aboutUs.setEmails(nullHandler(aboutUs.getEmails()) + email.getEmail() + "\\n");
+            }
+
+        }
+        //return gson.toJson(aboutUs);
+        return "";
+    }
+
+    public static String nullHandler(String str) {
+        if (str == null) {
+            return "";
+        }
+        return str;
     }
 
 }

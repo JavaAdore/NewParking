@@ -32,7 +32,11 @@ public class EmployeeWrapper {
 
     private String email;
 
-    public EmployeeWrapper(Integer employeeId, Roles roles, Garage garage, String firstName, String lastName, String email) {
+    private int active;
+
+    
+
+    public EmployeeWrapper(Integer employeeId, Roles roles, Garage garage, String firstName, String lastName, String email, int active) {
 
         this.employeeId = employeeId;
         this.roles = roles;
@@ -40,6 +44,7 @@ public class EmployeeWrapper {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.active = active;
     }
 
     public void setEmployeeId(Integer employeeId) {

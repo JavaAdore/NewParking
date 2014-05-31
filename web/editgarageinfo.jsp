@@ -209,7 +209,7 @@
 
 
 
-                alert(getMap());
+
 
             }
             function submitMethod()
@@ -226,16 +226,14 @@
 //                isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000);
 //                isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000);
 //                isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000);
-                if (isTextWithSpace('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000) && isImageAcceptNull('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 3000) && isAnumber('#height', '#heightError', 0, 3000) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
+                if (isTextWithSpace('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000)  && isImageAcceptNull('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 3000) && isAnumber('#height', '#heightError', 0, 3000) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
                 {
-                    if (map.getMapTypeId() == "satellite")
+                    if (map.getMapTypeId() == "hybrid")
                     {
-                        alert(map.getMapTypeId());
-                        alert(map.getZoom());
+
                         if (map.getZoom() !== 19)
                         {
-                            alert('entered here');
-                            alert('please specify location exactely');
+
                             return false;
                         } else
                         {
@@ -245,13 +243,11 @@
 
                     } else
                     {
-                        alert(map.getMapTypeId());
-                        alert(map.getZoom())
+
 
                         if (map.getZoom() !== 21)
                         {
-                            alert('entered here');
-                            alert('please specify location exactely');
+
                             return false;
                         } else
                         {
@@ -309,16 +305,12 @@
                                             <td > <input id="garageTitle" required  type = "text"  value="${currentGarage.getTitle()}" name = "title" onblur="isTextWithSpace('#garageTitle', '#garageTitleError')" /> </td>
                                             <td>  <span id="garageTitleError" > </span></td>
 
-                                        </tr>
-                                        <tr>                                            <td > Hour rate in rush hours </td>                                            <td > <input id="hourRateInRushHours" required type = "text" value="${currentGarage.getHourRateInRush()}" name = "hourRateInRushHours"  value = "1"  onblur="isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000)"/> </td>
-                                            <td>  <span id="hourRateInRushHoursError" > </span></td>
-                                        </tr>
-                                        <tr>
-                                            <td > Hour rate out of  rush hours </td>
-                                            <td > <input id="hourRateOutOfRushHours" required type = "text" value="${currentGarage.getHourRateOutOfRush()}" name = "hourRateOutOfRushHours"   readonly onblur="isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000)" /> </td>
-                                            <td>  <span id="hourRateOutOfRushHoursError" > </span></td>
 
                                         </tr>
+                                        <tr>                                            <td> Hour rate in rush hours </td>                                            <td> <input id="hourRateInRushHours" required type = "text" value="${currentGarage.getHourRateInRush()}" name = "hourRateInRushHours" onblur="isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000)"/> </td>
+                                            <td>  <span id="hourRateInRushHoursError" > </span></td>
+                                        </tr>
+
                                         <tr>
                                             <td > Map </td>
                                             <td >
@@ -375,7 +367,18 @@
                                             <td> <span id="lngMapError"> </span></td>
 
                                         </tr>
+                                        <tr>
+                                            <td>
+                                                Active
+                                            </td>
+                                            <td>
+                                                <select name="isActive"  >
+                                                    <option value="1">Active</option>
+                                                    <option value="0"<c:if test="${currentGarage.getEnabled()==0}" >selected</c:if>>Not Active</option>
 
+                                                </select>
+                                            </td>
+                                        </tr>
                                         <tr>
                                             <td > <input type = "button" value = "update" id = "myButton1" onclick = "submitMethod()" /> </td>
                                             <!--                                            <td > <input type = "reset" value = "Cancel" id = "myButton2"  /> </td>-->

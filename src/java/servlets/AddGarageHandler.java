@@ -28,8 +28,8 @@ public class AddGarageHandler extends HttpServlet {
     private String filePath;
     private File file;
     private String jspFilePath;
-    private ArrayList<String> parameterNames = new ArrayList<String>();
-    private ArrayList<String> parameterValues = new ArrayList<String>();
+    private List<String> parameterNames ;
+    private List<String> parameterValues ;
     private String theNameOfTheFile;
     private String fileExtention;
     String MapUrl = "";
@@ -37,7 +37,9 @@ public class AddGarageHandler extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, FileUploadException, Exception {
-
+        
+        parameterNames = new ArrayList();
+        parameterValues = new ArrayList();
         response.setContentType("text/html;charset=UTF-8");
 
         PrintWriter out = response.getWriter();
@@ -89,7 +91,7 @@ public class AddGarageHandler extends HttpServlet {
                 parameterValues.add(fi.getString().trim());
             }
         }
-        int result = save();
+        int result = save();    
         switch (result) {
             case -2:
                 request.setAttribute("error", new ErrorMessage("This garage title is already added"));
@@ -97,6 +99,11 @@ public class AddGarageHandler extends HttpServlet {
                 break;
             case -1:
                 request.setAttribute("error", new ErrorMessage("Looks Like some error happend please contact adminstrator"));
+                try {
+                    file.delete();
+                } catch (Exception ex) {
+                    
+                }
                 request.getRequestDispatcher("addgarage.jsp").forward(request, response);
                 break;
             case 0:
@@ -122,37 +129,21 @@ public class AddGarageHandler extends HttpServlet {
     private int save() {
 
         Garage g = new Garage();
-
         String garageName = parameterValues.get(0);
-
         int hourRateInRushHours = Integer.parseInt(parameterValues.get(1));
-
-        int hourRateoutofRushHours = Integer.parseInt(parameterValues.get(2));
-
-        double ratio = Double.parseDouble(parameterValues.get(3));
-
-        int width = Integer.parseInt(parameterValues.get(4));
-
-        int heigth = Integer.parseInt(parameterValues.get(5));
-
-        String unit = parameterValues.get(6);
-
-        lat = Double.parseDouble(parameterValues.get(7));
-        lon = Double.parseDouble(parameterValues.get(8));
-
+        double ratio = Double.parseDouble(parameterValues.get(2));
+        int width = Integer.parseInt(parameterValues.get(3));
+        int heigth = Integer.parseInt(parameterValues.get(4));
+        String unit = parameterValues.get(5);
+        lat = Double.parseDouble(parameterValues.get(6));
+        lon = Double.parseDouble(parameterValues.get(7));
         MapUrl = String.format("%s,%s.%s", lat, lon, FilenameUtils.getExtension(file.getName()));
-
         Address address = new AddressConverter().getAddress(lat, lon);
-
         g.setHourRateInRush(hourRateInRushHours);
-        g.setHourRateOutOfRush(hourRateoutofRushHours);
         g.setLat(lat);
         g.setLon(lon);
-        g.setHourRateOutOfRush(ratio);
         g.setTitle(garageName);
-
         Map map = new Map();
-
         map.setHeight(heigth);
         map.setWidth(width);
         map.setUnit(unit);

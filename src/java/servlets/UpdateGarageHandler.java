@@ -24,27 +24,27 @@ import pojo.Map;
 
 public class UpdateGarageHandler extends HttpServlet {
 
-    private boolean isMultipart;
-    private String filePath;
-    private File file;
-    private String jspFilePath;
-    private ArrayList<String> parameterNames = new ArrayList<String>();
-    private ArrayList<String> parameterValues = new ArrayList<String>();
-    private String theNameOfTheFile;
-    private String fileExtention;
-    Map map;
-    String MapUrl = "";
-    Garage currentGarage;
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, FileUploadException, Exception {
 
         response.setContentType("text/html;charset=UTF-8");
+
+        boolean isMultipart;
+        String filePath;
+        File file = null;
+        String jspFilePath;
+        ArrayList<String> parameterNames = new ArrayList<String>();
+        ArrayList<String> parameterValues = new ArrayList<String>();
+        String theNameOfTheFile;
+        String fileExtention;
+        Map map;
+        String MapUrl = "";
+        Garage currentGarage;
         currentGarage = (Garage) request.getSession().getAttribute("currentGarage");
 
         PrintWriter out = response.getWriter();
 
-        String jspFilePath = getServletContext().getRealPath(request.getRequestURI()).replace('\\', '/');
+        jspFilePath = getServletContext().getRealPath(request.getRequestURI()).replace('\\', '/');
 
         jspFilePath = jspFilePath.subSequence(0, jspFilePath.indexOf("/build")) + "/web/images/";
 
@@ -85,7 +85,6 @@ public class UpdateGarageHandler extends HttpServlet {
                                 + fileName.substring(fileName.lastIndexOf("\\") + 1));
                     }
                     fi.write(file);
-                    out.println("Uploaded Filename: " + theNameOfTheFile + "<br>");
                 }
             } else {
                 out.print(fi.getFieldName() + " " + fi.getString());
@@ -93,7 +92,8 @@ public class UpdateGarageHandler extends HttpServlet {
                 parameterValues.add(fi.getString().trim());
             }
         }
-        int result = save();
+
+        int result = save(parameterValues, currentGarage, file);
         switch (result) {
             case -2:
                 request.setAttribute("error", new ErrorMessage("This garage title is already added"));
@@ -125,42 +125,39 @@ public class UpdateGarageHandler extends HttpServlet {
         }
     }
 
-    private int save() {
+    private int save(List<String> parameterValues, Garage currentGarage, File file) {
 
         String garageName = parameterValues.get(0);
 
         double hourRateInRushHours = Double.parseDouble(parameterValues.get(1));
 
-        double hourRateoutofRushHours = Double.parseDouble(parameterValues.get(2));
+        double ratio = Double.parseDouble(parameterValues.get(2));
 
-        double ratio = Double.parseDouble(parameterValues.get(3));
+        int width = Integer.parseInt(parameterValues.get(3));
 
-        int width = Integer.parseInt(parameterValues.get(4));
+        int heigth = Integer.parseInt(parameterValues.get(4));
 
-        int heigth = Integer.parseInt(parameterValues.get(5));
+        String unit = parameterValues.get(5);
 
-        String unit = parameterValues.get(6);
+        double lat = Double.parseDouble(parameterValues.get(6));
 
-        double lat = Double.parseDouble(parameterValues.get(7));
-        
-        double lon = Double.parseDouble(parameterValues.get(8));
+        double lon = Double.parseDouble(parameterValues.get(7));
 
-        map = currentGarage.getMap();
+        int enabled = Integer.parseInt(parameterValues.get(8));
+
+        Map map = currentGarage.getMap();
 
         if (file != null) {
-            MapUrl = String.format("%s,%s.%s", currentGarage.getLat(), currentGarage.getLon(), FilenameUtils.getExtension(file.getName()));
+            String MapUrl = String.format("%s,%s.%s", currentGarage.getLat(), currentGarage.getLon(), FilenameUtils.getExtension(file.getName()));
             map.setMapUrl(MapUrl);
-
         }
         Address tempAddress = new AddressConverter().getAddress(lat, lon);
         Address address = currentGarage.getAddress();
         address.setCity(tempAddress.getCity());
         address.setCountry(tempAddress.getCountry());
         currentGarage.setHourRateInRush(hourRateInRushHours);
-        currentGarage.setHourRateOutOfRush(hourRateoutofRushHours);
         currentGarage.setLat(lat);
         currentGarage.setLon(lon);
-        currentGarage.setHourRateOutOfRush(ratio);
         currentGarage.setTitle(garageName);
         map.setHeight(heigth);
         map.setWidth(width);
@@ -169,6 +166,15 @@ public class UpdateGarageHandler extends HttpServlet {
         currentGarage.setMap(map);
         currentGarage.setAddress(address);
 
+        if (enabled != currentGarage.getEnabled()) {
+            if (enabled == 0) {
+                GarageImp.getInstance().deActivateGarage(currentGarage.getGarageId());
+            } else {
+                GarageImp.getInstance().ActivateGarage(currentGarage.getGarageId());
+
+            }
+        }
+        currentGarage.setEnabled(enabled);
         return GarageImp.getInstance().updateGarage(currentGarage);
 
     }

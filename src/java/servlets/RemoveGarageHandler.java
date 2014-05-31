@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import pojo.DeleteGarageSchedule;
 import utils.Utils;
 
 /**
@@ -38,28 +39,37 @@ public class RemoveGarageHandler extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
 
-            String garage = request.getParameterValues("garage")[0];
+            String garage = request.getParameter("garage");
             if (garage != null) {
+
                 int currentGarage = Integer.parseInt(garage);
                 if (currentGarage != -1) {
-                    int result = GarageImp.getInstance().deleteGarage(currentGarage);
+                    int result = GarageImp.getInstance().addToDeletePlan(new DeleteGarageSchedule(currentGarage));
                     switch (result) {
-                        case 0:
+                        case utils.Constants.SUCCESS:
                             request.setAttribute("error", new ErrorMessage(String.format("Garage deleted")));
                             break;
 
-                        case -1:
+                        case utils.Constants.FAILED:
                             request.setAttribute("error", new ErrorMessage(String.format("looks like some error happend please contact adminstrator")));
                             break;
+                        case utils.Constants.NOT_FOUND:
+                            request.setAttribute("error", new ErrorMessage(String.format("No Such garage")));
+                            break;
+
                     }
 
                 }
-            }
-        } finally {
-            request.getRequestDispatcher("/LoadAllGaragesInitializer?toPage=removegarage.jsp").forward(request, response);
-            out.close();
+            } else {
+                throw new exceptions.DataNotFoundException();
 
+            }
+        } catch (Exception ex) {
+            request.getRequestDispatcher("LoadAllGaragesInitializer?toPage=removegarage.jsp").forward(request, response);
         }
+        request.getRequestDispatcher("LoadAllGaragesInitializer?toPage=removegarage.jsp").forward(request, response);
+        out.close();
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -37,15 +38,15 @@ import utils.Utils;
  * @author orcl
  */
 public class GarageSlotDoorsImp {
-
+    
     Session garageSlotDoorsSession = ConnectionHandler.getGarageSlotDoorsSession();
     private static GarageSlotDoorsImp instance;
-
+    
     private GarageSlotDoorsImp() {
     }
-
+    
     public static GarageSlotDoorsImp getInstance() {
-
+        
         if (instance == null) {
             instance = new GarageSlotDoorsImp();
         }
@@ -55,9 +56,9 @@ public class GarageSlotDoorsImp {
     // add slot
     public GarageStatus addGarageSlot(GarageStatus newSlot) {
         try {
-
+            
             garageSlotDoorsSession.persist(newSlot);
-
+            
         } catch (Exception ex) {
             ex.printStackTrace();
             //    garageSlotDoorsSession.getTransaction().rollback();
@@ -65,7 +66,7 @@ public class GarageSlotDoorsImp {
         } finally {
             //   garageSlotDoorsSession.getTransaction().commit();
         }
-
+        
         return newSlot;
     }
 
@@ -80,7 +81,7 @@ public class GarageSlotDoorsImp {
             // leaev garagedoor is null as it's 
         }
         return door;
-
+        
     }
 
 //
@@ -103,49 +104,48 @@ public class GarageSlotDoorsImp {
 //
 //        return result;
 //    }
-    public int addGarageSlot(ArrayList<GarageStatus> garageSlot) {
-        int result = 0;
-        try {
-            garageSlotDoorsSession.clear();
-
-            garageSlotDoorsSession.beginTransaction();
-            for (GarageStatus garageStatus : garageSlot) {
-                System.out.println("slotId = " + garageStatus.getSlotId());
-                garageSlotDoorsSession.save(garageStatus);
-
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            garageSlotDoorsSession.getTransaction().rollback();
-            result = -1;
-        } finally {
-            garageSlotDoorsSession.getTransaction().commit();
-        }
-
-        return result;
-    }
-
+//    public int addGarageSlot(ArrayList<GarageStatus> garageSlot) {
+//        int result = 0;
+//        try {
+//            garageSlotDoorsSession.clear();
+//
+//            garageSlotDoorsSession.beginTransaction();
+//            for (GarageStatus garageStatus : garageSlot) {
+//                System.out.println("slotId = " + garageStatus.getSlotId());
+//                garageSlotDoorsSession.save(garageStatus);
+//
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            garageSlotDoorsSession.getTransaction().rollback();
+//            result = -1;
+//        } finally {
+//            garageSlotDoorsSession.getTransaction().commit();
+//        }
+//
+//        return result;
+//    }
     public int addpath(int slotId, int doorId, String path) {
         int result = 0;
         try {
             garageSlotDoorsSession.clear();
-
+            
             GarageSlotsDoors garageSlotsDoors = new GarageSlotsDoors(new GarageStatus(slotId), new GarageDoors(doorId), path);
             garageSlotDoorsSession.save(garageSlotsDoors);
-
+            
         } catch (Exception ex) {
             ex.printStackTrace();
             result = -1;
         } finally {
         }
-
+        
         return result;
     }
-
+    
     public int addpath(String slotName, String doorName, String path) {
         return addpath(getSlotId(slotName).getSlotId(), getDoorId(doorName).getDoorId(), path);
-
+        
     }
 
 //    public int addpath(ArrayList<GarageSlotsDoors> paths) {
@@ -173,36 +173,36 @@ public class GarageSlotDoorsImp {
 //        return result;
 //    }
     GarageStatus getSlotId(String slotName) {
-
+        
         GarageStatus garageStatus = null;
         try {
             garageSlotDoorsSession.clear();
-
+            
             Query q = garageSlotDoorsSession.createQuery("from GarageStatus where upper(slotName) like :slotName");
             q.setParameter("slotName", slotName.toUpperCase());
             garageStatus = (GarageStatus) q.uniqueResult();
-
+            
         } catch (Exception ex) {
             ex.printStackTrace();
-
+            
         } finally {
         }
         return garageStatus;
-
+        
     }
-
+    
     private GarageDoors getDoorId(String doorName) {
         GarageDoors garageDoor = null;
         try {
             garageSlotDoorsSession.clear();
-
+            
             Query q = garageSlotDoorsSession.createQuery("from GarageDoors where upper(doorName) like :doorName");
             q.setParameter("doorName", doorName.toUpperCase());
             garageDoor = (GarageDoors) q.uniqueResult();
-
+            
         } catch (Exception ex) {
             ex.printStackTrace();
-
+            
         } finally {
         }
         return garageDoor;
@@ -221,11 +221,15 @@ public class GarageSlotDoorsImp {
     public int handleThisGaragePlease(GObjects.Garage garage) {
         int result = 0;
         try {
-            beginTransaction();
+            
+            deletingGarageData(garage.getGarageId());
+            garageSlotDoorsSession.beginTransaction();
+            
             HashMap<String, GarageStatus> slots = new HashMap<>();
-
-            deleteOldDoorsAndSlots(garage.getGarageId());
-            Garage garage1 = GarageImp.getInstance().getGarage(garage.getGarageId());
+            Garage garage1 = (Garage) garageSlotDoorsSession.get(Garage.class, garage.getGarageId());
+            garage1.setSlotWidth(garage.getSlotWidth());
+            garage1.setSlotHeight(garage.getSlotHeight());
+            
             for (GObjects.Door door : garage.getDoors()) {
                 GarageDoors tempDoor = new GarageDoors(garage.getGarageId(), door.getDoorName(), door.getX(), door.getY(), door.getLon(), door.getLat());
                 tempDoor = addGarageDoor(tempDoor);
@@ -237,7 +241,7 @@ public class GarageSlotDoorsImp {
                             GeoLoc myGeoLocation = Converters.getMyGeoLocation(garage1.getLat(), garage1.getLon(), (slot.getX() * 0.002154195011337868), (slot.getY() * 0.000204082));
                             currentSlot = new GarageStatus(slot.getSlotName(), garage.getGarageId(), slot.getX(), slot.getY(), myGeoLocation.getLat(), myGeoLocation.getLon());
                             currentSlot = addGarageSlot(currentSlot);
-
+                            
                             if (currentSlot != null) {
                                 slots = addToHashMap(currentSlot, slots);
                             }
@@ -246,28 +250,28 @@ public class GarageSlotDoorsImp {
                         }
                         path = new GarageSlotsDoors(currentSlot, tempDoor, utils.Utils.prepareMeAPathPlease((ArrayList<Step>) slot.getPath()));
                         addNewPath(path);
-
+                        
                     }
                 }
             }
-            commit();
-
+            garageSlotDoorsSession.getTransaction().commit();
+            
         } catch (Exception ex) {
             result = -1;
             ex.printStackTrace();
-
+            
         }
-
+        
         return result;
     }
-
+    
     public boolean slotIsAddedBefore(Slot slot, HashMap slots) {
-
+        
         return slots.containsKey(slot.getX() + "-" + slot.getY());
     }
-
+    
     public GarageStatus getSlot(Slot slot, HashMap slots) {
-
+        
         return (GarageStatus) slots.get(slot.getX() + "-" + slot.getY());
     }
 
@@ -310,42 +314,48 @@ public class GarageSlotDoorsImp {
      */
     private void addNewPath(GarageSlotsDoors path) {
         try {
-
+            
             garageSlotDoorsSession.persist(path);
-
+            
         } catch (Exception ex) {
-
+            
             ex.printStackTrace();
         }
     }
-
-    public void beginTransaction() {
-
-        garageSlotDoorsSession.beginTransaction();
+    
+    public Transaction beginTransaction() {
+        
+        return garageSlotDoorsSession.beginTransaction();
     }
-
+    
     public void commit() {
-
-        garageSlotDoorsSession.getTransaction().commit();
+        
     }
 
-    private void deleteOldDoorsAndSlots(int garageId) {
-        try {
-            Query deleteAllPaths = garageSlotDoorsSession.createQuery("delete from GarageDoors where garage  =:garage");
-            deleteAllPaths.setParameter("garage", new Garage(garageId));
-            deleteAllPaths.executeUpdate();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-        }
-
-    }
-
+//    private void deleteOldDoorsAndSlots(int garageId) {
+//        try {
+//            Query deleteData = garageSlotDoorsSession.createQuery("delete from GarageDoors where garage  =:garage");
+//
+//            deleteData.setParameter("garage", new Garage(garageId));
+//
+//            deleteData.executeUpdate();
+//            deleteData = garageSlotDoorsSession.createQuery("delete from GarageStatus where garage  =:garage");
+//
+//            deleteData.setParameter("garage", new Garage(garageId));
+//
+//            deleteData.executeUpdate();
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//
+//        }
+//
+//    }
     public GObjects.Garage generateGarageObject(int garageId) {
-
+        
         GObjects.Garage garage = null;
         try {
-
+            
             Garage myGarage = GarageImp.getInstance().getGarage(garageId);
             Collection<GarageStatus> slots = myGarage.getGarageStatus();
             Collection<GarageDoors> doors = myGarage.getGarageDoors();
@@ -353,45 +363,45 @@ public class GarageSlotDoorsImp {
             q.setParameterList("slots", slots);
             q.setParameterList("doors", doors);
             Collection<GarageSlotsDoors> garageSlotsDoors = q.list();
-
+            
             garage = new GObjects.Garage(garageId);
-
+            
             ArrayList<GObjects.Door> tempDoors = new ArrayList<GObjects.Door>();
             ArrayList<GObjects.Slot> tempSlot = new ArrayList<GObjects.Slot>();
             Door currentDoor;
             Slot currentSlot;
-
+            
             for (GarageSlotsDoors garageSlotsDoor : garageSlotsDoors) {
                 GarageDoors g = garageSlotsDoor.getDoorId();
                 GarageStatus s = garageSlotsDoor.getSlotId();
-
+                
                 if (!contains(tempDoors, garageSlotsDoor.getDoorId().getDoorName())) {
                     currentDoor = new Door(g.getDoorId(), g.getDoorName(), g.getX(), g.getY(), g.getLat(), g.getLon());
                     tempDoors.add(currentDoor);
-
+                    
                 } else {
                     currentDoor = getElement(tempDoors, g.getDoorName());
                 }
                 if (!contains(tempSlot, garageSlotsDoor.getSlotId().getSlotName())) {
                     currentSlot = new Slot(s.getSlotName(), s.getX(), s.getY(), preparePathArray(garageSlotsDoor.getPoints()), s.getTotalDailyConsumedHours(), s.getTotalMonthlyConsumedHours(), s.getTotalYearlyConsumedHours());
                     tempSlot.add(currentSlot);
-
+                    
                 } else {
                     currentSlot = getElement(tempSlot, s.getSlotName());
                 }
-
+                
                 currentDoor.getSlots().add(currentSlot);
                 garage.setDoors(tempDoors);
             }
-
+            
         } catch (Exception ex) {
             ex.printStackTrace();
             garageSlotDoorsSession.getTransaction().rollback();
-
+            
         }
         return garage;
     }
-
+    
     public List<SlotDoorId> getGaraegSlots(ArrayList<GarageDoors> doors, ArrayList<GarageStatus> slots) {
         List<SlotDoorId> result = new ArrayList<SlotDoorId>();
         for (GarageDoors door : doors) {
@@ -401,37 +411,33 @@ public class GarageSlotDoorsImp {
         }
         return result;
     }
-
+    
     public <T extends Marker> boolean contains(ArrayList<T> list, Object obj) {
-
+        
         for (T door : list) {
-            if (door.getMarker().equals(obj.toString())) 
-            {
+            if (door.getMarker().equals(obj.toString())) {
                 return true;
             }
-
+            
         }
         return false;
     }
-
+    
     public static void main(String[] args) {
-        GObjects.Garage garage = new GarageSlotDoorsImp().generateGarageObject(252);
-
-        System.out.println("sss");
-
+        
     }
-
+    
     private <T extends Marker> T getElement(ArrayList<T> elements, String marker) {
-
+        
         for (T x : elements) {
             if (x.getMarker().equals(marker)) {
                 return x;
             }
-
+            
         }
         return null;
     }
-
+    
     private List<Step> preparePathArray(String points) {
         List<Step> steps = new ArrayList<Step>();
         try {
@@ -440,37 +446,52 @@ public class GarageSlotDoorsImp {
             JSONArray jSONArray = (JSONArray) myObject;
             Gson gson = new Gson();
             for (int i = 0; i < jSONArray.size(); i++) {
-
+                
                 steps.add(gson.fromJson(jSONArray.get(i).toString(), Step.class));
             }
-
+            
         } catch (ParseException ex) {
             ex.printStackTrace();
         }
         return steps;
     }
-
+    
     public int getNearestDoor(int garageId, double lat, double lon) {
         int nearestDoorId;
-
+        
         Garage garage = GarageImp.getInstance().getGarage(garageId);
-
+        
         HashMap<Integer, GarageDoors> doorsHashMap = new HashMap<Integer, GarageDoors>();
-
+        
         Object[] garageDoors = garage.getGarageDoors().toArray();
         for (int i = 0; i < garageDoors.length; i++) {
             GarageDoors currentDoor = (GarageDoors) garageDoors[i];
             int distance = HaversineAlgorithm.HaversineInCintemerters(lat, lon, currentDoor.getLat(), currentDoor.getLon());
             doorsHashMap.put(distance, currentDoor);
         }
-
+        
         return doorsHashMap.get(Collections.min(doorsHashMap.keySet())).getDoorId();
-
+        
     }
-
+    
     private HashMap<String, GarageStatus> addToHashMap(GarageStatus currentSlot, HashMap<String, GarageStatus> slots) {
         slots.put(currentSlot.getX() + "-" + currentSlot.getY(), currentSlot);
         return slots;
     }
-
+    
+    private void deletingGarageData(int garageId) {
+        garageSlotDoorsSession.beginTransaction();
+        Garage garage1 = (Garage) garageSlotDoorsSession.get(Garage.class, garageId);
+        
+        for (GarageDoors door : garage1.getGarageDoors()) {
+            garageSlotDoorsSession.delete(door);
+            
+        }
+        for (GarageStatus slot : garage1.getGarageStatus()) {
+            garageSlotDoorsSession.delete(slot);
+            
+        }
+        garageSlotDoorsSession.getTransaction().commit();
+    }
+    
 }

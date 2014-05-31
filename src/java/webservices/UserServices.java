@@ -125,18 +125,54 @@ public class UserServices {
 
     @Path("addApplicationFeedback")
     @POST
-    public int addAppicationFeedback(@FormParam("id") int userId, @FormParam("message") String feedback) {
+    public String addAppicationFeedback(@FormParam("id") String userId, @FormParam("message") String feedback) {
+        System.out.println("feedback webervice has caled");
+        if (userId != null) {
+            try {
 
-        return UserImp.getInstance().addApplciationFeedback(userId, feedback);
+                return UserImp.getInstance().addApplciationFeedback(Integer.parseInt(userId), feedback) + "";
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+
+            }
+        }
+        return "";
+
     }
 
     @Path("addGarageFeedback")
     @POST
-    public int addGarageFeedback(@FormParam("userId") int userId, @FormParam("garageId") int garageId, @FormParam("message") String feedback) 
-    {
-            return GarageImp.getInstance().addFeedback(userId, garageId, feedback);
+    public String addGarageFeedback(@FormParam("userId") String userId, @FormParam("garageId") int garageId, @FormParam("message") String feedback) {
+        System.out.println("feedback webervice has caled");
+        if (userId != null) {
+            try {
+                return GarageImp.getInstance().addFeedback(Integer.parseInt(userId), garageId, feedback) + "";
 
-        
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return "";
+
     }
+    
+    @Path("getAboutUs")
+    @POST
+    public String getAboutUs(@FormParam("garageId") String garageId) {
+        System.out.println("feedback webervice has caled");
+        if (garageId != null) {
+            try {
+                return GarageImp.getInstance().prepapreAboutUs(Integer.parseInt(garageId));
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return "";
+
+    }
+    
+    
 
 }

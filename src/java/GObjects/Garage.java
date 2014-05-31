@@ -15,6 +15,24 @@ import java.util.List;
 public class Garage implements Serializable{
 
     int garageId;
+    int slotWidth;
+    int slotHeight;
+
+    public int getSlotWidth() {
+        return slotWidth;
+    }
+
+    public void setSlotWidth(int slotWidth) {
+        this.slotWidth = slotWidth;
+    }
+
+    public int getSlotHeight() {
+        return slotHeight;
+    }
+
+    public void setSlotHeight(int slotHeight) {
+        this.slotHeight = slotHeight;
+    }
     List<Door> doors = new ArrayList<>();
 
     public Garage() {

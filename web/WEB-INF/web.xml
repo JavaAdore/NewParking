@@ -112,6 +112,18 @@
         <servlet-name>InitializeEmployee</servlet-name>
         <servlet-class>servlets.InitializeEmployee</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChangeGarageAvailability</servlet-name>
+        <servlet-class>ajax.ChangeGarageAvailability</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ContactHandler</servlet-name>
+        <servlet-class>ajax.ContactHandler</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetContactList</servlet-name>
+        <servlet-class>ajax.GetContactList</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -220,6 +232,18 @@
         <servlet-name>InitializeEmployee</servlet-name>
         <url-pattern>/InitializeEmployee</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeGarageAvailability</servlet-name>
+        <url-pattern>/ChangeGarageAvailability</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContactHandler</servlet-name>
+        <url-pattern>/ContactHandler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetContactList</servlet-name>
+        <url-pattern>/GetContactList</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -241,9 +265,16 @@
         <location>/login.jsp</location>
     </error-page>
     <error-page>
+        <exception-type>exceptions.CurrentClientNotAvailable</exception-type>
+        <location>/login.jsp</location>
+    </error-page>
+    <error-page>
         <exception-type>exceptions.SessionException</exception-type>
         <location>/invalidsession.jsp</location>
     </error-page>
+    
+    
+
     <servlet-mapping>
         <servlet-name>Jersey REST Service</servlet-name>
         <url-pattern>/rest/*</url-pattern>

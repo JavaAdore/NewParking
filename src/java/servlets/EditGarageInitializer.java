@@ -35,28 +35,31 @@ public class EditGarageInitializer extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
-            String garage = request.getParameterValues("garage")[0];
-          
-            if (garage != null) {
-                int garageId = Integer.parseInt(garage);
-                if (garageId != -1) {
-                    currentGarage = GarageImp.getInstance().getGarage(garageId);
-                    if (currentGarage != null) {
-                        request.getSession().setAttribute("currentGarage", currentGarage);
-                        request.getRequestDispatcher("editgarageinfo.jsp").forward(request, response);
+            try {
+                String garage = request.getParameter("garage");
+                if (garage != null) {
+                    int garageId = Integer.parseInt(garage);
+                    if (garageId != -1) {
+                        currentGarage = GarageImp.getInstance().getGarage(garageId);
+                        if (currentGarage != null) {
+                            request.getSession().setAttribute("currentGarage", currentGarage);
+                            request.getRequestDispatcher("editgarageinfo.jsp").forward(request, response);
+                        } else {
+                            request.getRequestDispatcher("LoadAllGaragesInitializer?toPage=updategarageinfo.jsp").forward(request, response);
+                        }
                     } else {
-                    response.sendRedirect("updategarageinfo.jsp");
+                        request.getRequestDispatcher("LoadAllGaragesInitializer?toPage=updategarageinfo.jsp").forward(request, response);
                     }
                 } else {
-                    response.sendRedirect("updategarageinfo.jsp");
-                }
-            } else {
 
-                response.sendRedirect("updategarageinfo.jsp");
+                    request.getRequestDispatcher("LoadAllGaragesInitializer?toPage=updategarageinfo.jsp").forward(request, response);
+                }
+            } catch (Exception ex) {
+
+                request.getRequestDispatcher("LoadAllGaragesInitializer?toPage=updategarageinfo.jsp").forward(request, response);
             }
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

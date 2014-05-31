@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.type.BasicType;
 
 /**
  *
@@ -36,6 +37,21 @@ public class ConnectionHandler {
 
     public static void destroySessions() {
 
+        roleSession.close();
+        mapSession.close();
+        garageSession.close();
+        employeeSession.close();
+        actionHistorySession.close();
+        userSession.close();
+        garageSlotSession.close();
+        garageSlotDoorsSession.close();
+        garageSlotStatusSession.close();
+        garageSlotDetailsSession.close();
+        dailyHistoryReportSession.close();
+        monthlyHistoryReportSession.close();
+        yearlyHistoryReportSession.close();
+
+        sessionFactory.close();
     }
 
     String hibernatePath = "";
@@ -56,7 +72,8 @@ public class ConnectionHandler {
 
     static {
         System.out.println(ConnectionHandler.class.getResource(""));
-        sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
+        Configuration cfg = new Configuration().configure();
+        sessionFactory = cfg.buildSessionFactory();
 
     }
 
@@ -123,7 +140,7 @@ public class ConnectionHandler {
         if (garageSlotDoorsSession == null) {
             garageSlotDoorsSession = sessionFactory.openSession();
             garageSlotDoorsSession.setCacheMode(CacheMode.NORMAL);
-            
+
         }
         return garageSlotDoorsSession;
     }
