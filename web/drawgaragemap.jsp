@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="ServiceProviderHeader/drawingToolHeader.jsp"/>
+<jsp:include page="headers/header.jsp"/>
 
 <html>
     <head>
@@ -14,7 +14,7 @@
         <script src="js/validators.js"></script>
         <script src="js/customValidator.js"></script>
         <script type="text/javascript">
-
+            setActive('#drawingTool');
         </script>
         <noscript>
         <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>

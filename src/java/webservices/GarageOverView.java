@@ -32,12 +32,12 @@ public class GarageOverView {
 
     GarageSlotsStatusImp garageSlotsStatusImp = GarageSlotsStatusImp.getInstance();
     GarageImp garageImp = GarageImp.getInstance();
-
+    
     @POST
     @Produces(MediaType.TEXT_PLAIN)
-    public String getGarageOverView(@FormParam(value = "garageId") final String gId, @FormParam(value = "userId") final String uId) {
+    public String getGarageOverView(@FormParam(value = "garageId") final String gId, @FormParam(value = "userId") final String uId, @FormParam(value = "increase") final String increaseNumberOfVisits) {
 
-        System.out.println("garage id = "+ gId + " userId= "+uId );
+        System.out.println("garage id = " + gId + " userId= " + uId);
         if (gId != null) {
             final int garageId = Integer.parseInt(gId);
             if (uId != null) {
@@ -45,7 +45,11 @@ public class GarageOverView {
                 new Thread() {
                     @Override
                     public void run() {
-                        UserImp.getInstance().addVisit(new Users(userId), new Garage(garageId));
+                        if (increaseNumberOfVisits != null) {
+                            if (increaseNumberOfVisits.equals("1")) {
+                                UserImp.getInstance().addVisit(new Users(userId), new Garage(garageId));
+                            }
+                        }
                     }
                 }.start();
 

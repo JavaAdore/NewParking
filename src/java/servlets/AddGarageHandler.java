@@ -24,93 +24,98 @@ import pojo.Map;
 
 public class AddGarageHandler extends HttpServlet {
 
-    private boolean isMultipart;
-    private String filePath;
-    private File file;
-    private String jspFilePath;
-    private List<String> parameterNames ;
-    private List<String> parameterValues ;
-    private String theNameOfTheFile;
-    private String fileExtention;
-    String MapUrl = "";
-    double lon, lat;
+    boolean isMultipart;
+    String filePath;
+    File file = null;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, FileUploadException, Exception {
-        
-        parameterNames = new ArrayList();
-        parameterValues = new ArrayList();
-        response.setContentType("text/html;charset=UTF-8");
 
-        PrintWriter out = response.getWriter();
+        try {
+            String jspFilePath;
+            List<String> parameterNames;
+            List<String> parameterValues;
+            String theNameOfTheFile;
+            String fileExtention;
 
-        String jspFilePath = getServletContext().getRealPath(request.getRequestURI()).replace('\\', '/');
+            parameterNames = new ArrayList();
+            parameterValues = new ArrayList();
 
-        jspFilePath = jspFilePath.subSequence(0, jspFilePath.indexOf("/build")) + "/web/images/";
+            response.setContentType(
+                    "text/html;charset=UTF-8");
 
-        out.println(jspFilePath);
+            PrintWriter out = response.getWriter();
 
-        isMultipart = ServletFileUpload.isMultipartContent(request);
+            jspFilePath = getServletContext().getRealPath(request.getRequestURI()).replace('\\', '/');
 
-        DiskFileItemFactory factory = new DiskFileItemFactory();
+            jspFilePath = jspFilePath.subSequence(0, jspFilePath.indexOf("/build")) + "/web/images/";
 
-        // Create a new file upload handler
-        ServletFileUpload upload = new ServletFileUpload(factory);
+            out.println(jspFilePath);
+
+            isMultipart = ServletFileUpload.isMultipartContent(request);
+
+            DiskFileItemFactory factory = new DiskFileItemFactory();
+
+            // Create a new file upload handler
+            ServletFileUpload upload = new ServletFileUpload(factory);
         // maximum file size to be uploaded.
 
-        // Parse the request to get file items.
-        List fileItems = upload.parseRequest(request);
+            // Parse the request to get file items.
+            List fileItems = upload.parseRequest(request);
 
-        // Process the uploaded file items
-        Iterator i = fileItems.iterator();
+            // Process the uploaded file items
+            Iterator i = fileItems.iterator();
 
-        while (i.hasNext()) {
-            FileItem fi = (FileItem) i.next();
-            if (!fi.isFormField()) {
-                // Get the uploaded file parameters
-                String fieldName = fi.getFieldName();
-                String fileName = fi.getName();
-                String contentType = fi.getContentType();
-                //  boolean isInMemory = fi.isInMemory();
-                long sizeInBytes = fi.getSize();
-                // Write the file
-                if (fileName.lastIndexOf("\\") >= 0) {
-                    fileExtention = fileName.substring(fileName.lastIndexOf("\\", fileName.length()));
-                    file = new File(jspFilePath + fileName.substring(fileName.lastIndexOf("\\")));
+            while (i.hasNext()) {
+                FileItem fi = (FileItem) i.next();
+                if (!fi.isFormField()) {
+                    // Get the uploaded file parameters
+                    String fieldName = fi.getFieldName();
+                    String fileName = fi.getName();
+                    String contentType = fi.getContentType();
+                    //  boolean isInMemory = fi.isInMemory();
+                    long sizeInBytes = fi.getSize();
+                    // Write the file
+                    if (fileName.lastIndexOf("\\") >= 0) {
+                        fileExtention = fileName.substring(fileName.lastIndexOf("\\", fileName.length()));
+                        file = new File(jspFilePath + fileName.substring(fileName.lastIndexOf("\\")));
 
+                    } else {
+
+                        file = new File(jspFilePath
+                                + fileName.substring(fileName.lastIndexOf("\\") + 1));
+                    }
+                    fi.write(file);
                 } else {
-
-                    file = new File(jspFilePath
-                            + fileName.substring(fileName.lastIndexOf("\\") + 1));
+                    out.print(fi.getFieldName() + " " + fi.getString());
+                    parameterNames.add(fi.getFieldName());
+                    parameterValues.add(fi.getString().trim());
                 }
-                fi.write(file);
-                out.println("Uploaded Filename: " + theNameOfTheFile + "<br>");
-            } else {
-                out.print(fi.getFieldName() + " " + fi.getString());
-                parameterNames.add(fi.getFieldName());
-                parameterValues.add(fi.getString().trim());
             }
-        }
-        int result = save();    
-        switch (result) {
-            case -2:
-                request.setAttribute("error", new ErrorMessage("This garage title is already added"));
-                request.getRequestDispatcher("addgarage.jsp").forward(request, response);
-                break;
-            case -1:
-                request.setAttribute("error", new ErrorMessage("Looks Like some error happend please contact adminstrator"));
-                try {
-                    file.delete();
-                } catch (Exception ex) {
-                    
-                }
-                request.getRequestDispatcher("addgarage.jsp").forward(request, response);
-                break;
-            case 0:
-                file.renameTo(new File(jspFilePath + String.format("%s,%s.%s", lat, lon, FilenameUtils.getExtension(file.getName()))));
-                request.setAttribute("error", new ErrorMessage("Garage added"));
-                request.getRequestDispatcher("addgarage.jsp").forward(request, response);
-                break;
+            int result = save(parameterValues);
+            switch (result) {
+                case -2:
+                    request.setAttribute("error", new ErrorMessage("This garage title is already added"));
+                    request.getRequestDispatcher("addgarage.jsp").forward(request, response);
+                    break;
+                case -1:
+                    request.setAttribute("error", new ErrorMessage("Looks Like some error happend please contact adminstrator"));
+                    try {
+                        file.delete();
+                    } catch (Exception ex) {
+
+                    }
+                    request.getRequestDispatcher("addgarage.jsp").forward(request, response);
+                    break;
+                case 0:
+                    file.renameTo(new File(jspFilePath + String.format("%s,%s.%s", parameterValues.get(6), parameterValues.get(7), FilenameUtils.getExtension(file.getName()))));
+                    request.setAttribute("error", new ErrorMessage("Garage added"));
+                    request.getRequestDispatcher("addgarage.jsp").forward(request, response);
+                    break;
+            }
+        } catch (Exception ex) {
+            request.getRequestDispatcher("addgarage.jsp").forward(request, response);
+
         }
 
     }
@@ -126,31 +131,40 @@ public class AddGarageHandler extends HttpServlet {
         }
     }
 
-    private int save() {
+    private int save(List<String> parameterValues) {
 
-        Garage g = new Garage();
-        String garageName = parameterValues.get(0);
-        int hourRateInRushHours = Integer.parseInt(parameterValues.get(1));
-        double ratio = Double.parseDouble(parameterValues.get(2));
-        int width = Integer.parseInt(parameterValues.get(3));
-        int heigth = Integer.parseInt(parameterValues.get(4));
-        String unit = parameterValues.get(5);
-        lat = Double.parseDouble(parameterValues.get(6));
-        lon = Double.parseDouble(parameterValues.get(7));
-        MapUrl = String.format("%s,%s.%s", lat, lon, FilenameUtils.getExtension(file.getName()));
-        Address address = new AddressConverter().getAddress(lat, lon);
-        g.setHourRateInRush(hourRateInRushHours);
-        g.setLat(lat);
-        g.setLon(lon);
-        g.setTitle(garageName);
-        Map map = new Map();
-        map.setHeight(heigth);
-        map.setWidth(width);
-        map.setUnit(unit);
-        map.setRatio(ratio);
-        map.setMapUrl(MapUrl);
+        try {
 
-        return GarageImp.getInstance().addGarage(map, g, address);
+            if (utils.Validator.validateAddGarage(parameterValues)) {
+                return utils.Constants.FAILED;
+            }
+            Garage g = new Garage();
+            String garageName = parameterValues.get(0);
+            int hourRateInRushHours = Integer.parseInt(parameterValues.get(1));
+            double ratio = Double.parseDouble(parameterValues.get(2));
+            int width = Integer.parseInt(parameterValues.get(3));
+            int heigth = Integer.parseInt(parameterValues.get(4));
+            String unit = parameterValues.get(5);
+            double lat = Double.parseDouble(parameterValues.get(6));
+            double lon = Double.parseDouble(parameterValues.get(7));
+            String MapUrl = String.format("%s,%s.%s", lat, lon, FilenameUtils.getExtension(file.getName()));
+            Address address = new AddressConverter().getAddress(lat, lon);
+            g.setHourRateInRush(hourRateInRushHours);
+            g.setLat(lat);
+            g.setLon(lon);
+            g.setTitle(garageName);
+            Map map = new Map();
+            map.setHeight(heigth);
+            map.setWidth(width);
+            map.setUnit(unit);
+            map.setRatio(ratio);
+            map.setMapUrl(MapUrl);
+
+            return GarageImp.getInstance().addGarage(map, g, address);
+
+        } catch (Exception ex) {
+            return -1;
+        }
 
     }
 }

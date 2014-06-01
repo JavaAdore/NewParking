@@ -263,7 +263,7 @@
             }
 
 
-
+            setActive('#updateGarage');
 
         </script>
 
@@ -272,7 +272,7 @@
     <body class = "column2" >
 
 
-        <jsp:include page="ServiceProviderHeader/updategarageheader.jsp"/>
+        <jsp:include page="headers/header.jsp"/>
         <div id = "page-wrapper" >
             <div id = "page-bgtop" >
                 <div id = "page-bgbtm" >

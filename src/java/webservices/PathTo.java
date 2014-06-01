@@ -32,12 +32,16 @@ public class PathTo {
 
     @POST
     @Produces(MediaType.TEXT_HTML)
-    public String giveMePathTo(@FormParam("garageid") int garageId, @FormParam("slotid") int slotId, @FormParam("lat") double lat, @QueryParam("lon") double lon) {
+    public String giveMePathTo(@FormParam("garageid") int garageId, @FormParam("slotid") int slotId, @FormParam("lat") double lat, @FormParam("lon") double lon) {
         int doorId = GarageSlotDoorsImp.getInstance().getNearestDoor(garageId, lat, lon);
         GarageSlotsDoors result = slotDetailsImp.getInstance().getSlotDetail(slotId, doorId);
         obj = new JSONObject();
-       // obj.put("points", );
-        return result.getPoints().replace("\\", "");
+      
+        if (result != null) {
+              
+            result.getPoints().replace("\\", "");
+        }
+        return "";
     }
 
 }

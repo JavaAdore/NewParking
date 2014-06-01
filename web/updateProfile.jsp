@@ -44,7 +44,7 @@
             }
         </script>
     </head><body>
-        <jsp:include page="adminHeaders\editProfileHeader.jsp"/>
+        <jsp:include page="headers/header.jsp"/>
         <div id="page-wrapper">
             <div id="page-bgtop">
                 <div id="page-bgbtm">

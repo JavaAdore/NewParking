@@ -27,11 +27,14 @@ public class Constants {
     public static final int IS_NOT_A_DATE = -99;
     public static final int MINIMUM_ACCEPTED_AGE = 16; // year
     public static final int VOLITILE_MINIMUM_ACCEPTED_AGE = -17;
+    public static final int MAX_ACCEPTED_HOUR_RATE = 1000;
     public static final String DAY = "DAY";
     public static final String MONTH = "MONTH";
     public static final String YEAR = "YEAR";
     public static final String SERVICE_PROVIDER_DEFAULT_PAGE = "addadmin.jsp";
     public static final String GARAGE_ADMIN_DEFAULT_PAGE = "editprofile.jsp";
     public static final String GARAGE_ACCOUNTATNT_DEFAULT_PAGE = "accountant.jsp";
+   
+    
 
 }

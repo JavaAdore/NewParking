@@ -5,8 +5,8 @@
 --%>
 
 
-<%@page import="utils.Utils"%>
-<%@page import="DAOS.EmployeesImp"%>
+        <jsp:include page="headers/header.jsp"/>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE HTML>
@@ -43,10 +43,10 @@
 
 
             }
+            setActive('#updateProfile');
         </script>
     </head>
     <body class="column1">
-        <jsp:include page="ServiceProviderHeader/updateEmployeeDataHeader.jsp"/>
 
         <div id="page-wrapper">
             <div id="page-bgtop">

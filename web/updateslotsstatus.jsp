@@ -1,7 +1,7 @@
 <%@page import="java.util.Collection"%>
 <%@page import="pojo.GarageStatus"%>
 <%@page import="java.util.ArrayList"%>
-<jsp:include page="adminHeaders\updateslotstatusheader.jsp"/>
+<jsp:include page="headers/header.jsp"/>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -16,21 +16,61 @@
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <script src="js/customValidator.js"></script>
         <style>
-            span{width:100px;}
+            .slotSpan {
+                -moz-box-shadow:inset 0px 4px 0px 0px #cae3fc;
+                -webkit-box-shadow:inset 0px 4px 0px 0px #cae3fc;
+                box-shadow:inset 0px 4px 0px 0px #cae3fc;
+                background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #4197ee) );
+                background:-moz-linear-gradient( center top, #79bbff 5%, #4197ee 100% );
+                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff', endColorstr='#4197ee');
+                background-color:#79bbff;
+                -webkit-border-top-left-radius:20px;
+                -moz-border-radius-topleft:20px;
+                border-top-left-radius:20px;
+                -webkit-border-top-right-radius:20px;
+                -moz-border-radius-topright:20px;
+                border-top-right-radius:20px;
+                -webkit-border-bottom-right-radius:20px;
+                -moz-border-radius-bottomright:20px;
+                border-bottom-right-radius:20px;
+                -webkit-border-bottom-left-radius:20px;
+                -moz-border-radius-bottomleft:20px;
+                border-bottom-left-radius:20px;
+                text-indent:0;
+                border:1px solid #469df5;
+                display:inline-block;
+                color:#ffffff;
+                font-family:Arial;
+                font-size:15px;
+                font-weight:bold;
+                font-style:normal;
+
+                height:${emp.getGarage().getSlotHeight()}px;
+                width:${emp.getGarage().getSlotWidth()}px;
+                text-decoration:none;
+                text-shadow:1px 1px 0px #287ace;
+            }
+            .icons
+            {
+                width:${emp.getGarage().getSlotWidth()/3}px;
+                height:${emp.getGarage().getSlotHeight()/2}px;
+
+            }
+
         </style>
         <noscript>
         <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
         </noscript> 
 
-        <style>
-            .slot
-            {
-                position:absolute;
-                color:red;
-            }
-        </style>
+
 
         <script type="text/javascript">
+
+            var busy = "${uri}/CustomImages/redCar.png";
+            alert(busy);
+            var available = "${uri}/CustomImages/greenCar.png";
+            var notEnabled = "${uri}/CustomImages/yellowCar.png";
+            var backgroundImage;
 
             function updateSlotAvailability(object, slotId)
             {
@@ -94,14 +134,17 @@
                     function myFunction()
                     {
             <c:forEach items="${garageSlots}" var="slot">
-                        var y = ${slot.getY()} + $('#mainDiv').position().top;
+                        var y = ${slot.getY()} + $('#background').position().top;
+
                         var checked = ${slot.getStatus()};
                         var checked2 = ${slot.getEnabled()};
                         var status = "";
                         var enabled = "";
+
                         if (checked == 1)
                         {
                             status = "checked";
+
                         }
                         if (checked2 == 0)
                         {
@@ -109,8 +152,8 @@
                             enabled = "checked";
 
                         }
+                        var inner = "<span class='slotSpan' style=' left:${slot.getX()}px;top:" + y + "px ;position:absolute;background-color:yellow;'  ><input  class='checkbox' id=" +${slot.getSlotId()} + " type='checkbox' " + status + " id='${slot.getSlotId()}' onchange='updateStatus(this)'/ ><img  class='icons' src='${uri}/CustomImages/busy.png' />" + '${slot.getSlotName()}' + "<input class = 'checkbox' type='checkbox' " + enabled + " id=" +${slot.getSlotId()} + " onchange='updateSlotAvailability(this," +${slot.getSlotId()} + ")' /><img class = 'icons' src='${uri}/CustomImages/unavailable.png' /></span>";
 
-                        var inner = "<div style=' left:${slot.getX()}px;top:" + y + "px ;position:absolute;width:100px;height:50px;background-color:yellow;'  ><input id=" +${slot.getSlotId()} + " type='checkbox' " + status + " id='${slot.getSlotId()}' onchange='updateStatus(this)' >busy</input><br><input type='checkbox' " + enabled + " id=" +${slot.getSlotId()} + " onchange='updateSlotAvailability(this," +${slot.getSlotId()} + ")' >Not Available</input>"+${slot.getSlotId()}+"</div>";
                         $('#mainDiv').append(inner);
 
                         if (checked2 == 0)
@@ -123,13 +166,14 @@
             </c:forEach>
                     }
 
+                    setActive('#updateSlot');
         </script>
     </head>
     <body onload="myFunction()">
 
-        <div id="mainDiv">
+        <span id="mainDiv">
             <img id="background"/>
-        </div>
+        </span>
 
 
 

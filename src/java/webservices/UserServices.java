@@ -7,6 +7,7 @@ package webservices;
 
 import DAOS.GarageImp;
 import DAOS.UserImp;
+import java.util.ArrayList;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,6 +17,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import pojo.Users;
 import utils.Utils;
+import utils.WrappedGarage;
 
 /**
  *
@@ -26,10 +28,10 @@ public class UserServices {
 
     @Path("updateProfile")
     @POST
-    public String updateProfile(@FormParam("id") int id, @FormParam("userName") String userName, @FormParam("email") String email, @FormParam("password") String password) {
+    public String updateProfile(@FormParam("id") String id, @FormParam("userName") String userName, @FormParam("email") String email, @FormParam("password") String password) {
         System.out.println("update profile web service has been called");
         if (password.length() >= 6 && password.length() <= 25) {
-            Users users = new Users(id, userName, email, password);
+            Users users = new Users(Integer.parseInt(id), userName, email, password);
             return UserImp.getInstance().updateProfile(users) + "";
         }
         // validation exception
@@ -37,8 +39,8 @@ public class UserServices {
     }
 
     @Path("login")
-    @GET
-    public String login(@QueryParam("userName") String userName, @QueryParam("password") String password) {
+    @POST
+    public String login(@FormParam("userName") String userName, @FormParam("password") String password) {
         JSONObject obj = new JSONObject();
         Users user = UserImp.getInstance().login(userName, password);
 
@@ -66,8 +68,8 @@ public class UserServices {
     }
 
     @Path("register")
-    @GET
-    public String register(@QueryParam("userName") String userName, @QueryParam("email") String email, @QueryParam("password") String password) {
+    @POST
+    public String register(@FormParam("userName") String userName, @FormParam("email") String email, @FormParam("password") String password) {
 
         UserImp userImp = UserImp.getInstance();
 
@@ -115,12 +117,12 @@ public class UserServices {
 
     @Path("visitsHistory")
     @POST
-    public String getVisitHistory(@FormParam("id") int userId) {
+    public String getVisitHistory(@FormParam("id") String userId) {
 
         JSONObject json = new JSONObject();
 
-        System.out.println("get history has been visited ");
-        return UserImp.getInstance().getVisitingHistory(userId).toString();
+        System.out.println("get history has been visited userId = " + userId);
+        return UserImp.getInstance().getVisitingHistory(Integer.parseInt(userId)).toString();
     }
 
     @Path("addApplicationFeedback")
@@ -143,11 +145,11 @@ public class UserServices {
 
     @Path("addGarageFeedback")
     @POST
-    public String addGarageFeedback(@FormParam("userId") String userId, @FormParam("garageId") int garageId, @FormParam("message") String feedback) {
+    public String addGarageFeedback(@FormParam("userId") String userId, @FormParam("garageId") String garageId, @FormParam("message") String feedback) {
         System.out.println("feedback webervice has caled");
         if (userId != null) {
             try {
-                return GarageImp.getInstance().addFeedback(Integer.parseInt(userId), garageId, feedback) + "";
+                return GarageImp.getInstance().addFeedback(Integer.parseInt(userId), Integer.parseInt(garageId), feedback) + "";
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -156,7 +158,7 @@ public class UserServices {
         return "";
 
     }
-    
+
     @Path("getAboutUs")
     @POST
     public String getAboutUs(@FormParam("garageId") String garageId) {
@@ -172,7 +174,31 @@ public class UserServices {
         return "";
 
     }
-    
-    
+
+    @Path("getNearestGarages")
+    @POST
+    public String getNearestGarages(@FormParam("lat") String lat, @FormParam("lon") String lon) {
+        System.out.println("feedback webervice has caled");
+        JSONArray list = new JSONArray();
+
+        if (lat != null && lon != null) {
+
+            ArrayList<WrappedGarage> result = GarageImp.getInstance().getNearGarages(Double.parseDouble(lat), Double.parseDouble(lon));
+            for (WrappedGarage garage : result) {
+
+                JSONObject obj = new JSONObject();
+                obj.put("id", garage.getGarageId());
+                obj.put("garageName", garage.getGarageName());
+                obj.put("numberOfBusySlots", garage.getNumberOfBusySlots());
+                obj.put("numberOfAvailableSlots", garage.getNumerOfAvailableSlots());
+                obj.put("lat", garage.getLatitude());
+                obj.put("lon", garage.getLontitude());
+                list.add(obj);
+            }
+        }
+
+        return list.toString();
+
+    }
 
 }

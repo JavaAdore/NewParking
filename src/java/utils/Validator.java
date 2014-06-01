@@ -37,7 +37,7 @@ public class Validator {
             int d = Integer.parseInt(number);
         } catch (Exception ex) {
 
-            return false;   
+            return false;
         }
         return true;
 
@@ -56,9 +56,16 @@ public class Validator {
 
     public static void main(String[] args) {
 
-        boolean image = isName("555");
+        boolean validateAddGarage = validateAddGarage("ddd", "12", "a.png", ".5", "15", "150", "m", "89", "89");
         System.out.println();
     }
+
+    public static boolean validateAddGarage(String garageName, String hourRateInRushhours, String isImage, String ratio, String width, String height, String unit, String lat, String lon) {
+
+        return (isGarageNameAvailable(garageName) && isDouble(hourRateInRushhours, 0, utils.Constants.MAX_ACCEPTED_HOUR_RATE) && isAnImage(isImage) && isRatio(ratio) && isDouble(width, 0, 99999) && isDouble(height, 0, 99999) && isUnit(unit) && isDouble(lon, -90, 90) && isDouble(lat, -90, 90));
+    }
+
+   
 
     public static boolean validateAdmin(String firstName, String lastName, String email, String password, String confirmPassword, String gender, String birthdate, String role) {
 
@@ -108,6 +115,10 @@ public class Validator {
 
         return (isEmail(email) && isPassword(password) && areTheSame(password, confirmPassword));
 
+    }
+
+    public static boolean validateAddGarage(List<String> parameterValues) {
+        return validateAddGarage(parameterValues.get(0), parameterValues.get(1), parameterValues.get(2), parameterValues.get(3), parameterValues.get(4), parameterValues.get(5), parameterValues.get(6), parameterValues.get(7), parameterValues.get(8));
     }
 
     public boolean isDate() {
@@ -163,7 +174,7 @@ public class Validator {
     }
 
     public static boolean isGarageNameAvailable(String garageName) {
-        
+
         if (!isName(garageName)) {
             return false;
         }
@@ -171,7 +182,7 @@ public class Validator {
     }
 
     public static boolean isDouble(String number, double min, double max) {
-        
+
         try {
             double temp = Double.parseDouble(number);
             return (temp > min && temp < max);
@@ -185,10 +196,23 @@ public class Validator {
 
         return isDouble(ratio, 0, 1);
     }
-    
-    
-    
 
+    public static boolean isUnit(String unit) {
+        return (unit.equalsIgnoreCase("m") || unit.equalsIgnoreCase("f") || unit.equalsIgnoreCase("i"));
+    }
+
+    public static boolean isActive(String str) {
+        if (str != null) {
+            try {
+                double number = Double.parseDouble(str);
+                return (number >= 0 || number <= 1);
+            } catch (Exception ex) {
+                return false;
+            }
+        }
+        return false;
+
+    }
 //    public static List<ErrorMessage> validateAddAdmin() {
 //
 //    }

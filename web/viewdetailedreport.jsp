@@ -1,4 +1,4 @@
-<jsp:include page="adminHeaders/detaildreportheader.jsp"/>
+<jsp:include page="headers/header.jsp"/>
 <head>
     <noscript>
     <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
@@ -72,7 +72,7 @@
                     {
 
                         //dateInitializer();
-                      //  viewDetailedReport($('#fromPeriod').val(), $('#toPeriod').val());
+                        //  viewDetailedReport($('#fromPeriod').val(), $('#toPeriod').val());
 
                     } else
                     {
@@ -95,7 +95,7 @@
                                                 }
                                         );
 
-
+     setActive('#viewDetailedReport');                                   
     </script>
 </head>
 <body>
@@ -128,7 +128,7 @@
                                 <tr>
                                     <td colspan="2">
 
-                                <center>  <input type = 'button' value = 'view report' onclick="viewDetailedReport('#fromPeriod', '#toPeriod','#fromDateError', '#toDateError')" /></center>
+                                <center>  <input type = 'button' value = 'view report' onclick="viewDetailedReport('#fromPeriod', '#toPeriod', '#fromDateError', '#toDateError')" /></center>
 
                                 </td>
                                 </tr>
@@ -137,7 +137,7 @@
 
                             </span>
                             <div class="details">
-                               
+
                             </div>
                     </center>
                 </div>

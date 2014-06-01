@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <jsp:include page="adminHeaders\addemployeeheader.jsp"/>
+        <jsp:include page="headers/header.jsp"/>
 
 
 
@@ -33,7 +33,7 @@
 
             function submitMethod()
             {
-                if (isText('#firstName', '#firstNameError') && isText('#lastName', '#lastNameError') && isEmailWithValidation('#email', '#emailError') && isPassword('#password', '#passwordError') &&  areTheSame('#password', '#confirmPassword', '#confirmPasswordError') && isAdate('#datepicker', '#birthdateError'))
+                if (isText('#firstName', '#firstNameError') && isText('#lastName', '#lastNameError') && isEmailWithValidation('#email', '#emailError') && isPassword('#password', '#passwordError') && areTheSame('#password', '#confirmPassword', '#confirmPasswordError') && isAdate('#datepicker', '#birthdateError'))
                 {
 
                     $("#addAdmin").submit();
@@ -43,6 +43,8 @@
             {
                 $("#datepicker").datepicker({maxDate: "-192m "});
             });
+            setActive('#addEmp');
+
         </script>
     </head><body>
         <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

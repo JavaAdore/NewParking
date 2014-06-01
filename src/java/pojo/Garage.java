@@ -63,7 +63,7 @@ public class Garage implements java.io.Serializable {
     private Collection< FaxContact> faxNumbers = new ArrayList<>();
 
     @OneToMany(orphanRemoval = true)
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     private Collection<Visit> visits = new ArrayList<>();
 
     @OneToMany(orphanRemoval = true, mappedBy = "garage")

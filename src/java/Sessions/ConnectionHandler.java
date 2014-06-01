@@ -27,12 +27,12 @@ public class ConnectionHandler {
         getGarageSlotDoorsSession();
         getGarageSlotSession();
         getUserSession();
-        getActionHistorySession();
         getEmployeeSession();
         getGarageSession();
+
+        getActionHistorySession();
         getMapSession();
         getRoleSession();
-
     }
 
     public static void destroySessions() {
@@ -72,8 +72,7 @@ public class ConnectionHandler {
 
     static {
         System.out.println(ConnectionHandler.class.getResource(""));
-        Configuration cfg = new Configuration().configure();
-        sessionFactory = cfg.buildSessionFactory();
+        sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
 
     }
 

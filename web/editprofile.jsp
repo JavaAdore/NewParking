@@ -1,6 +1,4 @@
-<jsp:include page="adminHeaders/editProfileHeader.jsp"></jsp:include>
-
-<%@page import="utils.EmployeeWrapper"%>
+<jsp:include page="headers/header.jsp"/>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -21,11 +19,12 @@
         <script type="text/javascript">
             function submitMethod()
             {
-                if (isPassword('#password','#passwordError')&&areTheSame('#password', '#confirmPassword', '#confirmPasswordError'))
+                if (isPassword('#password', '#passwordError') && areTheSame('#password', '#confirmPassword', '#confirmPasswordError'))
                 {
                     $('#updateProfileForm').submit();
                 }
             }
+            setActive('#editProfile');
         </script>
     </head><body>
 

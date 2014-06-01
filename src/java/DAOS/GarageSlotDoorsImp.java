@@ -424,7 +424,6 @@ public class GarageSlotDoorsImp {
     }
     
     public static void main(String[] args) {
-        
     }
     
     private <T extends Marker> T getElement(ArrayList<T> elements, String marker) {
@@ -480,18 +479,23 @@ public class GarageSlotDoorsImp {
     }
     
     private void deletingGarageData(int garageId) {
-        garageSlotDoorsSession.beginTransaction();
-        Garage garage1 = (Garage) garageSlotDoorsSession.get(Garage.class, garageId);
-        
-        for (GarageDoors door : garage1.getGarageDoors()) {
-            garageSlotDoorsSession.delete(door);
-            
-        }
-        for (GarageStatus slot : garage1.getGarageStatus()) {
-            garageSlotDoorsSession.delete(slot);
-            
-        }
-        garageSlotDoorsSession.getTransaction().commit();
+//        Transaction beginTransaction = garageSlotDoorsSession.beginTransaction();
+//        Garage garage1 = (Garage) garageSlotDoorsSession.get(Garage.class, garageId);
+//        Query q = garageSlotDoorsSession.createQuery("delete from GarageSlotsDoors where slotId in (:slotId) ");
+//        q.setParameterList("slotId", garage1.getGarageStatus());
+//        
+//        q.executeUpdate();
+//        for (GarageDoors door : garage1.getGarageDoors()) {
+//            garageSlotDoorsSession.delete(door);
+//            
+//        }
+//        for (GarageStatus slot : garage1.getGarageStatus()) {
+//            garageSlotDoorsSession.delete(slot);
+//            
+//        }
+//        
+//        beginTransaction.commit();
+//    }
     }
     
 }

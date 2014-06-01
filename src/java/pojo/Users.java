@@ -2,9 +2,11 @@ package pojo;
 // Generated Mar 28, 2014 6:28:10 PM by Hibernate Tools 3.2.1.GA
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -29,8 +31,8 @@ public class Users implements java.io.Serializable {
     private Date birthDate;
     private String gender;
     private String phone;
-    @OneToMany(mappedBy = "user" , orphanRemoval = true )
-    private Collection<Visit> visits;
+    @OneToMany(mappedBy = "user" , orphanRemoval = true , fetch = FetchType.EAGER    )
+    private Collection<Visit> visits = new ArrayList();
 
     public Users() {
     }

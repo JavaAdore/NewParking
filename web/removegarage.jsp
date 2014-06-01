@@ -1,4 +1,4 @@
-<%@page import="utils.*"%>
+
 <!DOCTYPE HTML>
 <!--
         Aqueous: A responsive HTML5 website template by HTML5Templates.com
@@ -6,7 +6,7 @@
         Visit http://html5templates.com for more great templates or follow us on Twitter @HTML5T
 -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="ServiceProviderHeader/removeGarageHeader.jsp"/>
+<jsp:include page="headers/header.jsp"/>
 <html>
     <head>
         <title>Parking System</title>
@@ -30,6 +30,9 @@
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <script src=  "js/validators.js"></script>
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
+        <script>
+            setActive('#removeGarage');
+        </script>
     </head><body class="column1">
 
         <div id="page-wrapper">
@@ -50,16 +53,15 @@
                                                     <c:if test="${garage.getEnabled()==1}">
                                                         <option value="${garage.getGarageId()}">${garage.getTitle()}</option>
                                                     </c:if>
-                                                </c:forEach>
-                                                        
+                                                </c:forEach> 
                                                 <c:if test="${numberOfInActiveGarages==allGarages.size() || (empty allGarages)}">
-                                                    <option value="-1">currently their is no garages</option>
+                                                    <option value="-1">currently their is no active garages</option>
 
                                                 </c:if>
 
                                             </select>
                                         </td>
-                                        
+
                                         <td>
                                             <input type="submit" value="Delete Garage" id="removeMyButton" />
                                         </td>
@@ -71,9 +73,6 @@
                 </div>
             </div>
         </div>
-        <div id="copyright" class="5grid-layout">
-            <section>
-            </section>
-        </div>
+
     </body>
 </html>

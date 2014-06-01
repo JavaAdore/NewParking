@@ -30,16 +30,19 @@ public class GarageDetails {
 
     JSONArray list = new JSONArray();
     JSONObject obj;
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String getgaragedetails(@QueryParam("doorId") int doorId, @QueryParam("slotId") int slotId) {
         GarageSlotsDoors result = slotDetailsImp.getInstance().getSlotDetail(slotId, doorId);
         obj = new JSONObject();
-        try {
-            obj.put("points", result.getPoints());
-        } catch (JSONException ex) {
-            Logger.getLogger(GarageDetails.class.getName()).log(Level.SEVERE, null, ex);
+        if (result != null) {
+
+            try {
+                obj.put("points", result.getPoints());
+            } catch (JSONException ex) {
+                ex.printStackTrace();
+            }
+
         }
         return obj.toString().replace("\\", "");
     }
@@ -57,8 +60,8 @@ public class GarageDetails {
             try {
                 JSONObject obj = new JSONObject();
 
-                obj.put("city", g.getAddress().getCity());
-                obj.put("country", g.getAddress().getCountry());
+                obj.put("city", (g.getAddress().getCity() != null) ? g.getAddress().getCity() : "Undefined");
+                obj.put("country", (g.getAddress().getCountry() != null) ? g.getAddress().getCountry() : "Undefined");
                 obj.put("doors", g.getGarageDoors().size());
                 obj.put("id", g.getGarageId());
                 obj.put("lat", g.getLat());

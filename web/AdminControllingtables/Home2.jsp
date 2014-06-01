@@ -1,6 +1,6 @@
 <%-- 
-    Document   : ServiceProviderError
-    Created on : Apr 6, 2014, 9:50:36 PM
+    Document   : Home
+    Created on : Jun 1, 2014, 9:26:50 AM
     Author     : orcl
 --%>
 
@@ -11,7 +11,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
-    <body>
+    <jsp:include page="header.jsp"/>
+    <body onload="setActive('#b')">
         <h1>Hello World!</h1>
     </body>
 </html>

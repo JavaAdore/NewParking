@@ -6,7 +6,7 @@
         Visit http://html5templates.com for more great templates or follow us on Twitter @HTML5T
 -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="ServiceProviderHeader/updategarageheader.jsp"/>
+<jsp:include page="headers/header.jsp"/>
 <html>
     <head>
         <title>Parking System</title>
@@ -19,8 +19,6 @@
         <link rel="stylesheet" href="css/5grid/core-1200px.css" />
         <link rel="stylesheet" href="css/5grid/core-noscript.css" />
         <link rel="stylesheet" href="css/style.css" />
-
-
         <link rel="stylesheet" href="css/style-desktop.css" />
         </noscript>
         <noscript>
@@ -37,7 +35,7 @@
                 alert($(select).val());
                 if (($(select).val() != "-1"))
                 {
-                    
+
 
                     $('#editGarageForm').submit();
 
@@ -45,6 +43,7 @@
 
 
             }
+            setActive('#updateGarage');
         </script>
 
 

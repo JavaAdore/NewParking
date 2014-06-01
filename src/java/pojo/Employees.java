@@ -21,7 +21,7 @@ public class Employees implements java.io.Serializable {
     private int employeeId;
     @ManyToOne
     private Roles roles;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST , fetch = FetchType.EAGER)
     private Garage garage;
     private String firstName;
     private String lastName;

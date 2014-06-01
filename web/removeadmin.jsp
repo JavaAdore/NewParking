@@ -1,24 +1,15 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:include page="ServiceProviderHeader/removeAdminHeader.jsp"/>
-<%@page import= "utils.EmployeeWrapper" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<!DOCTYPE html>
 
-<jsp:scriptlet>
-    String admins = "";
-    EmployeeWrapper employee = (EmployeeWrapper) request.getSession().getAttribute("emp");
-    if (employee != null) {
-        int myId = employee.getEmployeeId();
-        admins = utils.Utils.loadAllEmployeesAsList(myId, "option");
-    }
-</jsp:scriptlet>
+
 
 <!DOCTYPE HTML>
 
 <html>
     <head>
+        
+        <jsp:include page="headers/header.jsp"/>
         <title>Parking System</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="description" content="" />
@@ -38,7 +29,6 @@
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <script type="text/javascript">
-
             function submitMethod()
             {
                 if (areYouSure('#adminInfo', 'Are you sure that you want to delete ?'))
@@ -46,10 +36,8 @@
                     $('#deleteAdminForm').submit();
                 }
             }
-
+            setActive('#removeEmp');
         </script>
-
-
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
     </head><body class="column1">
         <script src="js/validators.js"></script>
@@ -66,13 +54,13 @@
                                         <td>
                                             <select name="adminInfo"  id="adminInfo">
                                                 <c:forEach items="${allEmployees}" var="employee">
-                                                    
-                                                        <c:if test="${employee.getRoles().getRoleId()!=1&&employee.getActive()==1}" >
-                                                            <option value="${employee.getEmployeeId()}">(${employee.getFirstName()} ${employee.getLastName()}) ${employee.getEmail()} </option>
-                                                        </c:if>
-                                                   
+
+                                                    <c:if test="${employee.getRoles().getRoleId()!=1&&employee.getActive()==1}" >
+                                                        <option value="${employee.getEmployeeId()}">(${employee.getFirstName()} ${employee.getLastName()}) ${employee.getEmail()} </option>
+                                                    </c:if>
+
                                                 </c:forEach>    
-                                                 <c:if test="${numberOfInActiveEmployees==numberOfEmployees || (empty allEmployees)}">
+                                                <c:if test="${numberOfInActiveEmployees==numberOfEmployees || (empty allEmployees)}">
                                                     <option value="-1">currently their is no Employees</option>
 
                                                 </c:if>
@@ -91,10 +79,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="copyright" class="5grid-layout">
-            <section>
-            </section>
         </div>
     </body>
 </html>

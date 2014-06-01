@@ -6,7 +6,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="utils.Utils"%>
-<jsp:include page="ServiceProviderHeader\addGarageHeader.jsp"/>
+<jsp:include page="headers/header.jsp"/>
 
 <html>
     <head>
@@ -22,7 +22,7 @@
         <link rel="stylesheet" href="css/style.css" />
         <link rel="stylesheet" href="css/style-desktop.css" />
         </noscript>
-        <noscript>i
+        <noscript>
         <meta http-equiv="refresh" content="0;  url=enablejavascript.jsp"/>
         </noscript>
         <script src="css/5grid/jquery.js"></script>
@@ -245,7 +245,11 @@
 
                 }
 
+
+
             }
+            setActive('#addGarage');
+
         </script>
 
     </head>
@@ -293,7 +297,7 @@
                                             <td > <input id="hourRateInRushHours" required type = "text" name = "hourRateInRushHours"  value = "1"  onblur="isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000)"/> </td>
                                             <td>  <span id="hourRateInRushHoursError" > </span></td>
                                         </tr>
-                                        
+
                                         <tr>
                                             <td > Map </td>
                                             <td >
@@ -353,7 +357,7 @@
 
                                         <tr >
                                             <td > <input type = "button" value = "Add" id = "myButton1" onclick = "submitMethod()" /> </td>
-<!--                                            <td > <input type = "reset" value = "Cancel" id = "myButton2" /> </td>-->
+                                            <!--                                            <td > <input type = "reset" value = "Cancel" id = "myButton2" /> </td>-->
                                         </tr>
 
                                     </table>

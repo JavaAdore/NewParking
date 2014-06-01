@@ -52,6 +52,7 @@ public class Utils {
         }
         return date;
     }
+
     public static Date totDate(String dateAsString, String format) {
         SimpleDateFormat formatedDate = new SimpleDateFormat(format);
         Date date;
@@ -163,8 +164,6 @@ public class Utils {
         }
         return counter;
     }
-
-
 
     public static String loadAllEmployeesAsList(int myId, String identifier) {
 
@@ -556,13 +555,15 @@ public class Utils {
         int counter = 0;
         for (Employees emp : employees) {
             if (emp.getRoles() != null) {
-                if (!emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
-                    counter++;
+                if (emp.getRoles().getRoleName() != null) {
+                    if (!emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
+
+                        counter++;
+                    }
                 }
             }
         }
         return counter;
-
     }
 
     public static double hoursBetween(Date date1, Date date2) {

@@ -7,7 +7,9 @@ package webservices;
 
 import DAOS.GarageImp;
 import java.util.ArrayList;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -27,9 +29,9 @@ public class GarageStatus {
     JSONArray list = new JSONArray();
     JSONObject obj;
 
-    @GET
+    @POST
     @Produces(MediaType.TEXT_PLAIN)
-    public String getNearstGarages(@QueryParam("lat") double lat, @QueryParam("lon") double lon) 
+    public String getNearstGarages(@FormParam("lat") double lat, @FormParam("lon") double lon) 
     {
 
         ArrayList<WrappedGarage> result = GarageImp.getInstance().getNearGarages(lat, lon);

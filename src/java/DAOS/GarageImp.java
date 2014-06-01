@@ -163,7 +163,7 @@ public class GarageImp {
 
     public void myFunction() {
 
-        ActivateGarage(3);
+        deleteGarage(3);
     }
 
     public void add(Object obj) {
@@ -189,12 +189,13 @@ public class GarageImp {
         double maxLat = coordinateHelper.getMaxLat();
         ArrayList<WrappedGarage> output = new ArrayList<WrappedGarage>();
         try {
-            Query q = garageSession.createSQLQuery(" select Garage.title , sum(GarageStatus.status), count(GarageStatus.status) ,Garage.Lat , Garage.Lon     from Garage , GarageStatus   where  Garage.lon>=? and Garage.lon<=? and Garage.lat >= ? and Garage.lat <= ? and Garage.garageid =  GarageStatus.garage_garageid  group by Garage.garageId ,Garage.title  , Garage.Lat ,Garage.lon  ");
+            Query q = garageSession.createSQLQuery(" select Garage.title , sum(GarageStatus.status), count(GarageStatus.status) ,Garage.Lat , Garage.Lon     from Garage , GarageStatus   where  Garage.lon>=? and Garage.lon<=? and Garage.lat >= ? and Garage.lat <= ? and Garage.garageid =  GarageStatus.garage_garageid  group by Garage.garageId ,Garage.title  , Garage.lat ,Garage.lon  ");
             q.setDouble(0, coordinateHelper.getMinLon());
             q.setDouble(1, coordinateHelper.getMaxLon());
             q.setDouble(2, coordinateHelper.getMinLat());
             q.setDouble(3, coordinateHelper.getMaxLat());
             List<Object[]> result = (List<Object[]>) q.list();
+
             for (Object[] g : result) {
                 WrappedGarage tempWrappedGarage = new WrappedGarage();
                 String title = (String) g[0];
@@ -455,25 +456,40 @@ public class GarageImp {
         Garage garage = GarageImp.getInstance().getGarage(garageId);
         AboutUs aboutUs = new AboutUs();
         JsonObject jsonObject = new JsonObject();
-        jsonObject.add(null, jsonObject);
 
         if (garage != null) {
-            aboutUs.setName(garage.getTitle());
 
-            aboutUs.setImage(garage.getImage());
-            aboutUs.setDesc(garage.getDescription());
-
-            for (ContactNumber contact : garage.getContactNumbers()) {
-                aboutUs.setPhoneNubmers(nullHandler(aboutUs.getPhoneNubmers()) + contact.getPhoneNumber() + "\\n");
-
+            jsonObject.addProperty("garageName", garage.getTitle());
+            
+            jsonObject.addProperty("garageImage", garage.getImage());
+            StringBuilder stringBuilder = new StringBuilder();
+            if (garage.getDescription() != null) {
+                stringBuilder.append("desc" + garage.getDescription() + "\n\n");
             }
-            for (EmailAddress email : garage.getEmails()) {
-                aboutUs.setEmails(nullHandler(aboutUs.getEmails()) + email.getEmail() + "\\n");
+            if (garage.getContactNumbers().size() > 0) {
+                stringBuilder.append("Phone Numbers : ");
+                for (ContactNumber contact : garage.getContactNumbers()) {
+                    stringBuilder.append(contact.getPhoneNumber() + "\n");
+                }
+                stringBuilder.append("\n");
             }
-
+            if (garage.getFaxNumbers().size() > 0) {
+                stringBuilder.append("Fax Numbers : ");
+                for (FaxContact fax : garage.getFaxNumbers()) {
+                    stringBuilder.append(fax.getFaxNumber() + "\n");
+                }
+                stringBuilder.append("\n");
+            }
+            if (garage.getEmails().size() > 0) {
+                stringBuilder.append("Email Address : ");
+                for (EmailAddress email : garage.getEmails()) {
+                    stringBuilder.append(email.getEmail() + "\n");
+                }
+                stringBuilder.append("\n");
+            }
+            jsonObject.addProperty("data", (stringBuilder.toString().length() > 0) ? stringBuilder.toString() : "");
         }
-        //return gson.toJson(aboutUs);
-        return "";
+        return jsonObject.toString();
     }
 
     public static String nullHandler(String str) {

@@ -6,6 +6,13 @@
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
     <head>
+        <script>
+            var toPage = '${defaultPage}';
+            if (toPage.length > 0)
+            {
+                window.location.replace(toPage);
+            }
+        </script>
         <noscript>
         <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
         </noscript> 
@@ -53,13 +60,7 @@
 
             $(document).ready(function()
             {
-                var toPage = '${defaultPage}';
-                if (toPage.length > 0)
-                {
-                    window.location.replace(toPage);
 
-
-                }
 
                 if (getCookie('seal') != "")
                 {

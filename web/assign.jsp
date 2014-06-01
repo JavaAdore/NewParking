@@ -1,3 +1,4 @@
+
 <!DOCTYPE HTML>
 <!--
         Aqueous: A responsive HTML5 website template by HTML5Templates.com
@@ -5,7 +6,7 @@
         Visit http://html5templates.com for more great templates or follow us on Twitter @HTML5T
 -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<jsp:include page="headers/header.jsp"/>
 <html>
     <head>
         <title></title>
@@ -31,10 +32,11 @@
                     $('#assign').submit();
 
             }
+            setActive('#assignEmp');
         </script>
     </head>
     <body class="column1">
-        <jsp:include page="ServiceProviderHeader\assigAdminHeader.jsp"/>
+        
 
         <div id="page-wrapper">
             <div id="page-bgtop">

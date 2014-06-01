@@ -18,6 +18,7 @@ import java.util.List;
 import mobilegsons.visitHistory;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import pojo.*;
 import utils.Utils;
 
@@ -76,8 +77,6 @@ public class UserImp {
             user = (Users) q.uniqueResult();
 
         } catch (Exception ex) {
-        } finally {
-
         }
         return user;
     }
@@ -126,9 +125,10 @@ public class UserImp {
     }
 
     public int updateProfile(Users user) {
+        Transaction beginTransaction = userSession.beginTransaction();
 
         Users u = (Users) userSession.get(Users.class, user.getUserId());
-        
+
         try {
             if (u != null) {
                 String email = user.getEmail();
@@ -144,14 +144,21 @@ public class UserImp {
                         return -2;
                     }
                 }
-                userSession.beginTransaction();
-                userSession.saveOrUpdate(user);
-                userSession.getTransaction().commit();
+                u.setEmail(user.getEmail());
+                u.setPassword(user.getPassword());
+                u.setUserName(user.getUserName());
+                userSession.persist(u);
 
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             return -1;
+        } finally {
+            if (beginTransaction != null) {
+                beginTransaction.commit();
+
+            }
+
         }
 
         return 0;
@@ -170,7 +177,7 @@ public class UserImp {
         Users user = (Users) userSession.get(Users.class, userId);
         if (user != null) {
             for (Visit v : user.getVisits()) {
-
+                System.out.println("visit history");
                 JsonElement toJsonTree = gson.toJsonTree(new visitHistory(v.getGarage().getTitle(), v.getNumberOfVisits() + "", Utils.toTime(v.getVisitDate())), visitHistory.class);
                 historyArray.add(toJsonTree);
             }
@@ -214,9 +221,9 @@ public class UserImp {
 
     public int addApplicationFeedback(ApplicationFeedback applicationFeedback) {
         try {
-            userSession.beginTransaction();
+            Transaction beginTransaction = userSession.beginTransaction();
             userSession.persist(applicationFeedback);
-            userSession.getTransaction().commit();
+            beginTransaction.commit();
 
         } catch (Exception ex) {
             ex.printStackTrace();

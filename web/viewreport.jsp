@@ -1,5 +1,5 @@
 <head>
-    <jsp:include page="adminHeaders/reportsHeader.jsp"/>
+    <jsp:include page="headers/header.jsp"/>
     <noscript>
     <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
     </noscript>
@@ -66,8 +66,10 @@
         {
 
             $("#fromPeriod").datepicker({maxDate: new Date('${maxDate.getYear()},${maxDate.getMonth()},${maxDate.getDay()}'), minDate: new Date('${minDate.getYear()},${minDate.getMonth()},${minDate.getDay()}')});
-            $("#toPeriod").datepicker({maxDate: new Date('${maxDate.getYear()},${maxDate.getMonth()},${maxDate.getDay()}'), minDate: new Date('${minDate.getYear()},${minDate.getMonth()},${minDate.getDay()}')});
-        }
+                    $("#toPeriod").datepicker({maxDate: new Date('${maxDate.getYear()},${maxDate.getMonth()},${maxDate.getDay()}'), minDate: new Date('${minDate.getYear()},${minDate.getMonth()},${minDate.getDay()}')});
+                        }
+
+                        setActive('#viewReport');
     </script>
 </head>
 <body>
@@ -102,7 +104,7 @@
                                 <tr>
                                     <td colspan="2">
 
-                                <center>  <input type = 'button' value = 'view report' onclick="viewReport('#fromPeriod', '#toPeriod','#fromDateError','#toDateError')" /></center>
+                                <center>  <input type = 'button' value = 'view report' onclick="viewReport('#fromPeriod', '#toPeriod', '#fromDateError', '#toDateError')" /></center>
 
                                 </td>
                                 </tr>

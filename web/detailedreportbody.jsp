@@ -111,7 +111,7 @@
     </c:forEach>
 
 
-
+setActive('#viewDetailedReport');
 
 </script>
 <div class='highlyConsumed' style='position:relative;font-size: 20px;'>Highly Consumed</div>

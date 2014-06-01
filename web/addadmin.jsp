@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="ServiceProviderHeader/addAdminHeader.jsp"/>
+        <jsp:include page="headers/header.jsp"/>
 
 <html>
     <head>
@@ -37,17 +37,6 @@
 
             }
 
-            
-            
-
-
-        </script>
-
-
-        <!--check if browser suppot datePicker or not--> 
-
-
-        <script>
             function checkInput(type) {
                 var input = document.createElement("input");
                 input.setAttribute("type", type);
@@ -66,10 +55,10 @@
                 $("#datepicker").datepicker({ maxDate: "-192m "});
             });
 
-
+            setActive('#addAdmin');
         </script>
 
-
+        
 
 
         <noscript>
