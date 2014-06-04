@@ -67,7 +67,6 @@
         <script type="text/javascript">
 
             var busy = "${uri}/CustomImages/redCar.png";
-            alert(busy);
             var available = "${uri}/CustomImages/greenCar.png";
             var notEnabled = "${uri}/CustomImages/yellowCar.png";
             var backgroundImage;

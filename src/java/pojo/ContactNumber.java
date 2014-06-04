@@ -46,5 +46,12 @@ public class ContactNumber implements Serializable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+    
+    @Override
+    public boolean equals(Object obj)
+    {
+        return ((ContactNumber)obj).getId()==getId();
+        
+    }
 
 }

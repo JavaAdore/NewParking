@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utils.EmployeeWrapper;
 
 /**
  *
@@ -19,43 +20,43 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ContactHandler extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
-            String garage = request.getParameter("garage");
-            String contact = request.getParameter("contact");
-            String contactType = request.getParameter("type");
-
-            if (garage != null && contact != null && contactType != null) {
-                try {
-                    int gId = Integer.parseInt(garage);
-                    switch (contactType) {
-                        case "phone":
-                            out.print(GarageImp.getInstance().addContact(gId, contact, utils.Constants.PHONE));
+            EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
+            if (emp!=null) {
+                String contact = request.getParameter("contact");
+                String contactType = request.getParameter("type");
+                String qualifier = request.getParameter("qualifier");
+                if (qualifier != null) {
+                    switch (qualifier) {
+                        case "a":
+                            if ( contact != null && contactType != null) {
+                                try {
+                                    int gId = emp.getGarage().getGarageId();
+                                    switch (contactType) {
+                                        case "phone":
+                                            out.print(GarageImp.getInstance().addContact(gId, contact, utils.Constants.PHONE));
+                                            break;
+                                        case "email":
+                                            out.print(GarageImp.getInstance().addContact(gId, contact, utils.Constants.EMAIL));
+                                            break;
+                                    }
+                                } catch (Exception ex) {
+                                    out.print(utils.Constants.FAILED);
+                                    ex.printStackTrace();
+                                }
+                            }
                             break;
-                        case "email":
-                            out.print(GarageImp.getInstance().addContact(gId, contact, utils.Constants.EMAIL));
+                        case "d":
+                            int result = GarageImp.getInstance().deleteContact(emp.getGarage().getGarageId(),contact);
+                            out.print(result);
                             break;
                     }
-                } catch (Exception ex) {
-                    out.print(utils.Constants.FAILED);
-                    ex.printStackTrace();
-
                 }
-
             }
-
         }
     }
 

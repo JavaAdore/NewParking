@@ -52,7 +52,7 @@ public class LoginServlet extends HttpServlet {
             System.out.println(employee + " employeeee Wrapper");
             System.out.println(employee.getRoles().getRoleName() + " employeeee Wrapper Role  Name");
 
-            String roleName = employee.getRoles().getRoleName();
+            String roleName = employeeWrapper.getRoles().getRoleName();
 
             Cookie cookie = new Cookie("seal", "seal");
                 response.addCookie(cookie);

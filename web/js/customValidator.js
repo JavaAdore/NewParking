@@ -99,7 +99,7 @@ function isAdate(dateField, dateError)
 
     if (matches == null)
     {
-        $(dateError).html("Please enter valid date like 31-12-1990 ");
+        $(dateError).html("Please enter valid date like 12/31/1990 ");
         return false;
     }
     $(dateError).html("");
@@ -113,17 +113,41 @@ function isAdate(dateField, dateError)
 
                 }
             });
-
-
-
     return true;
 
 
 }
+function isAReportDate(dateField, dateError)
+{
+    var matches = /^(\d{2})[-\/](\d{2})[-\/](\d{4})$/.exec($(dateField).val());
+    if (matches === null)
+    {
+        $(dateError).html("Please enter valid date like 31-12-1990 ");
+        return false;
+    }
+    $(dateError).html("");
+    var flag= false;
+    $.ajax(
+            {url: "ValidateReportDate", async: false, data: 'calDate=' + $(dateField).val(), success: function(result)
+                {
+                    $(dateError).html(result);
+                    if (result.length==0)
+                    {
+                        flag= true;
+                    }else
+                    {
+                        
+                        flag =  false;
+                    }
+                }
+            }
+    );
+    return flag;
+}
 
 function isEmailAvailable(email, feedback)
 {
-    var flag = false;
+
     $.ajax(
             {url: "EmailChecking", async: false, data: 'email=' + $(email).val(), success: function(result)
                 {
@@ -231,7 +255,6 @@ function isTextWithSpace(fieldId, fieldError)
 function isImageAcceptNull(fileId, fileError)
 {
     var fileName;
-    alert($(fileId).val());
 
 
     fileName = $(fileId).val();

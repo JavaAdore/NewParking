@@ -200,30 +200,45 @@
 </style>
 
 <script>
-    deleteButtonFormatingClass = "deleteButton";
+    deleteButtonFormatingClass = "handleContactNumber";
     deleteButtonMethod = "deleteContactNumber";
     $(document).ready(function()
+
+    {
+        loadData();
+
+    });
+
+    function loadData()
     {
 
         $.ajax(
-        {url: "GetContactList", async: false, data: 'garageId=' + ${emp.getGarage().getGarageId()} + "&deleteButtonFormatingClass= " + deleteButtonFormatingClass + "&deleteButtonMethod" = deleteButtonMethod, success: function(result)
-        {
-            alert(result);
-            $(contactsTable).append(result);
-        }
+                {url: "../GetContactList", async: false, data: 'deleteButtonFormatingClass=deleteButtonFormatingClass&deleteButtonMethod=deleteContactNumber', success: function(result)
+                    {
+                        $('#contactTable').html('<tr><td colspan="2"><input type="text" id="contact"><input type="button"  value="add"/></td></tr><tr><td>Phone Number</td><td>Action</td></tr>' + result);
+                    }
+                });
     }
-    );
-    });
 
+    function handleContactNumber(x,q,t)
+    {
+        $.ajax(
+                {url: "../ContactHandler", async: false, data: 'contact='+x+'&qualifier='+q+"&type="+t, success: function(result)
+                    {
+                        loadData();
+
+                    }
+                });
+    }
 
 </script>
 <div class="CSSTableGenerator" >
-    <table id="contactsTable">
+    <table id="contactTable" >
         <tr>
             <td colspan="2">
                 <input type="text" id="contact">
 
-                <input type="button"  value="add"/>
+                <input type="button"   onclick="handleContactNumber($('#contact').val(),'a','phone')"/>
             </td>
 
 
@@ -236,8 +251,6 @@
                 Action
             </td>
         </tr>
-
-
-
     </table>
+
 </div>

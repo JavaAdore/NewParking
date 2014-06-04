@@ -39,28 +39,6 @@
     <script src="js/ui/jquery.ui.datepicker.js"></script>
     <script src="js/customValidator.js"></script>
     <script>
-
-        //    $(document).ready(function()
-        //    {
-        //        $.ajax({url: "ReportHandler", async: false, success: function(result)
-        //            {
-        //                if (result.length > 1)
-        //                {
-        //                    $("#fromSpan").html(" from :      <input id='from' type='date' " + result + " />");
-        //                    $("#toSpan").html(" to :         <input id='to' type='date' " + result + " />");
-        //                    $("#buttonSpan").html(" <input type = 'button' value = 'view report' />");
-        //                    $('#buttonSpan').click(function()
-        //                    {
-        //
-        //                    });
-        //                } else
-        //                {
-        //                    $("#fromSpan").html(" Sorry , No available reports related to your garage yet");
-        //                }
-        //            }});
-        //
-        //
-        //    });
         $(document).ready(function()
         {
 
@@ -109,7 +87,10 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input  id='fromPeriod' type='text' onblur="isAdate('#fromPeriod', '#fromDateError')" />
+                                        From
+                                    </td>
+                                    <td>
+                                        <input  id='fromPeriod' type='text' onchange="isAReportDate('#fromPeriod', '#fromDateError')" />
                                     </td>    
                                     <td>
                                         <span id="fromDateError"></span> 
@@ -117,7 +98,10 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id='toPeriod' type='text' onblur="isAdate('#toPeriod', '#toDateError')" />
+                                        To
+                                    </td>
+                                    <td>
+                                        <input id='toPeriod' type='text' onchange="isAReportDate('#toPeriod', '#toDateError')" />
                                     </td>  
                                     <td>
 

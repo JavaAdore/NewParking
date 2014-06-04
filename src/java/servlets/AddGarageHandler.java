@@ -135,9 +135,9 @@ public class AddGarageHandler extends HttpServlet {
 
         try {
 
-            if (utils.Validator.validateAddGarage(parameterValues)) {
-                return utils.Constants.FAILED;
-            }
+//            if (!utils.Validator.validateAddGarage(parameterValues)) {
+//                return utils.Constants.FAILED;
+//            }
             Garage g = new Garage();
             String garageName = parameterValues.get(0);
             int hourRateInRushHours = Integer.parseInt(parameterValues.get(1));

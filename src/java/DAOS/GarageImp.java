@@ -460,7 +460,7 @@ public class GarageImp {
         if (garage != null) {
 
             jsonObject.addProperty("garageName", garage.getTitle());
-            
+
             jsonObject.addProperty("garageImage", garage.getImage());
             StringBuilder stringBuilder = new StringBuilder();
             if (garage.getDescription() != null) {
@@ -497,6 +497,42 @@ public class GarageImp {
             return "";
         }
         return str;
+    }
+
+    public int deleteContact(int id, String garage) {
+
+        try {
+            int x = Integer.parseInt(garage);
+            return deleteContact(id, x);
+        } catch (Exception ex) {
+            return -1;
+        }
+    }
+
+    public int deleteContact(int id, int x) {
+        Transaction beginTransaction = null;
+        try {
+            beginTransaction = garageSession.beginTransaction();
+            Garage g = (Garage) garageSession.get(Garage.class, id);
+            ContactNumber temp = new ContactNumber();
+            temp.setId(x);
+            for (ContactNumber c : g.getContactNumbers()) {
+                if (c.equals(temp));
+                {
+                    garageSession.delete(c);
+                }
+            }
+            beginTransaction.commit();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Constants.FAILED;
+        } finally {
+            if (beginTransaction != null) {
+                beginTransaction.commit();
+            }
+            return Constants.SUCCESS;
+
+        }
     }
 
 }

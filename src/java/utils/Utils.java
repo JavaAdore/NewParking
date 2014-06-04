@@ -148,10 +148,9 @@ public class Utils {
 
     public static void main(String[] args) {
 
-//        String prepapreAboutUs = prepapreAboutUs(3);
-//        Gson g = new Gson();
-//        AboutUs fromJson = g.fromJson(prepapreAboutUs, AboutUs.class);
-//        System.out.println(fromJson.getWebsite());
+        Date totDate = totDate("1/5/2014", "MM/dd/yyyy");
+        System.out.println();
+
     }
 
     public static int getNumberOfInActiveUsers(ArrayList<Garage> allGarages) {
@@ -609,7 +608,7 @@ public class Utils {
             for (ContactNumber contactNumber : garage.getContactNumbers()) {
                 stringBuilder.append(String.format("<tr id=%s >", contactNumber.getId()));
                 stringBuilder.append(String.format("<td>%s</td>", contactNumber.getPhoneNumber()));
-                stringBuilder.append(String.format("<td><button class=%s onclick=%s(%s)> %s </button> </td>", deleteButtonFormatingClass, deleteButtonMethod, contactNumber.getId()));
+                stringBuilder.append(String.format("<td><button class=%s onclick=%s(%s,d)> Delete </button> </td>", deleteButtonFormatingClass, deleteButtonMethod, contactNumber.getId()));
                 stringBuilder.append(String.format("</tr>"));
             }
         }
@@ -627,4 +626,15 @@ public class Utils {
         System.out.println("number Of Inactive employees = " + counter);
         return counter;
     }
+
+    public static String isDateBetween(Date date, Date date1, Date date2) {     
+        if ( ((date1.compareTo(date)<=0) && (date2.compareTo(date) >= 0))) {
+             return "";
+        }
+       
+CustomDate minDate = CustomDate.getCustomDate(date1);
+            CustomDate maxDate = CustomDate.getCustomDate(date2);
+            return String.format("Please enter date between %s/%s/%s and %s/%s/%s", minDate.getMonth(), minDate.getDay(), minDate.getYear(), maxDate.getMonth(), maxDate.getDay(), maxDate.getYear());
+    }
+
 }

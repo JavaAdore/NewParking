@@ -21,7 +21,11 @@ public class CustomDate {
     public CustomDate() {
     }
 
-    ;
+    public static void main(String[] args) {
+
+        Date date = getDate(new CustomDate(1, 10, 2011));
+        System.out.println();
+    }
 
     public CustomDate(int day, int month, int year) {
         this.day = day;
@@ -53,8 +57,28 @@ public class CustomDate {
         this.year = year;
     }
 
-    
-    
-    
-   
+    public static Date getDate(CustomDate c) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(0);
+        cal.set(c.getYear(), c.getMonth() - 1, c.getDay(), 0, 0, 0);
+        return new Date(cal.getTimeInMillis());
+    }
+
+    public static CustomDate getCustomDate(Date date1) {
+        try {
+            Calendar c = Calendar.getInstance();
+            c.setTime(date1);
+            return new CustomDate(c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH)+1, c.get(Calendar.YEAR));
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public String toString() {
+
+        return String.format("%s/%s/%s", getDay(), getMonth(), getYear());
+
+    }
+
 }

@@ -124,6 +124,10 @@
         <servlet-name>GetContactList</servlet-name>
         <servlet-class>ajax.GetContactList</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ValidateReportDate</servlet-name>
+        <servlet-class>ajax.ValidateReportDate</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -244,6 +248,10 @@
         <servlet-name>GetContactList</servlet-name>
         <url-pattern>/GetContactList</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ValidateReportDate</servlet-name>
+        <url-pattern>/ValidateReportDate</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -272,9 +280,6 @@
         <exception-type>exceptions.SessionException</exception-type>
         <location>/invalidsession.jsp</location>
     </error-page>
-    
-    
-
     <servlet-mapping>
         <servlet-name>Jersey REST Service</servlet-name>
         <url-pattern>/rest/*</url-pattern>

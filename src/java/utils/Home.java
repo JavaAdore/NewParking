@@ -33,9 +33,8 @@ public class Home {
 
     public static void main(String[] args) {
 
-        Users userById = UserImp.getInstance().getUserById(86);
-        System.out.println();
-       
+
+        GarageImp.getInstance().deleteGarage(51);
     }
 }
 

@@ -1,15 +1,11 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-
-
-
-<%@page import="java.util.Collection"%>
-<%@page import="pojo.GarageStatus"%>
-<%@page import="java.util.ArrayList"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <noscript>
 <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
 </noscript>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <link rel = "stylesheet" href = "css/mycss/jquery.ui.all.css" >
 <link rel="stylesheet" href="css/mycss/demos.css">
 <title>Parking System</title>
@@ -56,16 +52,22 @@
     {
         position:absolute;
         background-color:greenyellow;
+        height:${emp.getGarage().getSlotHeight()}px;
+        width:${emp.getGarage().getSlotWidth()}px;
     }
     .mediumConsumed
     {
         position:absolute;
         background-color:plum;
+        height:${emp.getGarage().getSlotHeight()}px;
+        width:${emp.getGarage().getSlotWidth()}px;
     }
     .rearlyConsumed
     {
         position:absolute;
         background-color:#99ccff;
+        height:${emp.getGarage().getSlotHeight()}px;
+        width:${emp.getGarage().getSlotWidth()}px;
     }
 
 
@@ -104,19 +106,18 @@
         </c:choose>
 
             var status = "";
-            var inner = "<div class=" + itemClass + " style=' left:${slot.key.getX()}px;top:" + y + "px ;position:absolute;width:40px;height:30px;  '  >" +${slot.value.getHours()} + "</div>";
-            alert(inner);
+            var inner = "<div class=" + itemClass + " style=' left:${slot.key.getX()}px;top:" + y + "px ;position:absolute;  '  >" +${slot.value.getHours()} + "</div>";
             $('#mainDiv').append(inner);
 
     </c:forEach>
 
 
-setActive('#viewDetailedReport');
+            setActive('#viewDetailedReport');
 
 </script>
-<div class='highlyConsumed' style='position:relative;font-size: 20px;'>Highly Consumed</div>
-<div class="mediumConsumed" style='position:relative;font-size: 20px;'>Medium Consumed</div>
-<div class="rearlyConsumed" style='position:relative;font-size: 20px;'>Rear Consumed</div>
+<div class='highlyConsumed' style='position:relative;font-size: 20px; width:100%x;height:40;'>Highly Consumed</div>
+<div class="mediumConsumed" style='position:relative;font-size: 20px;width:100%px;height:40;'>Medium Consumed</div>
+<div class="rearlyConsumed" style='position:relative;font-size: 20px;width:100%px; height:40; '>Rear Consumed</div>
 <div id="mainDiv">
 
     <img id="background"/>

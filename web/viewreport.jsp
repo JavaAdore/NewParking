@@ -46,7 +46,7 @@
 
             $.ajax({url: "ReportHandler", async: false, success: function(result)
                 {
-                    alert(result);
+                    
                     if (result.length > 1)
                     {
 
@@ -85,7 +85,10 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input  id='fromPeriod' type='text' onblur="isAdate('#fromPeriod', '#fromDateError')" />
+                                        From
+                                    </td>
+                                    <td>
+                                        <input  id='fromPeriod' type='text' onchange="isAReportDate('#fromPeriod', '#fromDateError')" />
                                     </td>    
                                     <td>
                                         <span id="fromDateError"></span> 
@@ -93,7 +96,10 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id='toPeriod' type='text' onblur="isAdate('#toPeriod', '#toDateError')" />
+                                        To 
+                                    </td>
+                                    <td>
+                                        <input id='toPeriod' type='text' onchange="isAReportDate('#toPeriod', '#toDateError')" />
                                     </td>  
                                     <td>
 
@@ -121,8 +127,6 @@
                             <div id="theChart"></div>
 
                     </center>
-                </div>
-                <div id="copyright" class="5grid-layout">	
                 </div>
             </div>
         </div>

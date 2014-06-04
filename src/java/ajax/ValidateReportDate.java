@@ -11,13 +11,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import utils.EmployeeWrapper;
+import utils.*;
 
 /**
  *
  * @author orcl
  */
-public class GetContactList extends HttpServlet {
+public class ValidateReportDate extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,19 +32,17 @@ public class GetContactList extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            EmployeeWrapper emp = (EmployeeWrapper)request.getSession().getAttribute("emp");
-            String deleteButtonFormatingClass = request.getParameter("deleteButtonFormatingClass");
-            String deleteButtonMethod = request.getParameter("deleteButtonMethod");
-            try 
-            {   
-                System.out.println(String.format("%s %s %s ",emp.getGarage().getGarageId() , deleteButtonFormatingClass,deleteButtonMethod));
-                out.print(utils.Utils.loadContacts(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
+            /* TODO output your page here. You may use following sample code. */
 
-            }
-            catch(Exception ex)
-            {   
-                ex.printStackTrace();
-                out.print(ex.getMessage());
+            String calDate = request.getParameter("calDate");
+            System.out.println("caldate is " + calDate);
+
+            if (calDate != null) {
+
+                CustomDate minDate = (CustomDate) request.getSession().getAttribute("minDate");
+                CustomDate maxDate = (CustomDate) request.getSession().getAttribute("maxDate");
+                System.out.println("date is " + CustomDate.getCustomDate(utils.Utils.totDate(calDate, "MM/dd/yyyy")) + " " + minDate + " " + maxDate);
+                out.print(utils.Utils.isDateBetween(utils.Utils.totDate(calDate, "MM/dd/yyyy"), CustomDate.getDate(minDate), CustomDate.getDate(maxDate)));
             }
 
         }

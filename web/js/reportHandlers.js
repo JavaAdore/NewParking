@@ -29,10 +29,8 @@ function detailedReportInitializer(from, to)
 }
 
 function viewReport(from, to, fromError, toError)
-{
-
-    var condition = isAdate(from, fromError) && isAdate(to, toError);
-    if (condition)
+{   
+    if (isAReportDate(from, fromError) && isAReportDate(to, toError))
     {
         assignListeners(from, to);
         $('#reportBodyDiv').load("ReportBody.jsp");
@@ -43,7 +41,7 @@ function viewReport(from, to, fromError, toError)
 }
 function viewDetailedReport(from, to,fromError, toError)
 {
-    var condition = isAdate(from, fromError) && isAdate(to, toError);
+    var condition = isAReportDate(from, fromError) && isAReportDate(to, toError);
     if (condition)
     {
         detailedReportInitializer(from, to);
@@ -87,8 +85,7 @@ function getToDate()
 
 function correctDates(from, to)
 {
-    alert(from);
-    alert(to);
+   
     var userMinDate = new Date(from);
     var userMaxDate = new Date(to);
 
