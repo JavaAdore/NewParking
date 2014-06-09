@@ -1,10 +1,18 @@
-function areYouSure(x)
+function areYouSure(select, x)
 {
-    var r = confirm(x);
-    if (r == true)
+    alert('ok');
+    if (($('#'+select).getVal())==="-1") 
     {
-        return true;
+        
+        alert("it's minus one dude");
     }
+    
+        var r = confirm(x);
+        if (r == true)
+        {
+            return true;
+        }
+    
     return false;
 
 }
@@ -12,7 +20,7 @@ function areYouSure(x)
 
 function isNotEmpty(x)
 {
-    alert($(x).getVal()!=null);
-    return $(x).getVal()!=null;
-    
+    alert($(x).getVal() != null);
+    return $(x).getVal() != null;
+
 }
