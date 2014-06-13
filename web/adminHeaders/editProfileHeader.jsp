@@ -17,8 +17,8 @@
                             <ul>
                                 <li class="current_page_item"><a href="editprofile.jsp">Edit Profile</a></li>
                                 <li><a href="addadminbyadmin.jsp">Add Employee</a></li>
-                                <li><a href="removeadminbyadmin.jsp">Remove Employee</a></li>
-                                <li><a href="viewreport.jsp">View Reports</a></li>
+                                <li><a href="RemoveAdminInitializer">Remove Employee</a></li>
+                                <li><a href="accountant.jsp">View Reports</a></li>
                             </ul>
                         </nav>
                     </div>

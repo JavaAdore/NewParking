@@ -39,19 +39,21 @@ public class RemoveGarageHandler extends HttpServlet {
         try {
 
             String garage = request.getParameterValues("garage")[0];
-            int currentGarage = Integer.parseInt(garage);
-            if (currentGarage != -1) {
-                int result = GarageImp.getInstance().deleteGarage(currentGarage);
-                switch (result) {
-                    case 0:
-                        request.setAttribute("error", new ErrorMessage(String.format("Garage deleted")));
-                        break;
+            if (garage != null) {
+                int currentGarage = Integer.parseInt(garage);
+                if (currentGarage != -1) {
+                    int result = GarageImp.getInstance().deleteGarage(currentGarage);
+                    switch (result) {
+                        case 0:
+                            request.setAttribute("error", new ErrorMessage(String.format("Garage deleted")));
+                            break;
 
-                    case -1:
-                        request.setAttribute("error", new ErrorMessage(String.format("looks like some error happend please contact adminstrator")));
-                        break;
+                        case -1:
+                            request.setAttribute("error", new ErrorMessage(String.format("looks like some error happend please contact adminstrator")));
+                            break;
+                    }
+
                 }
-
             }
         } finally {
             request.getRequestDispatcher(String.format("removegarage.jsp", new Date())).forward(request, response);

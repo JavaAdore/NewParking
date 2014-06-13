@@ -26,7 +26,7 @@ public class Employees implements java.io.Serializable {
     @ManyToOne
     private Roles roles;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Garage garage;
 
     private String firstName;
@@ -42,10 +42,10 @@ public class Employees implements java.io.Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date birthDate;
     @ElementCollection(fetch = FetchType.LAZY)
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "admin", orphanRemoval = true)
+    @OneToMany(mappedBy = "admin", orphanRemoval = true)
     private Collection<AdminsActions> admin = new ArrayList<>();
     @ElementCollection(fetch = FetchType.LAZY)
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "employee", orphanRemoval = true)
+    @OneToMany(mappedBy = "employee", orphanRemoval = true)
     private Collection<AdminsActions> employee = new ArrayList<>();
 
     public Collection<AdminsActions> getAdmin() {

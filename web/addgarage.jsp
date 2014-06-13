@@ -24,6 +24,13 @@
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none">
             
+
+        </script>
+        <script>
+            function submitMethod()
+            {
+                $('#loginform').submit();
+            }
         </script>
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
     </head>
@@ -35,7 +42,7 @@
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
                             <form action="AddGarageHandler" method="POST" id="loginform" enctype="multipart/form-data">
-                                
+
                                 <table>
                                     <th colspan="2">
                                         <c:out value="${error.getErrorBody()}"/>
@@ -52,14 +59,14 @@
                                         <td>city</td>
                                         <td><input type="text" name="city"  value ="Cairo" readonly/></td>
                                     </tr>
-                                      
+
                                     <tr>
-                                        <td>number of slots</td>
+                                        <td>Hour rate in rush hours</td>
                                         <td><input type="number" name="slots"  value ="1" min="1"/></td>
                                     </tr>
                                     <tr>
-                                        <td>number of doors</td>
-                                        <td><input type="number" name="doors"  value ="1" min="1"/></td>
+                                        <td>Hour rate out of  rush hours</td>
+                                        <td><input type="number" name="doors"  value ="1" min="1" readonly/></td>
                                     </tr>
                                     <tr>
                                         <td>Map</td>
@@ -106,7 +113,7 @@
                                         <td><input type="text" name="lat"  /></td>
                                     </tr>
                                     <tr>
-                                        <td><input type="submit" value="Add" id="myButton1"/></td>
+                                        <td><input type="button" value="Add" id="myButton1" onclick="submitMethod()"/></td>
                                         <td><input type="reset" value="Cancel" id="myButton2"/></td>
                                     </tr>
                                 </table>

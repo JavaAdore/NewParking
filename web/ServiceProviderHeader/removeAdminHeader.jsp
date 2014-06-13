@@ -6,15 +6,13 @@
 
 <!DOCTYPE html>
 <jsp:include page="checkingPage.jsp"></jsp:include>
-<div id="header-wrapper">
-    <header id="header">
-        <div class="5grid-layout">
-            <div class="row">
-                <div class="12u" id="logo"> <!-- Logo -->
-                          <jsp:include page="../signoutForm.jsp"></jsp:include>
-
+    <div id="header-wrapper">
+        <header id="header">
+            <div class="5grid-layout">
+                <div class="row">
+                    <div class="12u" id="logo"> <!-- Logo -->
+                    <jsp:include page="../signoutForm.jsp"></jsp:include>
                     <h1><a href="#" class="mobileUI-site-name">Parking System</a></h1>
-
                 </div>
             </div>
         </div>

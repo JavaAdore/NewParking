@@ -10,17 +10,20 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="../js/jQuery.js"></script>
-        <script src="../js/Query.Session.js"></script>
-        <script src="../js/cookieValidator.js"></script>
-        <script src="../js/validators.js"></script>
-        <script src="../js/.js"></script>
-        <script type="text/javascript" >
 
-        </script>
+        <script type="text/javascript" ></script>
+        <script src="js/jquery-1.5.1.min.js" ></script>
+
+
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+       
 
+        <c:if test="${ empty  emp}">
+            <script>alert('checking');</script>
+
+            <meta http-equiv="refresh" content="0; url= login.jsp" />
+        </c:if>
     </head>
     <body>
 

@@ -31,18 +31,19 @@ public class ReportInitializer extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String from = request.getParameter("from");
             String to = request.getParameter("to");
-            if (from != null && to != null) {
+            String minDate = (String) request.getSession().getAttribute("minDate");
+            String maxDate = (String) request.getSession().getAttribute("maxDate");
+            EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
+            ArrayList<ReportsInterface> historyRecord;
 
-                EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-                ArrayList<ReportsInterface> historyRecord = (ArrayList<ReportsInterface>) request.getSession().getAttribute("historyRecord");
+            historyRecord = (ArrayList<ReportsInterface>) request.getSession().getAttribute("historyRecord");
 
-                if (historyRecord != null) {
-                    ReportHistoryRecord report = Utils.prepareHistoryRecord(historyRecord, from, to, emp.getGarage().getGarageStatus().size());
-                    request.getSession().setAttribute("report", report);
-                }
+            if (historyRecord != null) {
 
+                ReportHistoryRecord report = Utils.prepareHistoryRecord(historyRecord, (from.length()>0) ? from : minDate, (to.length()>0) ? to : maxDate, emp.getGarage().getGarageStatus().size());
+
+                request.getSession().setAttribute("report", report);
             }
-
         }
     }
 

@@ -21,30 +21,23 @@ import javax.servlet.http.HttpServletResponse;
  * @author orcl
  */
 public class SessionFilter implements Filter {
-
-    @Override
+    
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        
     }
-
+    
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-//        if (!((HttpServletRequest) request).getHeader(HttpHeaders.REFERER).contains("Home")) {
-//            {
-//                if (((HttpServletRequest) request).getSession().getAttribute("session") == null) {
-//                    ((HttpServletResponse) response).sendRedirect("Home");
-//                } else {
-//                }
-//            }
-//        }
+        // if (((HttpServletRequest) request).getHeader(HttpHeaders.).contains("index.jsp")) 
+        {
+            chain.doFilter(request, response);
+        }
         
-                            chain.doFilter(request, response);
-
     }
-
+    
     @Override
     public void destroy() {
-
+        
     }
-
+    
 }

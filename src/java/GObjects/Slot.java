@@ -17,16 +17,16 @@ public class Slot implements Marker {
     String slotName;
     int x;
     int y;
-    HashMap<Integer, ValueContainer>  totalDailyConsumedHours;
-    HashMap<Integer, ValueContainer>  totalMonthlyConsumedHours;
-    HashMap<Integer, ValueContainer>  totalYearlyConsumedHours;
+    HashMap<Integer, ValueContainer> totalDailyConsumedHours;
+    HashMap<Integer, ValueContainer> totalMonthlyConsumedHours;
+    HashMap<Integer, ValueContainer> totalYearlyConsumedHours;
 
     List<Step> path;
 
     public Slot() {
     }
 
-    public Slot(String slotName, int x, int y, List<Step> path, HashMap<Integer, ValueContainer>  totalDailyConsumedHours, HashMap<Integer, ValueContainer>  totalMonthlyConsumedHours, HashMap<Integer, ValueContainer>  totalYearlyConsumedHours) {
+    public Slot(String slotName, int x, int y, List<Step> path, HashMap<Integer, ValueContainer> totalDailyConsumedHours, HashMap<Integer, ValueContainer> totalMonthlyConsumedHours, HashMap<Integer, ValueContainer> totalYearlyConsumedHours) {
         this.slotName = slotName;
         this.x = x;
         this.y = y;
@@ -92,10 +92,15 @@ public class Slot implements Marker {
         this.path = path;
     }
 
-    
-
     @Override
     public String getMarker() {
         return getSlotName();
+    }
+
+    @Override
+    public boolean equals(Object obj) 
+    {
+        Slot slot = (Slot) obj;
+        return ((((Slot) obj).getX() == getX()) && (((Slot) obj).getY() == getY()));
     }
 }

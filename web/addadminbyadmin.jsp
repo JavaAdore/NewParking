@@ -10,7 +10,15 @@
         <meta name="keywords" content="" />
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
-        <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
+        <script type="text/javascript">
+            function submitMethod()
+            {
+                //if () validated
+                {
+                    $('#addAdmin').submit();
+                }
+            }
+        </script>
     </head><body>
         <jsp:include page="adminHeaders\addemployeeheader.jsp"/>
         <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -21,7 +29,7 @@
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
                             <center>
-                                <form action ="addAdminServlet" method="post">
+                                <form  id = "addAdmin" action ="addAdminServlet" method="post">
                                     <table>
                                         <th colspan="2">
                                         <center> <c:out value="${error.getErrorBody()}" /></center>
@@ -70,7 +78,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><input type="submit" id="myButton" value="Register" /> </td>
+                                            <td><input type="button" id="myButton" value="Register" onclick="submitMethod()" /> </td>
                                         </tr>
                                     </table>
                                 </form>

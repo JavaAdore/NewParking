@@ -1,26 +1,49 @@
 function areYouSure(select, x)
 {
-    alert('ok');
-    if (($('#'+select).getVal())==="-1") 
+
+    if (($(select).val() != "-1"))
     {
-        
-        alert("it's minus one dude");
-    }
-    
         var r = confirm(x);
         if (r == true)
         {
             return true;
         }
-    
+    }
     return false;
-
 }
 
 
 function isNotEmpty(x)
 {
-    alert($(x).getVal() != null);
-    return $(x).getVal() != null;
+
+    return $(x).val() != -1;
 
 }
+
+function test()
+{
+
+
+    alert('test');
+    return false;
+}
+
+function checkEmail(emailTextBox)
+{
+    var email = $('#emailTextBox').val();
+    if (email != null)
+    {
+        $(document).ready(function()
+        {
+
+
+        });
+
+
+    }
+
+
+}
+
+
+

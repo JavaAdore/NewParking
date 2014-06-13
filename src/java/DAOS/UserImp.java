@@ -46,7 +46,7 @@ public class UserImp {
             if (u != null) {
                return -2;
             }
-            userSession.save(user);
+            userSession.persist(user);
 
         } catch (Exception ex) {
             return -1;

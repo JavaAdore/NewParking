@@ -6,6 +6,7 @@ import GObjects.ValueContainer;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import daosint.ReportsInterface;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import pojo.Employees;
 import pojo.Garage;
 import pojo.Map;
 import pojo.Users;
+import reportsClasses.CustomDate;
 import reportsClasses.ReportHistoryRecord;
 
 public class Utils {
@@ -81,17 +83,15 @@ public class Utils {
                 stringBuilder.append("</option>");
             }
 
-        } 
-        if(stringBuilder.length()==0)
-        {
-        
-         stringBuilder.append("<option value= '-1' >");
-
-                stringBuilder.append("currently there is no employees");
-
-                stringBuilder.append("</option>");
         }
-        
+        if (stringBuilder.length() == 0) {
+
+            stringBuilder.append("<option value= -1 >");
+
+            stringBuilder.append("currently there is no employees");
+
+            stringBuilder.append("</option>");
+        }
 
         return stringBuilder.toString();
     }
@@ -102,7 +102,7 @@ public class Utils {
 
         for (Garage garage : garageDao.getAllGarages()) {
 
-            stringBuilder.append(String.format("<%s value = '%s' >", identifier, garage.getGarageId()));
+            stringBuilder.append(String.format("<%s value = %s >", identifier, garage.getGarageId()));
 
             stringBuilder.append(garage.getTitle());
 
@@ -110,11 +110,34 @@ public class Utils {
 
         }
         if (stringBuilder.length() == 0) {
-            stringBuilder.append(String.format("<%s value='-1'>", "option"));
+            stringBuilder.append(String.format("<%s value=-1>", "option"));
             stringBuilder.append("currently there is no Garages");
             stringBuilder.append(String.format("</%s>", "option"));
         }
         return stringBuilder.toString();
+    }
+
+    public static Date getMinDate(ArrayList<ReportsInterface> dailyhistoryRecord, ArrayList<ReportsInterface> monthlyHistoryRecord, ArrayList<ReportsInterface> yearlyHistoryRecord) {
+        if (yearlyHistoryRecord.size() > 0) {
+            return yearlyHistoryRecord.get(0).getRecordDate();
+        } else if (monthlyHistoryRecord.size() > 0) {
+            return monthlyHistoryRecord.get(0).getRecordDate();
+        } else if (dailyhistoryRecord.size() > 0) {
+            return dailyhistoryRecord.get(0).getRecordDate();
+        }
+        return new Date();
+    }
+
+    public static ArrayList< ReportsInterface> mergeHistoryReports(ArrayList<ArrayList<ReportsInterface>> merged) {
+
+        ArrayList<ReportsInterface> result = new ArrayList<>();
+        for (ArrayList<ReportsInterface> category : merged) {
+            for (ReportsInterface record : category) {
+
+                result.add(record);
+            }
+        }
+        return result;
     }
 
     public String loadAllMapsAsList(String identifier) {
@@ -122,7 +145,7 @@ public class Utils {
 
 //        for (Map map : mapsDao.getAllMaps()) {
 //            if (map.getGarages() == null) {
-//                stringBuilder.append(String.format("<%s value = '%s' >%s", identifier, map.getMapId(), map.getMapUrl()));
+//                stringBuilder.append(String.format("<%s value = %s >%s", identifier, map.getMapId(), map.getMapUrl()));
 //                stringBuilder.append(map.getMapUrl());
 //                stringBuilder.append(String.format("</%s>", identifier));
 //            }
@@ -138,13 +161,13 @@ public class Utils {
             if (employee.getEmployeeId() == myId) {
                 continue;
             }
-            stringBuilder.append(String.format("<%s value = '%s' >", identifier, employee.getEmployeeId()));
+            stringBuilder.append(String.format("<%s value = %s >", identifier, employee.getEmployeeId()));
             stringBuilder.append(employee.getEmail());
             stringBuilder.append(String.format("</%s>", identifier));
 
         }
         if (stringBuilder.length() == 0) {
-            stringBuilder.append(String.format("<%s value = '-1'>", identifier));
+            stringBuilder.append(String.format("<%s value = -1>", identifier));
             stringBuilder.append("currently there is no employees");
             stringBuilder.append(String.format("</%s>", identifier));
         }
@@ -157,13 +180,13 @@ public class Utils {
 
         for (Employees employee : empDao.getAllEmployees()) {
 
-            stringBuilder.append(String.format("<%s value = '%s' >", identifier, employee.getEmployeeId()));
+            stringBuilder.append(String.format("<%s value = %s >", identifier, employee.getEmployeeId()));
             stringBuilder.append(employee.getEmail());
             stringBuilder.append(String.format("</%s>", identifier));
 
         }
         if (stringBuilder.length() == 0) {
-            stringBuilder.append(String.format("<%s value= '-1'>", identifier));
+            stringBuilder.append(String.format("<%s value= -1>", identifier));
             stringBuilder.append("currently there is no garages");
             stringBuilder.append(String.format("</%s>", identifier));
         }
@@ -175,7 +198,7 @@ public class Utils {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (Employees employee : empDao.getAllEmployeesByGarageId(garageId)) {
-            stringBuilder.append(String.format("<%s value = '%s' >", "option", employee.getEmployeeId()));
+            stringBuilder.append(String.format("<%s value = %s >", "option", employee.getEmployeeId()));
             stringBuilder.append(employee.getEmail());
             stringBuilder.append(String.format("</%s>", "option"));
 
@@ -201,13 +224,13 @@ public class Utils {
             if (employee.getEmployeeId() == employeeId) {
                 continue;
             }
-            stringBuilder.append(String.format("<%s value = '%s' >", "option", employee.getEmployeeId()));
+            stringBuilder.append(String.format("<%s value = %s >", "option", employee.getEmployeeId()));
             stringBuilder.append(employee.getEmail());
             stringBuilder.append(String.format("</%s>", "option"));
 
         }
         if (stringBuilder.length() == 0) {
-            stringBuilder.append(String.format("<%s value='-1'>", "option"));
+            stringBuilder.append(String.format("<%s value=-1>", "option"));
             stringBuilder.append("currently there is no Employee");
             stringBuilder.append(String.format("</%s>", "option"));
         }
@@ -227,8 +250,8 @@ public class Utils {
         //   int result = GarageSlotDoorsImp.getInstance().addGarageSlot("asmaa slot", 140, 140, 1);
         //GarageSlotDoorsImp.getInstance().handleThisGaragePlease(GObjects.Home.prepareMeGarageDemoPlease(24));
 //        prepareMeAPathPlease();
-        
-        ArrayList<ReportsInterface> d =   DailyHistoryReportImp.getInstance().getDailyHistory(4);
+
+        ArrayList<ReportsInterface> d = DailyHistoryReportImp.getInstance().getDailyHistory(4);
         System.out.println();
 
     }
@@ -270,17 +293,20 @@ public class Utils {
     public static void checkCurrentUserStatus(HttpServletRequest request) throws exceptions.CurrentClientNotAvailable {
 
         if (request.getSession().getAttribute("emp") == null) {
+            System.out.println("this is no current employee");
             throw new exceptions.CurrentClientNotAvailable();
+        } else {
+            System.out.println("current employee is already exisits");
+
         }
 
     }
 
     public static void checkSession(HttpServletRequest request) throws exceptions.SessionException {
 
-        if (request.getSession().getAttribute("session") == null) {
-            throw new exceptions.SessionException();
-        }
-
+//        if (request.getSession().getAttribute("session") == null) {
+//            throw new exceptions.SessionException();
+//        }
     }
 
     public static String prepareSelectTag(ArrayList<ReportsInterface> list) {
@@ -294,9 +320,9 @@ public class Utils {
 
         System.out.println("min date = " + minDate);
         System.out.println("max date = " + maxDate);
-        stringBuilder.append(String.format("From :  <input id ='from' type='date' min='%s' max = '%s' value='%s' />", minDate, maxDate, minDate, minDate));
+        stringBuilder.append(String.format("From :  <input id ='from' type='date' min=%s max = %s value=%s />", minDate, maxDate, minDate, minDate));
         stringBuilder.append("&nbsp&nbsp");
-        stringBuilder.append(String.format("To : <input id ='to' type='date' min='%s' max = '%s'/>", minDate, maxDate, maxDate, maxDate));
+        stringBuilder.append(String.format("To : <input id ='to' type='date' min=%s max = %s/>", minDate, maxDate, maxDate, maxDate));
         return stringBuilder.toString();
 
     }
@@ -304,39 +330,37 @@ public class Utils {
     public static ReportHistoryRecord prepareHistoryRecord(ArrayList<ReportsInterface> list, String from, String to, int numberOfSlots) {
         ReportHistoryRecord result = new ReportHistoryRecord();
         double hours = 0;
-        double income=0;
-        
+        double income = 0;
+
         Date minDate = correctDates(totDate(from), totDate(to), "min");
         Date maxDate = correctDates(totDate(from), totDate(to), "max");
 
         for (ReportsInterface reportInterface : list) {
             if ((reportInterface.getRecordDate().after(minDate) || reportInterface.getRecordDate().equals(minDate)) && (reportInterface.getRecordDate().before(maxDate) || reportInterface.getRecordDate().equals(maxDate))) {
                 hours += reportInterface.getHours();
-                income+=reportInterface.getIncome();
-                 
+                income += reportInterface.getIncome();
             }
-         
-           
         }
         result.setIncome(income);
         result.setRecordDate(new Date());
         result.setHours(hours);
         result.setFrom(toString(minDate));
         result.setTo(toString(maxDate));
+       
 
-        result.setAvrageOrConsumption(hours / (((daysBetween(minDate, maxDate) ) * 24) * numberOfSlots));
+        result.setAvrageOrConsumption((hours / (((daysBetween(minDate, maxDate) + 1) * 24) * numberOfSlots)));
 
         return result;
     }
 
     public static int daysBetween(Date d1, Date d2) {
         int result = (int) ((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
-        return (result == 0) ? 1 : result;
+        return result;
     }
 
     public static Date correctDates(Date minDate, Date maxDate, String identifier) {
         Date tempDate = null;
-        
+
         switch (identifier) {
             case "min":
                 if (minDate.after(maxDate)) {

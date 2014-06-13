@@ -123,17 +123,7 @@ function checkCookie()
 {
 
 
-    if (getCookie("seal") == null)
-    {
-        window.location = "invalidsession.jsp";
-
-    }
-    if (getCookie("seal") != "seal")
-    {
-
-        window.location = "Home";
-
-    }
+    
 
 }
 

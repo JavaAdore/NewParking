@@ -1,20 +1,86 @@
 
 <!DOCTYPE HTML>
-  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
     <head>
+
         <title>Parking System</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="description" content="" />
         <meta name="keywords" content="" />
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
+        <script src="js/validators.js"></script>
+        <script type="text/javascript">
+            var flag = false;
+            $(document).ready(function()
+            {
+
+                $("#email").change(function()
+                {
+                    var emailPattern = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
+
+                    var emailAddress = $("#email").val();
+                    if ((emailPattern.test(emailAddress)) == false)
+                    {
+
+                        $("#emailError").html("<h3 style 'color:red'>" + " Please enter email address like that someone@oracle.com</h3>");
+                        flag = false;
+                    } else
+                    {
+                        $.ajax(
+                                {url: "EmailChecking", async: false, data: 'email=' + $("#email").val(), success: function(result)
+                                    {
+
+                                        switch (result)
+                                        {
+                                            case "-1":
+                                                $("#emailError").html("<h3 style 'color:red'>" + $("#email").val() + " accepted</h3>");
+                                                flag = true;
+                                                break;
+                                            case "0" :
+                                                $("#emailError").html("<h3 style 'color:red'>" + $("#email").val() + " not accepted</h3>");
+                                                flag = false;
+                                                break;
+
+                                        }
+
+
+                                    }
+                                })
+                    }
+                })
+            });
+
+            $('addEmployeeForm').submit(new function()
+            {
+
+                if (flag)
+                {
+                    return true;
+
+                }
+                return false;
+            });
+
+            function submitMethod()
+            {
+
+                // if () validated
+                {
+                    $('#addEmployeeForm').submit();
+                }
+
+
+            }
+
+        </script>
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
     </head>
     <body>
         <jsp:include page="ServiceProviderHeader/addAdminHeader.jsp"/>
-      
+
         <div id="page-wrapper">
             <div id="page-bgtop">
                 <div id="page-bgbtm">
@@ -22,9 +88,9 @@
                         <div id="page-content-wrapper">
                             <center>
                                 <table>
-                                    <form method="post" action="addAdminServlet">
+                                    <form  method="post" action="addAdminServlet" id="addEmployeeForm">
                                         <th colspan="2">
-                                        <c:out value="${error.getErrorBody()}"/>
+                                            <c:out value="${error.getErrorBody()}"/>
                                         </th>
                                         <tr>
                                             <td>First Name:</td>
@@ -36,7 +102,8 @@
                                         </tr>
                                         <tr>
                                             <td>Email:</td>
-                                            <td><input name="email" type="email" required/> </td>
+                                            <td><input id="email" name="email" type="email" required/> </td>
+                                            <td><span id="emailError"></span></td>
                                         </tr>
                                         <tr>
                                             <td>Password:</td>
@@ -70,7 +137,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><input type="submit" id="myButton" value="Register" /> </td>
+                                            <td><input type="button" id="myButton" value="Register" onclick="submitMethod()" /> </td>
                                         </tr>
                                 </table>
                                 </form>

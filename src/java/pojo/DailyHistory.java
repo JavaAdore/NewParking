@@ -20,7 +20,7 @@ import utils.Utils;
  * @author orcl
  */
 @Entity
-public class DailyHistory implements ReportsInterface {
+public class DailyHistory implements ReportsInterface , Serializable {
 
     @Id
     @GeneratedValue

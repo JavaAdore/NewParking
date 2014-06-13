@@ -29,15 +29,14 @@ public class Home {
 
 //        GObjects.Garage garage = GarageSlotDoorsImp.getInstance().generateGarageObject(4);
 //            System.out.println("Ay kalam");
-       // ArrayList<WrappedGarage> nearGarages = GarageImp.getInstance().getNearGarages(30.0712016,  31.0213405);
-    Employees emp =    EmployeesImp.getInstance().getEmployee(1);
-        
+        // ArrayList<WrappedGarage> nearGarages = GarageImp.getInstance().getNearGarages(30.0712016,  31.0213405);
+        EmployeesImp.getInstance().deleteMemember(new Employees(61));
         System.out.println("dd");
-}
+    }
 }
 
   // 30.071352,31.021236,30.071354,31.021238 ==> 29 cm
-  // 30.071352,31.021236, 30.071354,31.021235 ==> 24 cm
-  // 30.071352,31.021236,30.071354,31.021236   ==> 22 cm
-  // int result = GarageSlotDoorsImp.getInstance().getNearestDoor(4, 30.071352, 31.021236);
+// 30.071352,31.021236, 30.071354,31.021235 ==> 24 cm
+// 30.071352,31.021236,30.071354,31.021236   ==> 22 cm
+// int result = GarageSlotDoorsImp.getInstance().getNearestDoor(4, 30.071352, 31.021236);
   // System.out.println(result);

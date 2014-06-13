@@ -11,7 +11,7 @@ public class ReportHistoryRecord extends DailyHistory {
 
     String from;
     String to;
-    
+    double avrageOrConsumption = 0;
 
     public String getFrom() {
         return from;
@@ -28,7 +28,7 @@ public class ReportHistoryRecord extends DailyHistory {
     public void setTo(String to) {
         this.to = to;
     }
-    double avrageOrConsumption = 0;
+    
 
     public ReportHistoryRecord() {
     }

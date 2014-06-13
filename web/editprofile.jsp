@@ -1,14 +1,11 @@
+<jsp:include page="adminHeaders/editProfileHeader.jsp"></jsp:include>
 
 <%@page import="utils.EmployeeWrapper"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
-    <%!EmployeeWrapper emp;%>
-    <%
-        emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-    %>
+
     <head>
         <title>Parking System</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -17,53 +14,28 @@
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
+        <script type="text/javascript">
+            function submitMethod()
+            {
+                $('#updateProfileForm').submit();
+            }
+        </script>
     </head><body>
-        <div id="header-wrapper">
-            <header id="header">
-                <div class="5grid-layout">
-                    <div class="row">
-                        <div class="12u" id="logo"> <!-- Logo -->
 
-                            <form action="LogOutServlet" method="Post">
-                                <input id="gobutton" type="submit" value="Sign Out" />
-                            </form>
-                            <h1><a href="#" class="mobileUI-site-name">Parking System</a></h1>
-
-                        </div>
-                    </div>
-                </div>
-                <div id="menu-wrapper">
-                    <div class="5grid-layout">
-                        <div class="row">
-                            <div class="12u" id="menu">
-                                <nav class="mobileUI-site-nav">
-                                    <ul>
-                                        <li class="current_page_item"><a href="editprofile.jsp">Edit Profile</a></li>
-                                        <li><a href="addadminbyadmin.jsp">Add Employee</a></li>
-                                        <li><a href="removeadminbyadmin.jsp">Remove Employee</a></li>
-                                        <li><a href="viewreport.jsp">View Reports</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header>
-        </div>
         <div id="page-wrapper">
             <div id="page-bgtop">
                 <div id="page-bgbtm">
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
                             <center>
-                                <form action ="UpdateProfileHandler" method="post">
+                                <form action ="UpdateProfileHandler" method="post" id="updateProfileForm">
                                     <table>
                                         <th colspan="2">
                                         <center> <c:out value="${error.getErrorBody()}"/></center>
                                         </th>
                                         <tr>
                                             <td>Email:</td>
-                                            <td><input name="email" type="email" required readonly value ="<%= emp.getEmail()%>"/> </td>
+                                            <td><input name="email" type="email" required readonly value ='${emp.getEmail()}'/> </td>
                                         </tr>
                                         <tr>
                                             <td>New Password:</td>
@@ -75,7 +47,7 @@
                                         </tr>
                                         <tr>
 
-                                            <td><input type="submit" id="myButton" value="Update" /> </td>
+                                            <td><input type="button" id="myButton" value="Update" onclick="submitMethod()" /> </td>
                                         </tr>
                                     </table>
                                 </form>

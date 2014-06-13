@@ -46,22 +46,17 @@ public class GarageImp implements GarageDAO {
         Query query = garageSession.createQuery("from Garage where upper(title) like ?");
         query.setString(0, garageTitle.toUpperCase());
         Garage garage = (Garage) query.uniqueResult();
-        if(garage!=null) garageSession.refresh(garage);
+        if (garage != null) {
+            garageSession.refresh(garage);
+        }
         return garage;
     }
 
     public int deleteGarage(String garageTitle) {
-        int result = 0;
-        try {
-            garageSession.beginTransaction();
-            Garage garage = getGarage(garageTitle);
-            if (garage != null) {
-                garageSession.delete(garage);
-            }
-        } catch (Exception ex) {
-            result = -1;
-        } finally {
-            garageSession.getTransaction().commit();
+        int result = -2;
+        Garage garage = getGarage(garageTitle);
+        if (garage != null) {
+            result = deleteGarage(garage.getGarageId());
         }
         return result;
 
@@ -75,10 +70,13 @@ public class GarageImp implements GarageDAO {
             if (garage == null) {
                 result = -2;
             } else {
+                if (garage.getGarageDoors().size() > 0) {
+                    Query q = garageSession.createQuery("delete from GarageSlotsDoors where doorId in :garageDoors");
+                    q.setParameterList("garageDoors", garage.getGarageDoors());
+                    q.executeUpdate();
+                }
                 garageSession.delete(garage);
-                Query q = garageSession.createQuery("delete from GarageSlotsDoors where doorId in :garageDoors");
-                q.setParameterList("garageDoors", garage.getGarageDoors());
-                q.executeUpdate();
+
                 garageSession.getTransaction().commit();
             }
         } catch (Exception ex) {
@@ -150,9 +148,10 @@ public class GarageImp implements GarageDAO {
 //
 //        int result = GarageImp.getInstance().addGarage(map, garage);
 //
-        GarageImp.getInstance().getImagePath(6);
-        ArrayList<WrappedGarage> result = GarageImp.getInstance().getNearGarages(30.071531, 31.020756);
-        System.out.println("cc");
+        //   GarageImp.getInstance().getImagePath(6);
+        //   ArrayList<WrappedGarage> result = GarageImp.getInstance().getNearGarages(30.071531, 31.020756);
+        //   System.out.println("cc");
+        GarageImp.getInstance().deleteGarage("NTA");
 
     }
 

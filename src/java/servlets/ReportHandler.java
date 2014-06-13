@@ -12,11 +12,13 @@ import daosint.ReportsInterface;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import pojo.DailyHistory;
+import reportsClasses.CustomDate;
 import reportsClasses.ReportHistoryRecord;
 import utils.EmployeeWrapper;
 import utils.Utils;
@@ -31,36 +33,34 @@ public class ReportHandler extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            Utils.checkCurrentUserStatus(request);
-            Utils.checkSession(request);
-            ArrayList<ReportsInterface> historyRecord = null;
+       
+            ArrayList<ReportsInterface> dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord;
+            ArrayList<ArrayList<ReportsInterface>> merged = new ArrayList();
             EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
             if (emp.getGarage() != null) {
+                dailyHistoryRecord = DailyHistoryReportImp.getInstance().getConsiceDailyHistory(emp.getGarage().getGarageId());
+                monthlyHistoryRecord = MonthlyHistoryReportImp.getInstance().getConsiceMonthlyHistory(emp.getGarage().getGarageId());
+                yearlyHistoryRecord = YearlyHistoryReportImp.getInstance().getConsiceYearlyHistory(emp.getGarage().getGarageId());
 
-                String reportType = request.getParameter("selection");
-                switch (reportType) {
-                    case "d":
-                        historyRecord = DailyHistoryReportImp.getInstance().getConsiceDailyHistory(emp.getGarage().getGarageId());
+                merged.add(dailyHistoryRecord);
+                merged.add(monthlyHistoryRecord);
+                merged.add(yearlyHistoryRecord);
 
-                        out.print(Utils.prepareSelectTag(historyRecord));
-                        break;
-                    case "m":
-                        historyRecord = MonthlyHistoryReportImp.getInstance().getConsiceMonthlyHistory(emp.getGarage().getGarageId());
-                        out.print(Utils.prepareSelectTag(historyRecord));
-                        break;
-                    case "y":
-                        historyRecord = YearlyHistoryReportImp.getInstance().getConsiceYearlyHistory(emp.getGarage().getGarageId());
-                        out.print(Utils.prepareSelectTag(historyRecord));
-                        break;
-                }
-                request.getSession().setAttribute("report", null); 
-                request.getSession().setAttribute("historyRecord", historyRecord);
+                ArrayList<ReportsInterface> mergeHistoryReports = Utils.mergeHistoryReports(merged);
+                Date minDate = Utils.getMinDate(dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord);
+                request.getSession().setAttribute("minDate", Utils.toString(minDate));
+                request.getSession().setAttribute("maxDate", Utils.toString(new Date()));
+                request.getSession().setAttribute("report", null);
+                request.getSession().setAttribute("historyRecord", mergeHistoryReports);
+                out.print(mergeHistoryReports.size());
+
             }
 
         }
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

@@ -94,6 +94,7 @@ public class EmployeesImp implements EmployeesDAO {
         } finally {
 
             employeeSession.getTransaction().commit();
+            employeeSession.clear();
         }
         return result;
     }
@@ -220,8 +221,17 @@ public class EmployeesImp implements EmployeesDAO {
             employeeSession.beginTransaction();
 
             Employees emp = (Employees) employeeSession.get(Employees.class, employee.getEmployeeId());
+            Query q;
             if (emp != null) {
 
+                
+                    q = employeeSession.createQuery("delete from AdminsActions where admin = :admin or  employee=:employee");
+                    q.setParameter("admin", emp);
+                    q.setParameter("employee", emp);
+                    q.executeUpdate();
+
+                
+               
                 employeeSession.delete(emp);
             } else {
 

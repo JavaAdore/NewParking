@@ -37,19 +37,19 @@ public class HelperClass {
 
         Slot slot1 = new Slot();
         slot1.setSlotName("my slot");
-        slot1.setX(50);
-        slot1.setY(70);
+        slot1.setX(100);
+        slot1.setY(150);
         slot1.setPath(Utils.prepareMePathArrayListPlease(new GObjects.Step[]{new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1)}));
 
         Slot slot2 = new Slot();
         slot2.setSlotName("my slot");
-        slot2.setX(50);
-        slot2.setY(70);
+        slot2.setX(300);
+        slot2.setY(300);
         slot2.setPath(Utils.prepareMePathArrayListPlease(new GObjects.Step[]{new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1)}));
         Slot slot3 = new Slot();
         slot3.setSlotName("my slot");
-        slot3.setX(50);
-        slot3.setY(70);
+        slot3.setX(450);
+        slot3.setY(470);
         slot3.setPath(Utils.prepareMePathArrayListPlease(new GObjects.Step[]{new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1), new GObjects.Step(1, 1, 1)}));
 
         Slot slot4 = new Slot();
@@ -67,9 +67,10 @@ public class HelperClass {
         ArrayList<Door> doors = new ArrayList<>();
         door1.setSlots(slots);
         door2.setSlots(slots);
-        garage.setDoors(doors);
+
         doors.add(door1);
         doors.add(door2);
+        garage.setDoors(doors);
         return garage;
     }
 

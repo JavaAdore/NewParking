@@ -1,19 +1,12 @@
-
-
 $(document).ready(function()
 {
 
-    $("#selection").change(function() {
-        $.ajax({url: "ReportHandler", async: false, data: 'selection=' + $("#selection").val(), success: function(result)
-            {
-                $("#fromDiv").html(result);
-                viewReport();
-                assignListeners();
-            }});
-    })
+
+    $.ajax({url: "ReportHandler", async: false, success: function(result)
+        {
+
+        }});
 });
-
-
 function getPeriod()
 {
 
@@ -22,29 +15,18 @@ function getPeriod()
 
 function assignListeners()
 {
-    $("#from").change(function() {
-        $.ajax({url: "ReportInitializer", async: false, data: 'from=' + $("#from").val() + '&to=' + $("#to").val(), success: function(result)
-            {
-                viewReport();
 
-            }});
-    });
-    $("#to").change(function() {
-        $.ajax({url: "ReportInitializer", async: false, data: 'from=' + $("#from").val() + '&to=' + $("#to").val(), success: function(result)
-            {
-                viewReport();
-            }});
-    });
+    $.ajax({url: "ReportInitializer", async: false, data: 'from=' + $("#from").val() + '&to=' + $("#to").val(), success: function(result)
+        {
 
-
+        }});
 }
 
 function viewReport()
 {
 
-
+    assignListeners();
     $('#reportBodyDiv').load("ReportBody.jsp");
-
 }
 
 function loadPeriod()
@@ -53,3 +35,22 @@ function loadPeriod()
 
     $('#period').text(getPeriod());
 }
+
+
+function load()
+{
+
+}
+function  getStartDate()
+{
+            
+    return $('#from').val();
+    ;
+
+}
+function getToDate()
+{
+    return $('#to').val();
+
+}
+

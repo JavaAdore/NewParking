@@ -5,6 +5,7 @@
  */
 package listeners;
 
+
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
@@ -19,13 +20,13 @@ public class MySessionListener implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         counter++;
-        System.out.println("number of sessions = " + counter);
+
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
-        System.out.println("number of sessions = " + counter);
         counter--;
+        System.out.println("number of sessions = " + counter);
     }
 
     public static int getSessionCount() {

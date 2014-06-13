@@ -59,7 +59,7 @@ public class DailyHistoryReportImp {
         ArrayList<ReportsInterface> result = new ArrayList<>();;
         try {
             
-            Query q = dailyHistoryReportSession.createQuery("  select  recordDate  ,  sum(hours) ,sum( income) from DailyHistory where slotId in :slotid group by recordDate order by recordDate   ");
+            Query q = dailyHistoryReportSession.createQuery("select  recordDate  ,  sum(hours) ,sum( income) from DailyHistory where slotId in :slotid group by recordDate order by recordDate ");
             q.setParameterList("slotid", garage.getGarageStatus());
             ArrayList<Object[]> res = (ArrayList<Object[]>) q.list();
             

@@ -14,12 +14,8 @@ public class LogOutServlet extends HttpServlet {
             throws ServletException, IOException {
 
         request.getSession().invalidate();
-        Cookie cookie = new Cookie("seal", "seal");
-        cookie.setMaxAge(0);
-        cookie.setValue(null);
-        response.addCookie(cookie);
-
-        response.sendRedirect("Home");
+        
+        response.sendRedirect("login.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

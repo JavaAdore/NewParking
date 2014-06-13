@@ -8,10 +8,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-        
+
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
         <title>JSP Page</title>
     </head>
     <body>

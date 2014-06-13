@@ -47,7 +47,8 @@ public class GarageSlotsDoors implements Serializable {
     }
 
     public GarageSlotsDoors(GarageStatus slotId, GarageDoors doorId, String points) {
-        //id = new SlotDoorId(slotId, doorId);
+       this.slotId = slotId;
+       this.doorId = doorId;
         this.points = points;
 
     }

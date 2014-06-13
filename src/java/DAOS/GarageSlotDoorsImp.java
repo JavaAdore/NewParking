@@ -51,63 +51,33 @@ public class GarageSlotDoorsImp {
     }
 
     // add slot
-    public int addGarageSlot(GarageStatus newSlot) {
-        int result = 0;
+    public GarageStatus addGarageSlot(GarageStatus newSlot) {
         try {
-            garageSlotDoorsSession.clear();
-            // garageSlotDoorsSession.beginTransaction();
 
-            garageSlotDoorsSession.save(newSlot);
+            garageSlotDoorsSession.persist(newSlot);
+
         } catch (Exception ex) {
             ex.printStackTrace();
             //    garageSlotDoorsSession.getTransaction().rollback();
-            result = -1;
+            // leave current slot null as it's 
         } finally {
             //   garageSlotDoorsSession.getTransaction().commit();
         }
 
-        int lastAddedSlot = 0;
-        if (result != -1) {
-            //   garageSlotDoorsSession.beginTransaction();
-            Query q = garageSlotDoorsSession.createQuery("from GarageStatus order by slotId desc");
-            q.setMaxResults(1);
-            GarageStatus slot = (GarageStatus) q.uniqueResult();
-            lastAddedSlot = slot.getSlotId();
-
-        }
-        return lastAddedSlot;
+        return newSlot;
     }
 
     // add door
     //will be called within session
-    public int addGarageDoor(GarageDoors door) {
-        int result = 0;
+    public GarageDoors addGarageDoor(GarageDoors door) {
         try {
-            garageSlotDoorsSession.clear();
-
-            //    garageSlotDoorsSession.beginTransaction();
-            garageSlotDoorsSession.save(door);
-
+            garageSlotDoorsSession.persist(door);
         } catch (Exception ex) {
             ex.printStackTrace();
             //  garageSlotDoorsSession.getTransaction().rollback();
-            result = -1;
-        } finally {
-            garageSlotDoorsSession.getTransaction().commit();
-            garageSlotDoorsSession.beginTransaction();
+            // leaev garagedoor is null as it's 
         }
-
-        int lastAddedDoor = 0;
-        if (result != -1) {
-            // garageSlotDoorsSession.beginTransaction();
-            Query q = garageSlotDoorsSession.createQuery("from GarageDoors order by doorId desc");
-            q.setMaxResults(1);
-            GarageDoors garage = (GarageDoors) q.uniqueResult();
-
-            lastAddedDoor = garage.getDoorId();
-
-        }
-        return lastAddedDoor;
+        return door;
 
     }
 
@@ -159,16 +129,13 @@ public class GarageSlotDoorsImp {
         try {
             garageSlotDoorsSession.clear();
 
-            garageSlotDoorsSession.beginTransaction();
             GarageSlotsDoors garageSlotsDoors = new GarageSlotsDoors(new GarageStatus(slotId), new GarageDoors(doorId), path);
             garageSlotDoorsSession.save(garageSlotsDoors);
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            garageSlotDoorsSession.getTransaction().rollback();
             result = -1;
         } finally {
-            garageSlotDoorsSession.getTransaction().commit();
         }
 
         return result;
@@ -253,37 +220,95 @@ public class GarageSlotDoorsImp {
         int result = 0;
         try {
             beginTransaction();
+            HashMap<String, GarageStatus> slots = new HashMap<>();
+
             deleteOldDoorsAndSlots(garage.getGarageId());
             for (GObjects.Door door : garage.getDoors()) {
                 GarageDoors tempDoor = new GarageDoors(garage.getGarageId(), door.getDoorName(), door.getX(), door.getY(), door.getLon(), door.getLat());
-                int currentDoor = addGarageDoor(tempDoor);
-                for (GObjects.Slot slot : door.getSlots()) {
-                    GarageStatus garageStatus = new GarageStatus(slot.getSlotName(), garage.getGarageId(), slot.getX(), slot.getY());
-                    int currentSlot = addGarageSlot(garageStatus);
-                    GarageSlotsDoors path = new GarageSlotsDoors(currentSlot, currentDoor, utils.Utils.prepareMeAPathPlease((ArrayList<Step>) slot.getPath()));
-                    addNewPath(path);
+                tempDoor = addGarageDoor(tempDoor);
+                if (tempDoor != null) {
+                    for (GObjects.Slot slot : door.getSlots()) {
+                        GarageSlotsDoors path;
+                        GarageStatus currentSlot = null;
+                        if (!slotIsAddedBefore(slot, slots)) 
+                        {
+                            currentSlot = new GarageStatus(slot.getSlotName(), garage.getGarageId(), slot.getX(), slot.getY());
+                            currentSlot = addGarageSlot(currentSlot);
 
+                            if (currentSlot != null) {
+                                slots = addToHashMap(currentSlot, slots);
+                            }
+                        } else {
+                            currentSlot = getSlot(slot, slots);
+                        }
+                        path = new GarageSlotsDoors(currentSlot, tempDoor, utils.Utils.prepareMeAPathPlease((ArrayList<Step>) slot.getPath()));
+                        addNewPath(path);
+
+                    }
                 }
             }
+            commit();
 
         } catch (Exception ex) {
             result = -1;
             ex.printStackTrace();
-
-        } finally {
-
-            commit();
 
         }
 
         return result;
     }
 
+    public boolean slotIsAddedBefore(Slot slot, HashMap slots) {
+
+        return slots.containsKey(slot.getX() + "-" + slot.getY());
+    }
+
+    public GarageStatus getSlot(Slot slot, HashMap slots) {
+
+        return (GarageStatus) slots.get(slot.getX() + "-" + slot.getY());
+    }
+
+    /**
+     * ************************************************************************************
+     */
+    /* 
+     public int handleThisGaragePlease(GObjects.Garage garage) {
+     int result = 0;
+     try {
+     beginTransaction();
+     deleteOldDoorsAndSlots(garage.getGarageId());
+     for (GObjects.Door door : garage.getDoors()) {
+     GarageDoors tempDoor = new GarageDoors(garage.getGarageId(), door.getDoorName(), door.getX(), door.getY(), door.getLon(), door.getLat());
+     int currentDoor = addGarageDoor(tempDoor);
+     for (GObjects.Slot slot : door.getSlots()) {
+     GarageStatus garageStatus = new GarageStatus(slot.getSlotName(), garage.getGarageId(), slot.getX(), slot.getY());
+     int currentSlot = addGarageSlot(garageStatus);
+     GarageSlotsDoors path = new GarageSlotsDoors(currentSlot, currentDoor, utils.Utils.prepareMeAPathPlease((ArrayList<Step>) slot.getPath()));
+     addNewPath(path);
+
+     }
+     }
+
+     } catch (Exception ex) {
+     result = -1;
+     ex.printStackTrace();
+
+     } finally {
+
+     commit();
+
+     }
+
+     return result;
+     }
+     */
+    /**
+     * ************************************************************************************
+     */
     private void addNewPath(GarageSlotsDoors path) {
         try {
-            garageSlotDoorsSession.save(path);
-            commit();
-            beginTransaction();
+
+            garageSlotDoorsSession.persist(path);
 
         } catch (Exception ex) {
 
@@ -446,6 +471,11 @@ public class GarageSlotDoorsImp {
 
         return doorsHashMap.get(Collections.min(doorsHashMap.keySet())).getDoorId();
 
+    }
+
+    private HashMap<String, GarageStatus> addToHashMap(GarageStatus currentSlot, HashMap<String, GarageStatus> slots) {
+        slots.put(currentSlot.getX() + "-" + currentSlot.getY(), currentSlot);
+        return slots;
     }
 
 }
