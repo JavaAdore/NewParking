@@ -29,6 +29,8 @@ public class DailyHistory implements ReportsInterface , Serializable {
     Date recordDate = new Date();
     double hours;
     double income;
+    @ManyToOne
+    GarageStatus slotId;
 
     public double getIncome() {
         return income;
@@ -45,8 +47,7 @@ public class DailyHistory implements ReportsInterface , Serializable {
     public void setSlotId(GarageStatus slotId) {
         this.slotId = slotId;
     }
-    @ManyToOne
-    GarageStatus slotId;
+    
 
     public DailyHistory() {
 

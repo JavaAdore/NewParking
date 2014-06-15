@@ -5,6 +5,7 @@
  */
 package servlets;
 
+import DAOS.ReportsImp;
 import daosint.ReportsInterface;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,8 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import reportsClasses.ReportHistoryRecord;
-import utils.EmployeeWrapper;
 import utils.*;
+import utils.EmployeeWrapper;
 
 /**
  *
@@ -34,16 +35,9 @@ public class ReportInitializer extends HttpServlet {
             String minDate = Utils.populateString((CustomDate) request.getSession().getAttribute("minDate"));
             String maxDate = Utils.populateString((CustomDate) request.getSession().getAttribute("maxDate"));
             EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-            ArrayList<ReportsInterface> historyRecord;
+            ReportHistoryRecord report = ReportsImp.getInstance().prepareHistoryRecord(emp.getGarage().getGarageId(), from, to);
+            request.getSession().setAttribute("report", report);
 
-            historyRecord = (ArrayList<ReportsInterface>) request.getSession().getAttribute("historyRecord");
-
-            if (historyRecord != null) {
-
-                ReportHistoryRecord report = Utils.prepareHistoryRecord(historyRecord, (from.length()>0) ? from : minDate, (to.length()>0) ? to : maxDate, emp.getGarage().getGarageStatus().size());
-
-                request.getSession().setAttribute("report", report);
-            }
         }
     }
 

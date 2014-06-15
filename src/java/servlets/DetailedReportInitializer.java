@@ -8,7 +8,6 @@ package servlets;
 import daosint.ReportsInterface;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -39,7 +38,7 @@ public class DetailedReportInitializer extends HttpServlet {
             String maxDate = Utils.populateString((CustomDate) request.getSession().getAttribute("maxDate"));
             EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
             HashMap<GarageStatus, List<ReportsInterface>> historyRecord;
-            historyRecord = (HashMap<GarageStatus, List<ReportsInterface>>) request.getSession().getAttribute("detailed");
+            historyRecord = Utils.detailed(emp.getGarage().getGarageId());
             if (historyRecord != null) {
                 HashMap<GarageStatus, ReportHistoryRecord> detailedReport = Utils.prepareSlotsHistoryRecord(historyRecord, (from.length() > 0) ? from : minDate, (to.length() > 0) ? to : maxDate, emp.getGarage().getGarageStatus().size());
                 request.getSession().setAttribute("detailedReport", detailedReport);

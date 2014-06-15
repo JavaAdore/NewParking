@@ -39,7 +39,7 @@ public class PathTo {
       
         if (result != null) {
               
-            result.getPoints().replace("\\", "");
+           return result.getPoints().replace("\\", "");
         }
         return "";
     }

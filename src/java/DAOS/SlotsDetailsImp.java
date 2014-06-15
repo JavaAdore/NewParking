@@ -20,7 +20,7 @@ import pojo.SlotDoorId;
 public class SlotsDetailsImp {
 
     private static SlotsDetailsImp instance;
-    private static Session slotDetailsSession = ConnectionHandler.garageSlotDetailsSession();
+    private static final Session slotDetailsSession = ConnectionHandler.garageSlotDetailsSession();
 
     private SlotsDetailsImp() {
     }
@@ -35,7 +35,6 @@ public class SlotsDetailsImp {
     public GarageSlotsDoors getSlotDetail(int slotId, int doorId) {
         GarageSlotsDoors garageSlotDoors = null;
         try {
-            slotDetailsSession.beginTransaction();
             Query q = slotDetailsSession.createQuery("from GarageSlotsDoors where slotId=:slot and doorId =:door");
             q.setParameter("slot", new GarageStatus(slotId));
             q.setParameter("door", new GarageDoors(doorId));
@@ -44,10 +43,7 @@ public class SlotsDetailsImp {
         } catch (Exception ex) {
 
             ex.printStackTrace();
-        } finally {
-            slotDetailsSession.getTransaction().commit();
-
-        }
+        } 
         return garageSlotDoors;
     }
 

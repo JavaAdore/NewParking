@@ -1,3 +1,4 @@
+<jsp:include page="headers/checkingPage.jsp"/>
 <%-- 
     Document   : updateempdata
     Created on : Mar 29, 2014, 11:39:43 PM
@@ -68,7 +69,11 @@
                                         <td>
                                             <select name="employee">
                                                 <c:forEach items="${allEmployees}" var="employee">
+                                                    <c:if test="${!((employee.getRoles().getRoleId()==1 ) &&(employee.getEmployeeId()!=emp.getEmployeeId()))}">
+                                                        
+                                                   
                                                     <option value="${employee.getEmployeeId()}">(${employee.getFirstName()} ${employee.getLastName()}) ${employee.getEmail()} </option>
+                                                     </c:if>
                                                 </c:forEach>  
                                             </select> 
 

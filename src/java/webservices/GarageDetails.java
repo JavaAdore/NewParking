@@ -73,6 +73,8 @@ public class GarageDetails {
                 obj.put("width", g.getMap().getWidth());
                 obj.put("ratio", g.getMap().getRatio());
                 obj.put("unit", g.getMap().getUnit());
+                obj.put("slotWidth", g.getSlotWidth());
+                obj.put("slotHeight", g.getSlotHeight());
 
                 arr = arr.put(obj);
             } catch (JSONException ex) {

@@ -1,4 +1,4 @@
-
+<jsp:include page="headers/checkingPage.jsp"/>
 <noscript>
 <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
 </noscript>
@@ -80,7 +80,7 @@
     $(document).ready(function()
 
     {
-        var path = '${uri}/images/${imageURL}';
+        var path = '${uri}/images/${emp.getGarage().getMap().getMapUrl()}';
                 $('#background').attr('src', path);
             });
 

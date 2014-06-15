@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -40,17 +41,6 @@ public class Utils {
         empDao = EmployeesImp.getInstance();
 
         garageDao = GarageImp.getInstance();
-    }
-
-    public static Date totDate(String dateAsString) {
-        SimpleDateFormat formatedDate = new SimpleDateFormat("yyyy-MM-dd");
-        Date date;
-        try {
-            date = formatedDate.parse(dateAsString);
-        } catch (ParseException ex) {
-            return null;
-        }
-        return date;
     }
 
     public static Date totDate(String dateAsString, String format) {
@@ -105,20 +95,44 @@ public class Utils {
         return stringBuilder.toString();
     }
 
-    public static Date[] extractMinMaxDate(ArrayList<ReportsInterface> dailyhistoryRecord, ArrayList<ReportsInterface> monthlyHistoryRecord, ArrayList<ReportsInterface> yearlyHistoryRecord) {
-        Date[] dates = new Date[2];
-        if (yearlyHistoryRecord.size() > 0) {
-            dates[0] = yearlyHistoryRecord.get(0).getRecordDate();
-        } else if (monthlyHistoryRecord.size() > 0) {
-            dates[0] = monthlyHistoryRecord.get(0).getRecordDate();
-        } else if (dailyhistoryRecord.size() > 0) {
-            dates[0] = dailyhistoryRecord.get(0).getRecordDate();
-            dates[1] = dailyhistoryRecord.get(0).getRecordDate();
-        } else {
-            dates[0] = new Date();
-            dates[1] = new Date();
+    public static Date[] extractMinMaxDate(int garageId) {
+        {
+            //List<Date> dates = new ArrayList<Date>();
+
+            //Garage garage = garageDao.getGarage(garageId);
+            return new Date[]{new Date(), new Date()};
+
         }
-        return dates;
+
+    }
+
+    public static Date[] extractMinMaxDate(List<ReportsInterface> reports) {
+        Date[] dates = new Date[2];
+        if (reports.size() == 1) {
+            dates[0] = reports.get(0).getRecordDate();
+            dates[1] = dates[0];
+            return dates;
+        } else if (reports.size() > 1) {
+            dates[0] = reports.get(0).getRecordDate();
+            dates[1] = reports.get(reports.size() - 1).getRecordDate();
+            return dates;
+        }
+
+        return new Date[]{new Date(), new Date()};
+    }
+
+    public static Object getFirstElelemt(List list) {
+        if (list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
+
+    public static Object getLastElement(List list) {
+        if (list.size() > 0) {
+            return list.get(list.size() - 1);
+        }
+        return null;
     }
 
     public static ArrayList< ReportsInterface> mergeHistoryReports(ArrayList<ArrayList<ReportsInterface>> merged) {
@@ -148,9 +162,9 @@ public class Utils {
 
     public static void main(String[] args) {
 
-        Date totDate = totDate("1/5/2014", "MM/dd/yyyy");
+        HashMap<GarageStatus, List<ReportsInterface>> detailed = detailed(164);
         System.out.println();
-
+//       
     }
 
     public static int getNumberOfInActiveUsers(ArrayList<Garage> allGarages) {
@@ -291,16 +305,47 @@ public class Utils {
         return tempSteps;
     }
 
-    public static void checkCurrentUserStatus(HttpServletRequest request) throws exceptions.CurrentClientNotAvailable {
+    public static boolean checkCurrentUserStatus(HttpServletRequest request) throws exceptions.CurrentClientNotAvailable {
+        boolean result = true;
+        EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
 
-        if (request.getSession().getAttribute("emp") == null) {
-            System.out.println("this is no current employee");
-            throw new exceptions.CurrentClientNotAvailable();
-        } else {
-            System.out.println("current employee is already exisits");
+        try {
+            if (emp == null) {
+                System.out.println("this is no current employee");
+                result = false;
+              //  throw new exceptions.CurrentClientNotAvailable();
+            } else {
+                Employees employee = empDao.getEmployee(emp.getEmployeeId());
+                if (employee == null) {
+                    result = false;
+                //    throw new exceptions.CurrentClientNotAvailable();
+                } else {
+                    if (employee.getActive() == 0) {
+                        result = false;
+                //        throw new exceptions.CurrentClientNotAvailable();
 
+                    }
+
+                }
+
+            }
+        } finally {
+            return result;
         }
 
+    }
+
+    public static void checkCurrentUserStatus(int employeeId) throws exceptions.CurrentClientNotAvailable {
+        Employees employee = empDao.getEmployee(employeeId);
+        if (employee == null) {
+            throw new exceptions.CurrentClientNotAvailable();
+        } else {
+            if (employee.getActive() == 0) {
+                throw new exceptions.CurrentClientNotAvailable();
+
+            }
+
+        }
     }
 
     public static void checkSession(HttpServletRequest request) throws exceptions.SessionException {
@@ -328,31 +373,7 @@ public class Utils {
 
     }
 
-    public static ReportHistoryRecord prepareHistoryRecord(ArrayList<ReportsInterface> list, String from, String to, int numberOfSlots) {
-        ReportHistoryRecord result = new ReportHistoryRecord();
-        double hours = 0;
-        double income = 0;
-
-        Date minDate = correctDates(totDate(from, "MM/dd/yyyy"), totDate(to, "MM/dd/yyyy"), "min");
-        Date maxDate = correctDates(totDate(from, "MM/dd/yyyy"), totDate(to, "MM/dd/yyyy"), "max");
-
-        for (ReportsInterface reportInterface : list) {
-            if ((reportInterface.getRecordDate().after(minDate) || reportInterface.getRecordDate().equals(minDate)) && (reportInterface.getRecordDate().before(maxDate) || reportInterface.getRecordDate().equals(maxDate))) {
-                hours += reportInterface.getHours();
-                income += reportInterface.getIncome();
-            }
-        }
-        result.setIncome(income);
-        result.setRecordDate(new Date());
-        result.setHours(hours);
-        result.setFrom(toString(minDate));
-        result.setTo(toString(maxDate));
-
-        result.setAvrageOrConsumption((hours / (((daysBetween(minDate, maxDate) + 1) * 24) * numberOfSlots)));
-
-        return result;
-    }
-
+//
     public static HashMap<GarageStatus, ReportHistoryRecord> prepareSlotsHistoryRecord(HashMap<GarageStatus, List<ReportsInterface>> detailedReport, String from, String to, int numberOfSlots) {
 
         HashMap<GarageStatus, ReportHistoryRecord> result = new HashMap();
@@ -376,7 +397,7 @@ public class Utils {
             tempReportHistoryRecord.setIncome(income);
             tempReportHistoryRecord.setRecordDate(new Date());
             tempReportHistoryRecord.setHours(hours);
-            tempReportHistoryRecord.setAvrageOrConsumption((hours / (((daysBetween(minDate, maxDate) + 1) * 24) * numberOfSlots)));
+            tempReportHistoryRecord.setAvrageOrConsumption((hours / (((daysBetween(minDate, maxDate) + 1) * 24))));
             result.put((GarageStatus) detailedReport.keySet().toArray()[counter], tempReportHistoryRecord);
             counter++;
             hours = 0;
@@ -460,7 +481,7 @@ public class Utils {
 
         String imagePath = GarageImp.getInstance().getImagePath(id);
         obj2 = new JSONObject();
-        ArrayList<WrappedGarageSlotsStatus> result = GarageSlotsStatusImp.getInstance().getGarageSlotsStatus(id);
+        ArrayList<WrappedGarageSlotsStatus> result = GarageImp.getInstance().getGarageSlotsStatus(id);
         obj2.put("imagePath", imagePath);
         for (WrappedGarageSlotsStatus wrappedGarageSlotsStatus : result) {
             obj = new JSONObject();
@@ -469,6 +490,7 @@ public class Utils {
             obj.put("status", wrappedGarageSlotsStatus.getSlotStatus());
             obj.put("x", wrappedGarageSlotsStatus.getX());
             obj.put("y", wrappedGarageSlotsStatus.getY());
+
             list.add(obj);
         }
         obj2.put("slots", list);
@@ -627,14 +649,35 @@ public class Utils {
         return counter;
     }
 
-    public static String isDateBetween(Date date, Date date1, Date date2) {     
-        if ( ((date1.compareTo(date)<=0) && (date2.compareTo(date) >= 0))) {
-             return "";
+    public static String isDateBetween(Date date, Date date1, Date date2) {
+        if (((date1.compareTo(date) <= 0) && (date2.compareTo(date) >= 0))) {
+            return "";
         }
-       
-CustomDate minDate = CustomDate.getCustomDate(date1);
-            CustomDate maxDate = CustomDate.getCustomDate(date2);
-            return String.format("Please enter date between %s/%s/%s and %s/%s/%s", minDate.getMonth(), minDate.getDay(), minDate.getYear(), maxDate.getMonth(), maxDate.getDay(), maxDate.getYear());
+
+        CustomDate minDate = CustomDate.getCustomDate(date1);
+        CustomDate maxDate = CustomDate.getCustomDate(date2);
+        return String.format("Please enter date between %s/%s/%s and %s/%s/%s", minDate.getMonth(), minDate.getDay(), minDate.getYear(), maxDate.getMonth(), maxDate.getDay(), maxDate.getYear());
+    }
+
+    public static boolean compareDates(Date date1, Date date2, String identifier) {
+        boolean result = false;
+        switch (identifier) {
+            case "b":
+                if (date1.compareTo(date2) > 0) {
+                    result = true;
+
+                }
+                break;
+
+            case "a":
+                if (date1.compareTo(date2) < 0) {
+                    result = true;
+
+                }
+                break;
+
+        }
+        return result;
     }
 
 }

@@ -5,6 +5,7 @@
  */
 package DAOS;
 
+import static DAOS.GarageSlotImp.garageSession;
 import Sessions.ConnectionHandler;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -20,20 +21,26 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.Address;
 import pojo.ContactNumber;
+import pojo.DailyHistory;
 import pojo.DeleteGarageSchedule;
 import pojo.EmailAddress;
 import pojo.FaxContact;
 import pojo.Feedback;
 import pojo.Garage;
+import pojo.GarageStatus;
 import pojo.InActivePeriod;
 import pojo.Map;
+import pojo.MonthlyHistory;
 import pojo.Users;
+import pojo.YearlyHistory;
 import utils.AboutUs;
 import utils.Constants;
 import utils.CoordinateHelper;
+import utils.GarageUtils;
 import utils.GeoLocation;
 import utils.Regex;
 import utils.WrappedGarage;
+import utils.WrappedGarageSlotsStatus;
 
 /**
  *
@@ -163,7 +170,8 @@ public class GarageImp {
 
     public void myFunction() {
 
-        deleteGarage(3);
+//        Date[] minAndMaxDate = getMinAndMaxDate(164);
+//        System.out.println();
     }
 
     public void add(Object obj) {
@@ -188,27 +196,25 @@ public class GarageImp {
         double minLat = coordinateHelper.getMinLat();
         double maxLat = coordinateHelper.getMaxLat();
         ArrayList<WrappedGarage> output = new ArrayList<WrappedGarage>();
+        List<Garage> result;
         try {
-            Query q = garageSession.createSQLQuery(" select Garage.title , sum(GarageStatus.status), count(GarageStatus.status) ,Garage.Lat , Garage.Lon     from Garage , GarageStatus   where  Garage.lon>=? and Garage.lon<=? and Garage.lat >= ? and Garage.lat <= ? and Garage.garageid =  GarageStatus.garage_garageid  group by Garage.garageId ,Garage.title  , Garage.lat ,Garage.lon  ");
+            Query q = garageSession.createQuery("from Garage  where  lon>=? and lon<=? and lat >= ? and  lat <= ? ");
             q.setDouble(0, coordinateHelper.getMinLon());
             q.setDouble(1, coordinateHelper.getMaxLon());
             q.setDouble(2, coordinateHelper.getMinLat());
             q.setDouble(3, coordinateHelper.getMaxLat());
-            List<Object[]> result = (List<Object[]>) q.list();
+            result = (ArrayList<Garage>) q.list();
 
-            for (Object[] g : result) {
+            for (Garage g : result) {
                 WrappedGarage tempWrappedGarage = new WrappedGarage();
-                String title = (String) g[0];
-                BigDecimal numberOfSlots = (BigDecimal) g[1];
-                BigDecimal numberOfAvailableSlots = (BigDecimal) g[2];
-                BigDecimal latitude = (BigDecimal) g[3];
-                BigDecimal lontitude = (BigDecimal) g[4];
-                tempWrappedGarage.setGarageId(getGarage(title).getGarageId());
-                tempWrappedGarage.setGarageName(title);
-                tempWrappedGarage.setNumberOfBusySlots(new Integer(numberOfSlots.toString()));
-                tempWrappedGarage.setNumerOfAvailableSlots(new Integer(numberOfAvailableSlots.toString()));
-                tempWrappedGarage.setLatitude(latitude);
-                tempWrappedGarage.setLontitude(lontitude);
+                int numberOfBusySlots = GarageUtils.getNumberOfBusySlots(g);
+                int numberOfUnAvailableSlots = GarageUtils.getNumberOfUnvailableSlots(g);
+                tempWrappedGarage.setGarageId(g.getGarageId());
+                tempWrappedGarage.setGarageName(g.getTitle());
+                tempWrappedGarage.setNumberOfBusySlots(numberOfBusySlots);
+                tempWrappedGarage.setNumerOfAvailableSlots(g.getGarageStatus().size() - numberOfBusySlots - numberOfUnAvailableSlots);
+                tempWrappedGarage.setLatitude(g.getLat());
+                tempWrappedGarage.setLontitude(g.getLon());
                 output.add(tempWrappedGarage);
             }
         } catch (Exception ex) {
@@ -228,7 +234,7 @@ public class GarageImp {
         return garagePath;
     }
 
-    public String setEnabled(int garageId, int enabled) {
+    public String setGaragessEnabled(int garageId, int enabled) {
         String result = "no such garage";
         Garage garage = getGarage(garageId);
 
@@ -500,7 +506,6 @@ public class GarageImp {
     }
 
     public int deleteContact(int id, String garage) {
-
         try {
             int x = Integer.parseInt(garage);
             return deleteContact(id, x);
@@ -522,7 +527,6 @@ public class GarageImp {
                     garageSession.delete(c);
                 }
             }
-            beginTransaction.commit();
         } catch (Exception ex) {
             ex.printStackTrace();
             return Constants.FAILED;
@@ -531,8 +535,102 @@ public class GarageImp {
                 beginTransaction.commit();
             }
             return Constants.SUCCESS;
-
         }
     }
 
+    public ArrayList<WrappedGarageSlotsStatus> getGarageSlotsStatus(int garageId) {
+        ArrayList<WrappedGarageSlotsStatus> output = new ArrayList<WrappedGarageSlotsStatus>();
+        try {
+
+            Garage garage = (Garage) garageSession.get(Garage.class, garageId);
+            for (GarageStatus garageStatus : garage.getGarageStatus()) {
+                if (garageStatus.getEnabled() == 0) {
+                    continue;
+                }
+                output.add(new WrappedGarageSlotsStatus(garageStatus.getSlotId(), garageStatus.getSlotName(), garageStatus.getStatus(), garageStatus.getX(), garageStatus.getY()));
+
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return output;
+    }
+
+    public static Date[] getMinAndMaxDate(int garageId) {
+        return null;
+
+    }
+
+    public String UpdateGarageSlot(int slotid, int status) {
+        String output = "";
+        try {
+            garageSession.beginTransaction();
+            Query q = garageSession.createQuery("from GarageStatus where slotid = :slotid ");
+            q.setParameter("slotid", slotid);
+            GarageStatus result = (GarageStatus) q.uniqueResult();
+            if (result != null) {
+                result.setStatus(status);
+                if (status == 0) {
+//                    garageSession.getNamedQuery("update_Garage_status").setParameter("slotid", slotid).executeUpdate();
+                    result.setConsumedHours(result.getConsumedHours() + utils.Utils.hoursBetween(result.getArrivalTime(), new Date()));
+                    System.out.println("supposed to update garage slot");
+
+                } else {
+                    result.setArrivalTime(new Timestamp(new Date().getTime()));
+
+                }
+                output = "slot status has been updated successfully ";
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            garageSession.getTransaction().rollback();
+            output = "looks like some error happend during updating slot status please contact adminstrator ";
+        } finally {
+            garageSession.getTransaction().commit();
+        }
+
+        return output;
+
+    }
+
+    public GarageStatus getSlot(int slotId) {
+        return (GarageStatus) garageSession.get(GarageStatus.class, slotId);
+
+    }
+
+    public String setSlotEnabled(int slotId, int enabled) {
+        String result = "-1";
+        GarageStatus slot = getSlot(slotId);
+        if (slot != null) {
+            slot.setEnabled(enabled);
+            if (enabled == 0) {
+                slot.setStatus(0);
+            }
+
+            return updateSlot(slot) + "";
+        }
+
+        return result;
+    }
+
+    public int updateSlot(GarageStatus slot) {
+        try {
+            garageSession.beginTransaction();
+            garageSession.persist(slot);
+            garageSession.getTransaction().commit();
+        } catch (Exception ex) {
+            return -1;
+        }
+        return 0;
+    }
+
+    public ArrayList<GarageStatus> getGarageStatusList(int garageId) {
+
+        Query query = garageSession.createQuery("from GarageStatus where garage=:garage");
+        query.setParameter("garage", new Garage(garageId));
+        return (ArrayList<GarageStatus>) query.list();
+
+    }
 }

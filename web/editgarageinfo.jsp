@@ -1,3 +1,4 @@
+<jsp:include page="headers/checkingPage.jsp"/>
 <%-- 
     Document   : addgarage
     Created on : Mar 29, 2014, 9:09:49 PM

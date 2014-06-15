@@ -13,7 +13,6 @@ function getPeriod()
 
 function assignListeners(from, to)
 {
-    correctDates($(from).val(), $(to).val());
 
     $.ajax({url: "ReportInitializer", async: false, data: 'from=' + $(from).val() + '&to=' + $(to).val(), success: function(result)
         {
@@ -21,7 +20,7 @@ function assignListeners(from, to)
 }
 function detailedReportInitializer(from, to)
 {
-    correctDates($(from).val(), $(to).val());
+    
 
     $.ajax({url: "DetailedReportInitializer", async: false, data: 'from=' + $(from).val() + '&to=' + $(to).val(), success: function(result)
         {

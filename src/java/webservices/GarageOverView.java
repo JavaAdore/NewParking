@@ -32,7 +32,7 @@ public class GarageOverView {
 
     GarageSlotsStatusImp garageSlotsStatusImp = GarageSlotsStatusImp.getInstance();
     GarageImp garageImp = GarageImp.getInstance();
-    
+
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     public String getGarageOverView(@FormParam(value = "garageId") final String gId, @FormParam(value = "userId") final String uId, @FormParam(value = "increase") final String increaseNumberOfVisits) {
@@ -55,6 +55,17 @@ public class GarageOverView {
 
             }
             return Utils.prepareGarageOverView(garageId).toString();
+        }
+        return new JSONObject().toString();
+    }
+
+    @Path("/getGarageSlots")
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getGarageOverView(@QueryParam(value = "garageId") final String gId) 
+    {
+        if (gId != null) {
+            return utils.GarageUtils.getEnabledGaraegSlots(Integer.parseInt(gId)).toString();
         }
         return new JSONObject().toString();
     }

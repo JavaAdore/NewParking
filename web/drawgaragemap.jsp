@@ -1,3 +1,6 @@
+
+<jsp:include page="headers/checkingPage.jsp"/>
+
 <!DOCTYPE HTML>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:include page="headers/header.jsp"/>

@@ -1,3 +1,4 @@
+<jsp:include page="headers/checkingPage.jsp"/>
 <%-- 
     Document   : accountant
     Created on : Apr 6, 2014, 11:11:27 PM

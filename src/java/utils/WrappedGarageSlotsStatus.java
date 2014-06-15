@@ -14,7 +14,9 @@ public class WrappedGarageSlotsStatus {
     int slotId;
     int slotStatus;
     String slotName;
+    
 
+    
     public String getSlotName() {
         return slotName;
     }

@@ -8,7 +8,10 @@
 
 <html>
     <head>
-        
+        <noscript>
+            <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
+        </noscript>
+        <jsp:include page="headers/checkingPage.jsp"/>
         <jsp:include page="headers/header.jsp"/>
         <title>Parking System</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />

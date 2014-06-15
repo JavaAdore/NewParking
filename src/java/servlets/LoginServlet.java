@@ -1,10 +1,7 @@
 package servlets;
 
-import DAOS.DailyHistoryReportImp;
 import DAOS.EmployeesImp;
 import DAOS.GarageImp;
-import DAOS.MonthlyHistoryReportImp;
-import DAOS.YearlyHistoryReportImp;
 import daosint.ReportsInterface;
 import errors.ErrorMessage;
 import java.io.IOException;
@@ -26,7 +23,13 @@ public class LoginServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       // Utils.checkSession(request);
+
+        String uri = request.getRequestURL().substring(0, request.getRequestURL().lastIndexOf("/"));
+        if (request.getServletContext().getAttribute("uri") == null);
+        {
+            request.getServletContext().setAttribute("uri", uri);
+        }
+        // Utils.checkSession(request);
         String email = request.getParameter("email");
 
         String password = request.getParameter("pass");
@@ -36,7 +39,7 @@ public class LoginServlet extends HttpServlet {
 
         if (employee == null) {
 
-            request.setAttribute("error", new ErrorMessage("Invaled email or password"));
+            request.setAttribute("error", new ErrorMessage("Invalid username or password"));
             request.getRequestDispatcher("login.jsp").forward(request, response);
 
         } else if (employee.getActive() == 0) {
@@ -55,7 +58,7 @@ public class LoginServlet extends HttpServlet {
             String roleName = employeeWrapper.getRoles().getRoleName();
 
             Cookie cookie = new Cookie("seal", "seal");
-                response.addCookie(cookie);
+            response.addCookie(cookie);
             if (roleName.equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
                 request.getSession().setAttribute("defaultPage", Constants.SERVICE_PROVIDER_DEFAULT_PAGE);
                 response.sendRedirect("addadmin.jsp");
@@ -92,38 +95,37 @@ public class LoginServlet extends HttpServlet {
             }
 
         }
+
     }
 
     public void initializeReport(HttpServletRequest request, HttpServletResponse response) {
-        ArrayList<ReportsInterface> dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord;
-        ArrayList<ArrayList<ReportsInterface>> merged = new ArrayList();
-        EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-        Calendar c = Calendar.getInstance();
-        if (emp.getGarage() != null) {
-            dailyHistoryRecord = DailyHistoryReportImp.getInstance().getConsiceDailyHistory(emp.getGarage().getGarageId());
-            monthlyHistoryRecord = MonthlyHistoryReportImp.getInstance().getConsiceMonthlyHistory(emp.getGarage().getGarageId());
-            yearlyHistoryRecord = YearlyHistoryReportImp.getInstance().getConsiceYearlyHistory(emp.getGarage().getGarageId());
-            merged.add(dailyHistoryRecord);
-            merged.add(monthlyHistoryRecord);
-            merged.add(yearlyHistoryRecord);
-            ArrayList<ReportsInterface> mergeHistoryReports = Utils.mergeHistoryReports(merged);
-            Date[] extractMinMaxDate = Utils.extractMinMaxDate(dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord);
-            Date minDate = extractMinMaxDate[0];
-            request.getSession().setAttribute("minDate", Utils.populateDate(minDate));
-            Date maxDate = extractMinMaxDate[1];
-            if (emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.ADMIN)) {
-                request.getSession().setAttribute("detailed", Utils.detailed(emp.getGarage().getGarageId()));
-            }
-            String uri = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + getServletContext().getContextPath();
+//        ArrayList<ReportsInterface> dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord;
+//        ArrayList<ArrayList<ReportsInterface>> merged = new ArrayList();
+//        EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
+//        Calendar c = Calendar.getInstance();
+//        if (emp.getGarage() != null) {
+//            dailyHistoryRecord = DailyHistoryReportImp.getInstance().getConsiceDailyHistory(emp.getGarage().getGarageId());
+//            monthlyHistoryRecord = MonthlyHistoryReportImp.getInstance().getConsiceMonthlyHistory(emp.getGarage().getGarageId());
+//            yearlyHistoryRecord = YearlyHistoryReportImp.getInstance().getConsiceYearlyHistory(emp.getGarage().getGarageId());
+//            merged.add(dailyHistoryRecord);
+//            merged.add(monthlyHistoryRecord);
+//            merged.add(yearlyHistoryRecord);
+//            ArrayList<ReportsInterface> mergeHistoryReports = Utils.mergeHistoryReports(merged);
+//            Date[] extractMinMaxDate = Utils.extractMinMaxDate(garageId);
+//            Date minDate = extractMinMaxDate[0];
+//            request.getSession().setAttribute("minDate", Utils.populateDate(minDate));
+//            Date maxDate = extractMinMaxDate[1];
+//            if (emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.ADMIN)) {
+//                request.getSession().setAttribute("detailed", Utils.detailed(emp.getGarage().getGarageId()));
+//            }
+//            String uri = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + getServletContext().getContextPath();
+//            request.getSession().setAttribute("maxDate", Utils.populateDate(maxDate));
+//            request.getSession().setAttribute("uri", uri);
+//            String imageURL = GarageImp.getInstance().getImagePath(emp.getGarage().getGarageId());
+//            request.getSession().setAttribute("imageURL", imageURL);
+//            request.getSession().setAttribute("historyRecord", mergeHistoryReports);
 
-            request.getSession().setAttribute("maxDate", Utils.populateDate(maxDate));
-            request.getSession().setAttribute("uri", uri);
-            String imageURL = GarageImp.getInstance().getImagePath(emp.getGarage().getGarageId());
-            request.getSession().setAttribute("imageURL", imageURL);
-            request.getSession().setAttribute("historyRecord", mergeHistoryReports);
-
-        }
-
+//        }
     }
 
     @Override

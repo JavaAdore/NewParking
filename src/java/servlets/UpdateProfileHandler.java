@@ -2,7 +2,6 @@ package servlets;
 
 import DAOS.EmployeesImp;
 import DAOS.GarageImp;
-import static com.sun.jmx.snmp.EnumRowStatus.active;
 import errors.ErrorMessage;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -46,7 +45,7 @@ public class UpdateProfileHandler extends HttpServlet {
                 request.setAttribute("error", new ErrorMessage("Looks Like some error happend please contact adminstrator"));
                 break;
             case 0:
-                request.setAttribute("error", new ErrorMessage("Data updated"));
+                request.setAttribute("error", new ErrorMessage("Profile updated"));
 
                 break;
         }

@@ -4,7 +4,6 @@
  */
 package utils;
 
-import java.math.BigDecimal;
 
 /**
  *
@@ -17,10 +16,10 @@ public class WrappedGarage {
     String GarageName;
     int numberOfBusySlots;
     int numerOfAvailableSlots;
-    BigDecimal latitude;
-    BigDecimal lontitude;
+    double latitude;
+    double lontitude;
 
-    public WrappedGarage(String GarageName, int numberOfBusySlots, int numerOfAvailableSlots, BigDecimal latitude, BigDecimal lontitude) {
+    public WrappedGarage(String GarageName, int numberOfBusySlots, int numerOfAvailableSlots, double latitude, double lontitude) {
         this.GarageName = GarageName;
         this.numberOfBusySlots = numberOfBusySlots;
         this.numerOfAvailableSlots = numerOfAvailableSlots;
@@ -28,7 +27,7 @@ public class WrappedGarage {
         this.lontitude = lontitude;
     }
 
-    public WrappedGarage(int garageId, String GarageName, int numberOfBusySlots, int numerOfAvailableSlots, BigDecimal latitude, BigDecimal lontitude) {
+    public WrappedGarage(int garageId, String GarageName, int numberOfBusySlots, int numerOfAvailableSlots, double latitude, double lontitude) {
         this.garageId = garageId;
         this.GarageName = GarageName;
         this.numberOfBusySlots = numberOfBusySlots;
@@ -45,19 +44,19 @@ public class WrappedGarage {
         this.garageId = garageId;
     }
 
-    public BigDecimal getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(BigDecimal latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public BigDecimal getLontitude() {
+    public double getLontitude() {
         return lontitude;
     }
 
-    public void setLontitude(BigDecimal lontitude) {
+    public void setLontitude(double lontitude) {
         this.lontitude = lontitude;
     }
 

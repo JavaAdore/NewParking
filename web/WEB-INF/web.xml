@@ -128,6 +128,10 @@
         <servlet-name>ValidateReportDate</servlet-name>
         <servlet-class>ajax.ValidateReportDate</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>InitializeReportDates</servlet-name>
+        <servlet-class>ajax.InitializeReportDates</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -252,6 +256,10 @@
         <servlet-name>ValidateReportDate</servlet-name>
         <url-pattern>/ValidateReportDate</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InitializeReportDates</servlet-name>
+        <url-pattern>/InitializeReportDates</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -284,6 +292,16 @@
         <servlet-name>Jersey REST Service</servlet-name>
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
+    <filter>
+        <filter-name>sessionFilter</filter-name>
+        <filter-class>filters.SessionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>sessionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher> 
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
     <welcome-file-list>
         <welcome-file>/login.jsp</welcome-file>
     </welcome-file-list>

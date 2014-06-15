@@ -1,3 +1,4 @@
+<jsp:include page="headers/checkingPage.jsp"/>
 <jsp:include page="headers/header.jsp"/>
 <head>
     <noscript>
@@ -43,14 +44,14 @@
         {
 
 
-            $.ajax({url: "ReportHandler", async: false, success: function(result)
+            $.ajax({url: "InitializeReportDates", async: false, success: function(result)
                 {
 
+                    alert(result);
                     if (result.length > 1)
                     {
 
-                        //dateInitializer();
-                        //  viewDetailedReport($('#fromPeriod').val(), $('#toPeriod').val());
+                        dateInitializer();
 
                     } else
                     {
@@ -63,17 +64,14 @@
 
         );
 
-        $(document).ready(
-                function() {
+        function dateInitializer()
+        {
 
+            $("#fromPeriod").datepicker({maxDate: new Date('${maxDate.getYear()},${maxDate.getMonth()},${maxDate.getDay()}'), minDate: new Date('${minDate.getYear()},${minDate.getMonth()},${minDate.getDay()}')});
+                    $("#toPeriod").datepicker({maxDate: new Date('${maxDate.getYear()},${maxDate.getMonth()},${maxDate.getDay()}'), minDate: new Date('${minDate.getYear()},${minDate.getMonth()},${minDate.getDay()}')});
+                        }
 
-                    $("#fromPeriod").datepicker({maxDate: new Date('${maxDate.getYear()},${maxDate.getMonth()},${maxDate.getDay()}'), minDate: new Date('${minDate.getYear()},${minDate.getMonth()},${minDate.getDay()}')});
-                                    $("#toPeriod").datepicker({maxDate: new Date('${maxDate.getYear()},${maxDate.getMonth()},${maxDate.getDay()}'), minDate: new Date('${minDate.getYear()},${minDate.getMonth()},${minDate.getDay()}')});
-
-                                                }
-                                        );
-
-     setActive('#viewDetailedReport');                                   
+                        setActive('#viewDetailedReport');
     </script>
 </head>
 <body>

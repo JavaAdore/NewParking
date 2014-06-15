@@ -1,3 +1,4 @@
+<jsp:include page="headers/checkingPage.jsp"/>
 <%-- 
     Document   : addgarage
     Created on : Mar 29, 2014, 9:09:49 PM
@@ -198,26 +199,19 @@
             }
 
             google.maps.event.addDomListener(window, 'load', initialize);
-            function getZoomLevel()
-            {
-
-
-
-                alert(getMap());
-            }
+            
             function submitMethod()
             {
 
-                if (isTextWithSpace('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isImage('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 99999) && isAnumber('#height', '#heightError', 0, 99999) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
+                if (isTextWithSpace('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isImage('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 99999) && isAnumber('#height', '#heightError', 0, 99999) && isAnumber('#ratio', '#ratioError', 0, 1) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
                 {
                     if (map.getMapTypeId() == "satellite")
                     {
-                        alert(map.getMapTypeId());
-                        alert(map.getZoom());
+                        
                         if (map.getZoom() !== 19)
                         {
-                            alert('entered here');
-                            alert('please specify location exactely');
+                           
+                            alert('please specify parking location exactely');
                             return;
                         } else
                         {
@@ -227,12 +221,11 @@
 
                     } else
                     {
-                        alert(map.getMapTypeId());
-                        alert(map.getZoom())
+                        
 
                         if (map.getZoom() !== 21)
                         {
-                            alert('entered here');
+                           
                             alert('please specify location exactely');
                             return;
                         } else

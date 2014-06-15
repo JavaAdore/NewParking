@@ -3,60 +3,61 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlets;
 
-import DAOS.GarageImp;
-import DAOS.GarageSlotImp;
-import DAOS.GarageSlotsStatusImp;
+package ajax;
+
+import DAOS.ReportsImp;
+import daosint.ReportsInterface;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import pojo.Garage;
-import pojo.GarageStatus;
-import utils.EmployeeWrapper;
-import utils.WrappedGarageSlotsStatus;
+import utils.*;
 
 /**
  *
  * @author orcl
  */
-public class UpdateSlotInitializer extends HttpServlet {
+public class InitializeReportDates extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-            if (emp != null)
+           
+            
+            EmployeeWrapper emp = (EmployeeWrapper)request.getSession().getAttribute("emp");
+            if(emp!=null)
             {
-
-                if (emp.getGarage() != null) {
-                    if (emp.getRoles().getRoleName().equalsIgnoreCase(utils.EmployeeRole.ADMIN)) {
-                        String uri = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + getServletContext().getContextPath();
-                        Collection<GarageStatus> garageSlots = GarageImp.getInstance().getGarageStatusList(emp.getGarage().getGarageId());
-                        System.out.println("size is " + garageSlots.size());
-                        String imageURL = GarageImp.getInstance().getImagePath(emp.getGarage().getGarageId());
-                        request.setAttribute("imageURL", imageURL);
-                        request.getSession().setAttribute("garageSlots", garageSlots);
-                        request.getSession().setAttribute("uri", uri);
-                        request.getRequestDispatcher("updateslotsstatus.jsp").forward(request, response);
-                    }
-                }else
+                if(emp.getGarage()!=null)
                 {
-                    response.sendRedirect(request.getHeader("Referer"));
-                
+                    List<ReportsInterface> conciseReport = ReportsImp.getInstance().getConciseReport(emp.getGarage().getGarageId());
+                    Date[] extractMinMaxDate = Utils.extractMinMaxDate(conciseReport);
+                    request.getSession().setAttribute("minDate",CustomDate.getCustomDate(extractMinMaxDate[0]));
+                    request.getSession().setAttribute("maxDate",CustomDate.getCustomDate(extractMinMaxDate[1]));
+                    out.print("ok");
                 }
+                
+            
             }
-
+            
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

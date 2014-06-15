@@ -9,21 +9,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8/">
-        <script src="jquery.min.js">
 
-        </script>
-        <script src="js/MyAwesomeJavaScriptFile.js">
-
-        </script>
         <title>JSP Page</title>
     </head>
     <body>
-        <input type="button" value="test" onclick="test()"/>
-        <input type="button" value="addDoor" onclick="addDoor()"/>
-        <div id="MyAwesomeDiv">
-            <img scr="" id="myImage" width="100%" height="90%"/>
-        </div>
-    </body>
+    <applet code="applets/DrawingTool.class" archive="Drawing_Tool_2.jar" width="1200"  height=650>
+        <param name="ip" value="localhost" />
+        <param name="parking" value="NewParking" />
+        <param name="port" value="9999" />
+
+    </applet>
+</body>
 
 </html>

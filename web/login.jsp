@@ -6,6 +6,9 @@
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
     <head>
+        <noscript>
+        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
+        </noscript> 
         <script>
             var toPage = '${defaultPage}';
             if (toPage.length > 0)
@@ -13,9 +16,7 @@
                 window.location.replace(toPage);
             }
         </script>
-        <noscript>
-        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
-        </noscript> 
+        
         <title>Parking System</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="description" content="" />
@@ -149,7 +150,7 @@
                                                 <tr>
 
                                                     <td>Password:</td>
-                                                    <td><input id="password" type="password" name="pass" required onblur="validateLength('password', 'passwordError')" /></td>
+                                                    <td><input id="password" type="password" name="pass" required onblur="isPassword('#password', '#passwordError')" /></td>
                                                     <td><span id="passwordError"></span></td>
 
                                                 </tr>

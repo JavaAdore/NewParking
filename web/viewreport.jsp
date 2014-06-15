@@ -1,3 +1,4 @@
+<jsp:include page="headers/checkingPage.jsp"/>
 <head>
     <jsp:include page="headers/header.jsp"/>
     <noscript>
@@ -44,9 +45,9 @@
         {
 
 
-            $.ajax({url: "ReportHandler", async: false, success: function(result)
+            $.ajax({url: "InitializeReportDates", async: false, success: function(result)
                 {
-                    
+                    alert(result);
                     if (result.length > 1)
                     {
 

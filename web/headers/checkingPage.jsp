@@ -4,14 +4,17 @@
     Author     : orcl
 --%>
 
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <script src="js/jquery-1.5.1.min.js" ></script>
 
 <script type="text/javascript" >
-    if (getCookie('seal') == "")
+    if (getCookie('seal').length==0)
     {
-        history.back(-1);
+        window.location = "login.jsp";
+
     }
+
     function getCookie(cname)
     {
         var name = cname + "=";
@@ -19,12 +22,22 @@
         for (var i = 0; i < ca.length; i++)
         {
             var c = ca[i].trim();
-            if (c.indexOf(name) == 0)
+            if (c.indexOf(name) === 0)
                 return c.substring(name.length, c.length);
         }
         return "";
     }
+    setInterval("checkCookie()", "1");
+    function checkCookie()
+    {  
+        if (getCookie('seal').length === 0)
+        {
+            window.location = "login.jsp";
+        }
 
+
+
+    }
 </script>
 
 

@@ -1,5 +1,4 @@
-<%@page import="pojo.Employees"%>
-<%@page import="utils.EmployeeWrapper"%>
+<jsp:include page="headers/checkingPage.jsp"/>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE HTML>
@@ -41,8 +40,11 @@
             }
             function submitMethod()
             {
-
-                $(updateProfileForm).submit();
+                if (isPassword('#password', '#passwordError')&&areTheSame('#password', '#confirmPassword', '#confirmPasswordError'))
+                {
+                    $(updateProfileForm).submit();
+                }
+                
 
             }
         </script>

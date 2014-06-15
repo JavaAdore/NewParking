@@ -1,4 +1,5 @@
-<%@page import="utils.*"%>
+
+<jsp:include page="headers/checkingPage.jsp"/>
 <!DOCTYPE HTML>
 <!--
         Aqueous: A responsive HTML5 website template by HTML5Templates.com

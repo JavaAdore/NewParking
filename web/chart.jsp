@@ -1,3 +1,4 @@
+<jsp:include page="headers/checkingPage.jsp"/>
 <body>
 
     <script src="js/circle.js"></script>

@@ -18,10 +18,6 @@ import org.hibernate.type.BasicType;
 public class ConnectionHandler {
 
     public static void initiateSessions() {
-        getYearlyHistoryReportSession();
-
-        getMonthlyHistoryReportSession();
-        getDailyHistoryReportSession();
         garageSlotDetailsSession();
         getGarageSlotStatusSession();
         getGarageSlotDoorsSession();
@@ -36,8 +32,8 @@ public class ConnectionHandler {
     }
 
     public static void destroySessions() {
-
-        roleSession.close();
+        try
+        {
         mapSession.close();
         garageSession.close();
         employeeSession.close();
@@ -47,11 +43,11 @@ public class ConnectionHandler {
         garageSlotDoorsSession.close();
         garageSlotStatusSession.close();
         garageSlotDetailsSession.close();
-        dailyHistoryReportSession.close();
-        monthlyHistoryReportSession.close();
-        yearlyHistoryReportSession.close();
-
         sessionFactory.close();
+        }catch(Exception ex)
+        {
+            // all resources will get free 
+        }
     }
 
     String hibernatePath = "";
@@ -66,7 +62,7 @@ public class ConnectionHandler {
     private static Session garageSlotDoorsSession;
     private static Session garageSlotStatusSession;
     private static Session garageSlotDetailsSession;
-    private static Session dailyHistoryReportSession;
+    private static Session reporSession;
     private static Session monthlyHistoryReportSession;
     private static Session yearlyHistoryReportSession;
 
@@ -160,29 +156,15 @@ public class ConnectionHandler {
         return garageSlotDetailsSession;
     }
 
-    public static Session getDailyHistoryReportSession() {
-        if (dailyHistoryReportSession == null) {
-            dailyHistoryReportSession = sessionFactory.openSession();
-            dailyHistoryReportSession.setCacheMode(CacheMode.NORMAL);
+    public static Session getReportSession() {
+        if (reporSession == null) {
+            reporSession = sessionFactory.openSession();
+            reporSession.setCacheMode(CacheMode.NORMAL);
         }
-        return dailyHistoryReportSession;
+        return reporSession;
     }
 
-    public static Session getMonthlyHistoryReportSession() {
-        if (monthlyHistoryReportSession == null) {
-            monthlyHistoryReportSession = sessionFactory.openSession();
-            monthlyHistoryReportSession.setCacheMode(CacheMode.NORMAL);
-        }
-        return monthlyHistoryReportSession;
-    }
-
-    public static Session getYearlyHistoryReportSession() {
-        if (yearlyHistoryReportSession == null) {
-            yearlyHistoryReportSession = sessionFactory.openSession();
-            yearlyHistoryReportSession.setCacheMode(CacheMode.NORMAL);
-        }
-        return yearlyHistoryReportSession;
-    }
+    
 
     public static void destroyRoleSession() {
         roleSession = null;
@@ -225,16 +207,9 @@ public class ConnectionHandler {
         garageSlotDetailsSession = null;
     }
 
-    public static void destroyDailyHistoryReportSession() {
-        dailyHistoryReportSession = null;
+    public static void destroyReportSession() {
+        reporSession = null;
     }
 
-    public static void destroyMonthlyHistoryReportSession() {
-        monthlyHistoryReportSession = null;
-    }
-
-    public static void destroyYearlyHistoryReportSession() {
-        yearlyHistoryReportSession = null;
-    }
 
 }

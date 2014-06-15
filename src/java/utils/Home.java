@@ -5,12 +5,14 @@
  */
 package utils;
 
-import DAOS.DailyHistoryReportImp;
 import DAOS.EmployeesImp;
 import DAOS.GarageImp;
 import DAOS.GarageSlotDoorsImp;
 import DAOS.GarageSlotsStatusImp;
+import DAOS.ReportsImp;
+import DAOS.SlotsDetailsImp;
 import DAOS.UserImp;
+import daosint.ReportsInterface;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +23,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import pojo.Address;
 import pojo.Employees;
 import pojo.Garage;
+import pojo.GarageSlotsDoors;
 import pojo.Map;
 import pojo.Users;
 import reportsClasses.ReportHistoryRecord;
@@ -33,8 +36,13 @@ public class Home {
 
     public static void main(String[] args) {
 
+        GarageImp.getInstance().deleteGarage(186);
 
-        GarageImp.getInstance().deleteGarage(51);
+//        List<ReportsInterface> conciseReport = ReportsImp.getInstance().getConciseReport(164);
+//        System.out.println();
+//        Date[] extractMinMaxDate = utils.Utils.extractMinMaxDate(conciseReport);
+//        List<ReportsInterface> conciseReport2 = ReportsImp.getInstance().getConciseReport(164);
+//        Date[] extractMinMaxDate1 = utils.Utils.extractMinMaxDate(conciseReport2);
     }
 }
 

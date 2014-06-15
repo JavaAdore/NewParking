@@ -99,7 +99,7 @@ function isAdate(dateField, dateError)
 
     if (matches == null)
     {
-        $(dateError).html("Please enter valid date like 12/31/1990 ");
+        $(dateError).html("Please enter valid date like 12/31/2014 ");
         return false;
     }
     $(dateError).html("");
@@ -122,22 +122,22 @@ function isAReportDate(dateField, dateError)
     var matches = /^(\d{2})[-\/](\d{2})[-\/](\d{4})$/.exec($(dateField).val());
     if (matches === null)
     {
-        $(dateError).html("Please enter valid date like 31-12-1990 ");
+        $(dateError).html("Please enter valid date like 12/31/2013 ");
         return false;
     }
     $(dateError).html("");
-    var flag= false;
+    var flag = false;
     $.ajax(
             {url: "ValidateReportDate", async: false, data: 'calDate=' + $(dateField).val(), success: function(result)
                 {
                     $(dateError).html(result);
-                    if (result.length==0)
+                    if (result.length == 0)
                     {
-                        flag= true;
-                    }else
+                        flag = true;
+                    } else
                     {
-                        
-                        flag =  false;
+
+                        flag = false;
                     }
                 }
             }
@@ -169,7 +169,7 @@ function isEmailAvailable(email, feedback)
 
 function isAnumber(fieldId, feedback, min, max)
 {
-    if (!(isNaN($(fieldId).val())) && $(fieldId).val().length != 0)
+    if (!(isNaN($(fieldId).val())) && $(fieldId).val().trim().length != 0)
     {
         if ($(fieldId).val() >= min && $(fieldId).val() <= max)
         {
@@ -287,23 +287,26 @@ function isImageAcceptNull(fileId, fileError)
 
 function isPassword(password, error)
 {
-
-
-
     if ($(password).val() != null)
     {
-        var regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/
+        if ($(password).val().length < 8 || $(password).val().length > 25)
+        {
+            $(error).html("password should be between 8 - 25  characters containing at least one number, one lowercase and one uppercase letter ");
+            return false;F
+        }
+        var regex = /^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{8,}$/
         if (!$(password).val().match(regex))
         {
-            $(error).html("password should be 6 characters containing at least one number, one lowercase and one uppercase letter ");
+            $(error).html("password should be between 8 - 25  characters containing at least one number, one lowercase and one uppercase letter ");
             return false;
         }
         else {
             $(error).html("");
 
         }
-        return true;
     }
+    return true;
+
 
 
 }

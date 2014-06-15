@@ -8,6 +8,7 @@ package listeners;
 import Sessions.ConnectionHandler;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import utils.DeleteThread;
 
 /**
  *
@@ -17,12 +18,12 @@ public class StartupListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        
+
         sce.getServletContext().setAttribute("serviceProviderHeader", httputils.HeaderLoader.getServiceProviderHeader());
         sce.getServletContext().setAttribute("adminHeader", httputils.HeaderLoader.getAdminHeader());
         sce.getServletContext().setAttribute("accountantHeader", httputils.HeaderLoader.getAccountatnHeader());
-        System.out.println("listener Added");
         ConnectionHandler.initiateSessions();
+        new DeleteThread();
     }
 
     @Override

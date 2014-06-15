@@ -1,4 +1,5 @@
-        <jsp:include page="headers/header.jsp"/>
+<jsp:include page="headers/checkingPage.jsp"/>
+<jsp:include page="headers/header.jsp"/>
 
 <%@page import="utils.EmployeeWrapper"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

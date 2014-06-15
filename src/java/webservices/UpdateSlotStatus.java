@@ -19,6 +19,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author orcl
  */
+
 @Path("/update")
 
 public class UpdateSlotStatus {
@@ -28,7 +29,7 @@ public class UpdateSlotStatus {
     @Produces(MediaType.TEXT_PLAIN)
     public String updateSlot(@QueryParam("slotid") int slotid, @QueryParam("status") int status) {
         System.out.println(String.format("webservice has been called and slotid is %s status is %s", slotid, status));
-        return GarageSlotImp.getInstance().UpdateGarageSlot(slotid, status);
+        return GarageImp.getInstance().UpdateGarageSlot(slotid, status);
     }
 
     @Path("/changeSlotStatus")
@@ -37,7 +38,7 @@ public class UpdateSlotStatus {
     public String updateSlotStatus(@FormParam("slotid") String slotid, @FormParam("status") String status) {
         if (status != null) {
             try {
-                return GarageSlotImp.getInstance().UpdateGarageSlot(Integer.parseInt(slotid), Integer.parseInt(status));
+                return GarageImp.getInstance().UpdateGarageSlot(Integer.parseInt(slotid), Integer.parseInt(status));
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -51,13 +52,13 @@ public class UpdateSlotStatus {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String setSlotEnabled(@QueryParam("slotId") int slotId, @QueryParam("enabled") int enabled) {
-        return GarageSlotImp.getInstance().setEnabled(slotId, enabled);
+        return GarageImp.getInstance().setSlotEnabled(slotId, enabled);
     }
 
     @Path("/garageAvailability")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String setGarageEnabled(@QueryParam("garageid") int gargeId, @QueryParam("enabled") int enabled) {
-        return GarageImp.getInstance().setEnabled(gargeId, enabled);
+        return GarageImp.getInstance().setGaragessEnabled(gargeId, enabled);
     }
 }

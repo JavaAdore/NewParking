@@ -5,10 +5,7 @@
  */
 package servlets;
 
-import DAOS.DailyHistoryReportImp;
 import DAOS.GarageImp;
-import DAOS.MonthlyHistoryReportImp;
-import DAOS.YearlyHistoryReportImp;
 import daosint.ReportsInterface;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,42 +32,42 @@ public class ReportHandler extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-
-             ArrayList<ReportsInterface> dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord;
-        ArrayList<ArrayList<ReportsInterface>> merged = new ArrayList();
-        EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-        Calendar c = Calendar.getInstance();
-        if (emp.getGarage() != null) {
-            dailyHistoryRecord = DailyHistoryReportImp.getInstance().getConsiceDailyHistory(emp.getGarage().getGarageId());
-            monthlyHistoryRecord = MonthlyHistoryReportImp.getInstance().getConsiceMonthlyHistory(emp.getGarage().getGarageId());
-            yearlyHistoryRecord = YearlyHistoryReportImp.getInstance().getConsiceYearlyHistory(emp.getGarage().getGarageId());
-
-            merged.add(dailyHistoryRecord);
-            merged.add(monthlyHistoryRecord);
-            merged.add(yearlyHistoryRecord);
-
-            ArrayList<ReportsInterface> mergeHistoryReports = Utils.mergeHistoryReports(merged);
-            
-            Date[] extractMinMaxDate = Utils.extractMinMaxDate(dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord);
-            Date minDate = extractMinMaxDate[0];
-            request.getSession().setAttribute("minDate", Utils.populateDate(minDate));
-            Date maxDate = extractMinMaxDate[1];
-            if (emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.ADMIN)) {
-                request.getSession().setAttribute("detailed", Utils.detailed(emp.getGarage().getGarageId()));
-            }
-            String uri = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + getServletContext().getContextPath();
-
-            request.getSession().setAttribute("maxDate", Utils.populateDate(maxDate));
-            request.getSession().setAttribute("uri", uri);
-            String imageURL = GarageImp.getInstance().getImagePath(emp.getGarage().getGarageId());
-            request.getSession().setAttribute("imageURL", imageURL);
-            request.getSession().setAttribute("historyRecord", mergeHistoryReports);
-                out.print(String.format(" min= %s max=%s value=%s", Utils.toString(minDate), Utils.toString(maxDate), Utils.toString(maxDate)));
-
-            }
-
-        }
+//        try (PrintWriter out = response.getWriter()) {
+//
+//             ArrayList<ReportsInterface> dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord;
+//        ArrayList<ArrayList<ReportsInterface>> merged = new ArrayList();
+//        EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
+//        Calendar c = Calendar.getInstance();
+//        if (emp.getGarage() != null) {
+//            dailyHistoryRecord = DailyHistoryReportImp.getInstance().getConsiceDailyHistory(emp.getGarage().getGarageId());
+//            monthlyHistoryRecord = MonthlyHistoryReportImp.getInstance().getConsiceMonthlyHistory(emp.getGarage().getGarageId());
+//            yearlyHistoryRecord = YearlyHistoryReportImp.getInstance().getConsiceYearlyHistory(emp.getGarage().getGarageId());
+//
+//            merged.add(dailyHistoryRecord);
+//            merged.add(monthlyHistoryRecord);
+//            merged.add(yearlyHistoryRecord);
+//
+//            ArrayList<ReportsInterface> mergeHistoryReports = Utils.mergeHistoryReports(merged);
+//            
+//            Date[] extractMinMaxDate = Utils.extractMinMaxDate(dailyHistoryRecord, monthlyHistoryRecord, yearlyHistoryRecord);
+//            Date minDate = extractMinMaxDate[0];
+//            request.getSession().setAttribute("minDate", Utils.populateDate(minDate));
+//            Date maxDate = extractMinMaxDate[1];
+//            if (emp.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.ADMIN)) {
+//                request.getSession().setAttribute("detailed", Utils.detailed(emp.getGarage().getGarageId()));
+//            }
+//            String uri = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + getServletContext().getContextPath();
+//
+//            request.getSession().setAttribute("maxDate", Utils.populateDate(maxDate));
+//            request.getSession().setAttribute("uri", uri);
+//            String imageURL = GarageImp.getInstance().getImagePath(emp.getGarage().getGarageId());
+//            request.getSession().setAttribute("imageURL", imageURL);
+//            request.getSession().setAttribute("historyRecord", mergeHistoryReports);
+//                out.print(String.format(" min= %s max=%s value=%s", Utils.toString(minDate), Utils.toString(maxDate), Utils.toString(maxDate)));
+//
+//            }
+//
+//        }
 
     }
 

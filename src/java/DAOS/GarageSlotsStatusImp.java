@@ -34,31 +34,7 @@ public class GarageSlotsStatusImp {
 
     }
 
-    public ArrayList<WrappedGarageSlotsStatus> getGarageSlotsStatus(int garageId) {
-        ArrayList<WrappedGarageSlotsStatus> output = new ArrayList<WrappedGarageSlotsStatus>();
-        try {
-
-            GarageSlotsStatusSession.beginTransaction();
-            Query q = GarageSlotsStatusSession.createSQLQuery("select slotId , status , x , y  ,  slotName from  GarageStatus where Garage_GarageId = ?");
-            q.setInteger(0, garageId);
-            List<Object[]> result = (List<Object[]>) q.list();
-            for (Object[] obj : result) {
-                int slotId = new Integer(obj[0] + "");
-                int status = new Integer(obj[1] + "");
-                int x = new Integer(obj[2] + "");
-                int y = new Integer(obj[3] + "");
-                String slotName = new String(obj[4] + "");
-                output.add(new WrappedGarageSlotsStatus(slotId, slotName, status, x, y));
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            GarageSlotsStatusSession.getTransaction().rollback();
-        } finally {
-            GarageSlotsStatusSession.getTransaction().commit();
-        }
-        return output;
-    }
+    
 
     public GarageStatus getGarageStatus(int slotId) {
         return (GarageStatus) GarageSlotsStatusSession.get(GarageStatus.class, slotId);
