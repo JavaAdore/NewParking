@@ -1,4 +1,3 @@
-
 <jsp:include page="headers/checkingPage.jsp"/>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -26,14 +25,15 @@
 
 <script type="text/javascript">
     function updateGarage(select)
-    {
-        alert($(select).val());
-        if (($(select).vtGarageForm').submit();
-
+    {   
+        if (($(select).val() != -1))
+        {
+            $('#editGarageForm').submit();
         }
-
-
     }
+
+
+    
     setActive('#updateGarage');
 </script>
 
@@ -68,7 +68,7 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="button" value="e" onclick="updateGarage('#garage')" id="updateButton" />
+                                        <input type="button" value="update" onclick="updateGarage('#garage')" id="updateButton" />
                                     </td>
                                 </tr>
                             </table>

@@ -20,7 +20,7 @@ public class UpdateProfileHandler extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Utils.checkCurrentUserStatus(request);
-       
+
         EmployeeWrapper me = (EmployeeWrapper) request.getSession().getAttribute("emp");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -34,7 +34,6 @@ public class UpdateProfileHandler extends HttpServlet {
             result = EmployeesImp.getInstance().updateProfile(email, password, confirmPassword, garage, isActive);
 
         } else {
-
             result = EmployeesImp.getInstance().updateProfile(me.getEmployeeId(), password, confirmPassword);
 
         }
@@ -45,6 +44,7 @@ public class UpdateProfileHandler extends HttpServlet {
                 request.setAttribute("error", new ErrorMessage("Looks Like some error happend please contact adminstrator"));
                 break;
             case 0:
+
                 request.setAttribute("error", new ErrorMessage("Profile updated"));
 
                 break;

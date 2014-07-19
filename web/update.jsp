@@ -6,7 +6,7 @@
 --%>
 
 
-        <jsp:include page="headers/header.jsp"/>
+<jsp:include page="headers/header.jsp"/>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -55,41 +55,37 @@
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
                             <form method="post" action="InitializeEmployee" id="updateEmployeeForm" >
+                                <center>
+                                    <table>
+                                        <tr>                   
+                                            <td > <center> <c:out value="${error.getErrorBody()}"/></center> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>please choose employee do you want to update his / her information</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <select name="employee">
+                                                    <c:forEach items="${allEmployees}" var="employee">
+                                                        <c:if test="${!((employee.getRoles().getRoleId()==1 ) &&(employee.getEmployeeId()!=emp.getEmployeeId()))}">
+                                                            <option value="${employee.getEmployeeId()}">(${employee.getFirstName()} ${employee.getLastName()}) ${employee.getEmail()} </option>
+                                                        </c:if>
+                                                    </c:forEach>  
+                                                </select> 
+                                                <input type="button" class="button" value="update" id="removeMyButton" onclick="submitMethod()"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                
+                                            </td>
 
-                                <table>
-                                    <tr>
-                                        <td colspan="2">
-                                    <center> <c:out value="${error.getErrorBody()}"/></center>
-                                    </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            "please choose employee do you want to update his / her data"
-                                        </td>
-                                        <td>
-                                            <select name="employee">
-                                                <c:forEach items="${allEmployees}" var="employee">
-                                                    <c:if test="${!((employee.getRoles().getRoleId()==1 ) &&(employee.getEmployeeId()!=emp.getEmployeeId()))}">
-                                                        
-                                                   
-                                                    <option value="${employee.getEmployeeId()}">(${employee.getFirstName()} ${employee.getLastName()}) ${employee.getEmail()} </option>
-                                                     </c:if>
-                                                </c:forEach>  
-                                            </select> 
+                                    </table>
+                                </center>
 
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <input type="button" value="update" id="removeMyButton" onclick="submitMethod()"/>
-                                        </td>
-
-                                    </tr>
-                                </table>
                             </form>
 
-                                   
+
                         </div>
                     </div>
                 </div>

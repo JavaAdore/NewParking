@@ -63,7 +63,7 @@
                                         </td>
 
                                         <td>
-                                            <input type="submit" value="Delete Garage" id="removeMyButton" />
+                                            <input type="submit" value="Deactivate" id="removeMyButton" />
                                         </td>
                                     </tr>
                                 </table>

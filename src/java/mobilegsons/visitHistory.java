@@ -13,6 +13,30 @@ public class visitHistory {
 
     String garageName;
     String numberOfVisits;
+
+    public String getGarageName() {
+        return garageName;
+    }
+
+    public void setGarageName(String garageName) {
+        this.garageName = garageName;
+    }
+
+    public String getNumberOfVisits() {
+        return numberOfVisits;
+    }
+
+    public void setNumberOfVisits(String numberOfVisits) {
+        this.numberOfVisits = numberOfVisits;
+    }
+
+    public String getLastVisitTime() {
+        return lastVisitTime;
+    }
+
+    public void setLastVisitTime(String lastVisitTime) {
+        this.lastVisitTime = lastVisitTime;
+    }
     String lastVisitTime;
 
     public visitHistory() {

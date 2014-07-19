@@ -14,7 +14,11 @@ import pojo.Employees;
  *
  * @author orcl
  */
-public class Validator {
+
+
+
+
+public  class Validator {
 
     private static EmployeesImp employeeImp = EmployeesImp.getInstance();
     private static GarageImp garageImp = GarageImp.getInstance();
@@ -27,6 +31,8 @@ public class Validator {
             = "((?=.*\\d)(?=.*[A-Z]).{8,25})";
 
     private static final String NAME = "^[A-z]+$";
+    private static final String NUMBER = "^\\d+$";
+    
 
     private static final String IMAGE_PATTERN
             = "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
@@ -65,18 +71,16 @@ public class Validator {
         return (isGarageNameAvailable(garageName) && isDouble(hourRateInRushhours, 0, utils.Constants.MAX_ACCEPTED_HOUR_RATE) && isAnImage(isImage) && isRatio(ratio) && isDouble(width, 0, 99999) && isDouble(height, 0, 99999) && isUnit(unit) && isDouble(lon, -90, 90) && isDouble(lat, -90, 90));
     }
 
-   
-
     public static boolean validateAdmin(String firstName, String lastName, String email, String password, String confirmPassword, String gender, String birthdate, String role) {
 
-        if (isName(firstName) && isName(lastName) && isEmailWithValidation(email) && isPassword(password) && areTheSame(password, confirmPassword) && areTheSame(password, confirmPassword) && isGender(gender) && isBirthDate(birthdate) && isEmployee(role)) {
+        if (isName(firstName)&&isName(lastName)&&isEmailWithValidation(email)&&isPassword(password)&&areTheSame(password, confirmPassword)&&isGender(gender)&&isBirthDate(birthdate)&&isEmployee(role)) {
             return true;
         }
         return false;
     }
 
     public static boolean isGender(String gender) {
-        return gender.equalsIgnoreCase("m") || gender.equalsIgnoreCase("g");
+        return gender.equalsIgnoreCase("m") || gender.equalsIgnoreCase("f");
     }
 
     public static boolean areTheSame(String string1, String string2) {
@@ -119,6 +123,18 @@ public class Validator {
 
     public static boolean validateAddGarage(List<String> parameterValues) {
         return validateAddGarage(parameterValues.get(0), parameterValues.get(1), parameterValues.get(2), parameterValues.get(3), parameterValues.get(4), parameterValues.get(5), parameterValues.get(6), parameterValues.get(7), parameterValues.get(8));
+    }
+
+    public static boolean isANumber(String feedbackId) {
+
+        try {
+            int temp = Integer.parseInt(feedbackId);
+        } catch (Exception ex) {
+
+            return false;
+        }
+        return true;
+
     }
 
     public boolean isDate() {
@@ -213,7 +229,4 @@ public class Validator {
         return false;
 
     }
-//    public static List<ErrorMessage> validateAddAdmin() {
-//
-//    }
 }

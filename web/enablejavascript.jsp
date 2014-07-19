@@ -40,16 +40,13 @@
             </header>
         </div>
     <center>
-        <img src="js/javascript.png"/>
+        <img src="js/enableJavaScript.png"/>
         <hr/>
         <a href="login.jsp" style="color:white; font-size:200%">Back to Login</a>
     </center>
 
 
-    <div id="copyright" class="5grid-layout">
-        <section>
-        </section>
-    </div>
+   
 </body>
 </html>
 

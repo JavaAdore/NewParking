@@ -111,8 +111,7 @@
 
                 mapOptions = {
                     zoom: 19,
-                    center: new google.maps.LatLng(lat+.0009, lon-.0025),
-                    
+                    center: new google.maps.LatLng(lat + .0009, lon - .0025),
                     mapTypeId: 'satellite'
                 };
                 map = new google.maps.Map(document.getElementById('map-canvas'),
@@ -212,7 +211,7 @@
             function submitMethod()
             {
 
-                if (isGarageNameAvailableForUpdate('#garageTitle',${currentGarage.getGarageId()} ,'#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isImageAcceptNull('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 3000) && isAnumber('#height', '#heightError', 0, 3000) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
+                if (isGarageNameAvailableForUpdate('#garageTitle',${currentGarage.getGarageId()}, '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isImageAcceptNull('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 3000) && isAnumber('#height', '#heightError', 0, 3000) && isAnumber('#ratio', '#ratioError', 0, 1) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
                 {
                     if (map.getMapTypeId() == "satellite")
                     {
@@ -284,7 +283,7 @@
                                         </tr>
                                         <tr>
                                             <td > Garage Title </td>
-                                            <td > <input id="garageTitle" required  type = "text"  value="${currentGarage.getTitle()}" name = "title" onblur="isGarageNameAvailableForUpdate('#garageTitle',${currentGarage.getGarageId()} ,'#garageTitleError')" /> </td>
+                                            <td > <input id="garageTitle" required  type = "text"  value="${currentGarage.getTitle()}" name = "title" onblur="isGarageNameAvailableForUpdate('#garageTitle',${currentGarage.getGarageId()}, '#garageTitleError')" /> </td>
                                             <td>  <span id="garageTitleError" > </span></td>
 
 

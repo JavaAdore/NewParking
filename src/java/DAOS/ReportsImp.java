@@ -15,7 +15,7 @@ import org.hibernate.Session;
 import pojo.DailyHistory;
 import pojo.Garage;
 import utils.*;
-import reportsClasses.ReportHistoryRecord;
+import report.ReportHistoryRecord;
 
 /**
  *

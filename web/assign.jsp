@@ -36,7 +36,7 @@
         </script>
     </head>
     <body class="column1">
-        
+
 
         <div id="page-wrapper">
             <div id="page-bgtop">
@@ -49,9 +49,11 @@
                                     <select name="admin" id="admin">
 
                                         <c:forEach items="${admins}" var="admin">
-                                            <option value="${admin.getEmployeeId()}">${admin.getFirstName()}   ${admin.getLastName()} (   ${admin.getEmail()}   ) </option>
+                                            <c:if test="${admin.getActive()==1}">
+                                                <option value="${admin.getEmployeeId()}">${admin.getFirstName()}   ${admin.getLastName()} (   ${admin.getEmail()}   ) </option>
+                                            </c:if>
                                         </c:forEach>
-                                        <c:if test="${empty admins}">
+                                        <c:if test="${(empty admins) || numberOfInActiveEmployees==admins.size()}">
                                             <option value=-1 >Currently there is unassigned  employees </option>
                                         </c:if> 
                                     </select>

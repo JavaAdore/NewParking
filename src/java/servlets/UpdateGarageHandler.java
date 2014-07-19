@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,9 +40,23 @@ public class UpdateGarageHandler extends HttpServlet {
         String fileExtention;
         Map map;
         String MapUrl = "";
+        String oldGarageURL = "";
         Garage currentGarage;
         currentGarage = (Garage) request.getSession().getAttribute("currentGarage");
+        if (currentGarage != null) {
+            oldGarageURL = currentGarage.getMap().getMapUrl();
+        } else {
 
+            request.getSession().invalidate();
+            Cookie[] cookies = ((HttpServletRequest) request).getCookies();
+            if (cookies != null) {
+                for (int i = 0; i < cookies.length; i++) {
+                    cookies[i].setMaxAge(0);
+                    ((HttpServletResponse) response).addCookie(cookies[i]);
+                }
+            }
+            response.sendRedirect("login.jsp");
+        }
         PrintWriter out = response.getWriter();
 
         jspFilePath = getServletContext().getRealPath(request.getRequestURI()).replace('\\', '/');
@@ -87,7 +102,6 @@ public class UpdateGarageHandler extends HttpServlet {
                     fi.write(file);
                 }
             } else {
-                out.print(fi.getFieldName() + " " + fi.getString());
                 parameterNames.add(fi.getFieldName());
                 parameterValues.add(fi.getString().trim());
             }
@@ -105,6 +119,7 @@ public class UpdateGarageHandler extends HttpServlet {
                 break;
             case 0:
                 if (file != null) {
+                    new File(jspFilePath + oldGarageURL).delete();
                     file.renameTo(new File(jspFilePath + String.format("%s,%s.%s", currentGarage.getLat(), currentGarage.getLon(), FilenameUtils.getExtension(file.getName()))));
                 }
                 request.setAttribute("error", new ErrorMessage("Garage Updated"));

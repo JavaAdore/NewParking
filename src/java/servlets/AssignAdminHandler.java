@@ -10,11 +10,14 @@ import DAOS.GarageImp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import pojo.Employees;
 import pojo.Garage;
+import utils.EmployeeWrapper;
 import utils.Utils;
 
 /**
@@ -36,12 +39,14 @@ public class AssignAdminHandler extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-
-            request.getSession().setAttribute("admins", EmployeesImp.getInstance().getAllAdminsInfo(false));
+            List<Employees> allAdminsInfo = EmployeesImp.getInstance().getAllUnAssignedAdmins();
+            request.setAttribute("admins",allAdminsInfo );
             ArrayList<Garage> allGarages = GarageImp.getInstance().getAllGarages();
-            request.setAttribute( "allGarages",allGarages);
+            request.setAttribute("allGarages", allGarages);
             int numberOfInActiveGarages = Utils.getNumberOfInActiveUsers(allGarages);
-            request.setAttribute("numberOfInActiveGarages",numberOfInActiveGarages);
+            request.setAttribute("numberOfInActiveGarages", numberOfInActiveGarages);
+            request.setAttribute("numberOfInActiveEmployees", Utils.numberOfInActiveEmployees(allAdminsInfo));
+
             request.getRequestDispatcher("assign.jsp").forward(request, response);
 
         }

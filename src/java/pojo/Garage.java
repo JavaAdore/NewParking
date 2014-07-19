@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,6 +27,7 @@ public class Garage implements java.io.Serializable {
     private int garageId;
     String description;
     String image;
+   @Column(unique = true)
     private String title;
     private double lon;
     private double lat;
@@ -39,7 +41,7 @@ public class Garage implements java.io.Serializable {
     @OneToOne(orphanRemoval = true, fetch = FetchType.EAGER)
     private Map map;
     @OneToMany(mappedBy = "garage", orphanRemoval = true)
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     private Collection< Employees> employees = new ArrayList<>();
     @OneToMany(mappedBy = "garage", orphanRemoval = true)
     @ElementCollection(fetch = FetchType.EAGER)
@@ -49,15 +51,15 @@ public class Garage implements java.io.Serializable {
     private Collection< GarageStatus> garageStatus = new ArrayList<>();
 
     @OneToMany(mappedBy = "garage", orphanRemoval = true)
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     private Collection< Feedback> feedbacks = new ArrayList<>();
 
     @OneToMany(orphanRemoval = true)
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     private Collection< ContactNumber> contactNumbers = new ArrayList<>();
 
     @OneToMany(orphanRemoval = true)
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     private Collection< FaxContact> faxNumbers = new ArrayList<>();
 
     @OneToMany(orphanRemoval = true)

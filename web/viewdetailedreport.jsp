@@ -47,10 +47,9 @@
             $.ajax({url: "InitializeReportDates", async: false, success: function(result)
                 {
 
-                    alert(result);
                     if (result.length > 1)
                     {
-
+                        $("#feedback").load("minMaxDate.jsp");
                         dateInitializer();
 
                     } else
@@ -81,6 +80,7 @@
                 <div id="page" class="5grid-layout">
                     <center>
                         <div id="page-content-wrapper">
+                            <span id="feedback"></span>
 
                             <table>
                                 <tr>
@@ -110,26 +110,21 @@
                                 <tr>
                                     <td colspan="2">
 
-                                <center>  <input type = 'button' value = 'view report' onclick="viewDetailedReport('#fromPeriod', '#toPeriod', '#fromDateError', '#toDateError')" /></center>
+                                <center>  <input id="myButton4" type = 'button' value = 'view report' onclick="viewDetailedReport('#fromPeriod', '#toPeriod', '#fromDateError', '#toDateError')" /></center>
 
                                 </td>
                                 </tr>
                             </table>
-                            <span id="buttonSpan">
 
-                            </span>
-                            <div class="details">
-
-                            </div>
                     </center>
                 </div>
             </div>
         </div>
-        <div id="reportBodyDiv">
 
-        </div>
         <div id="chartDiv">
 
         </div>
         <div id="theChart"></div>
+    </div><div id="reportBodyDiv">
+
     </div>

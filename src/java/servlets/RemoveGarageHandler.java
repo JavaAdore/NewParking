@@ -47,7 +47,7 @@ public class RemoveGarageHandler extends HttpServlet {
                     int result = GarageImp.getInstance().addToDeletePlan(new DeleteGarageSchedule(currentGarage));
                     switch (result) {
                         case utils.Constants.SUCCESS:
-                            request.setAttribute("error", new ErrorMessage(String.format("Garage deleted")));
+                            request.setAttribute("error", new ErrorMessage(String.format("Garage deactivated")));
                             break;
 
                         case utils.Constants.FAILED:

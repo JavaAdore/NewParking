@@ -7,6 +7,7 @@ package webservices;
 
 import DAOS.GarageImp;
 import DAOS.GarageSlotImp;
+import DAOS.UserImp;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,6 +15,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import pojo.Garage;
+import pojo.Users;
 
 /**
  *
@@ -35,15 +38,27 @@ public class UpdateSlotStatus {
     @Path("/changeSlotStatus")
     @POST
     @Produces(MediaType.TEXT_PLAIN)
-    public String updateSlotStatus(@FormParam("slotid") String slotid, @FormParam("status") String status) {
-        if (status != null) {
+    public String updateSlotStatus(@FormParam("slotid") final String slotid, @FormParam("status") int status , @FormParam("userid") final int userId , @FormParam("increase") final String increase) {
+        System.out.println(String.format("slot id = %s and status is %s userId = %s increase = %s",slotid , status,userId, increase));
+      
             try {
-                return GarageImp.getInstance().UpdateGarageSlot(Integer.parseInt(slotid), Integer.parseInt(status));
+                
+                new Thread() {
+                    @Override
+                    public void run() {
+                         {
+                            if (increase.equals("1")) {
+                                UserImp.getInstance().addVisit(new Users((userId)), slotid);
+                            }
+                        }
+                    }
+                }.start();
+                return GarageImp.getInstance().UpdateGarageSlot(Integer.parseInt(slotid), status);
 
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-        }
+        
         return utils.Constants.FAILED+"";
 
     }

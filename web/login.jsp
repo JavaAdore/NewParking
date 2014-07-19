@@ -6,6 +6,7 @@
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
     <head>
+
         <noscript>
         <meta http-equiv="refresh" content="0; url=enablejavascript.jsp"/>
         </noscript> 
@@ -16,11 +17,12 @@
                 window.location.replace(toPage);
             }
         </script>
-        
+
         <title>Parking System</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="description" content="" />
         <meta name="keywords" content="" />
+        <link rel="shortcut icon" type="image/x-icon" href="js/icon.png" />`
 
         <noscript>
         <link rel="stylesheet" href="css/5grid/core.css" />
@@ -29,6 +31,8 @@
         <link rel="stylesheet" href="css/5grid/core-noscript.css" />
         <link rel="stylesheet" href="css/style.css" />
         <link rel="stylesheet" href="css/style-desktop.css" />
+        <link rel="stylesheet" href="css/CustomStyle.css" />
+
         </noscript>
 
         <script src="css/5grid/jquery.js"></script>
@@ -61,8 +65,17 @@
 
             $(document).ready(function()
             {
+                $("#email").keypress(function(e) {
+                    if (e.which == 13) {
+                        submitMethod();
+                    }
+                });
 
-
+                $("#password").keypress(function(e) {
+                    if (e.which == 13) {
+                        submitMethod();
+                    }
+                });
                 if (getCookie('seal') != "")
                 {
                     history.forward();
@@ -90,6 +103,7 @@
 
                 return false;
             }
+
 
         </script>
 
@@ -136,9 +150,11 @@
 
                                             <table>
 
-                                                <th colspan="2">
-                                                    <c:out value="${error.getErrorBody()}"/>
-                                                    <span id  = "enableCoockies"></span>
+                                                <th colspan="2" >
+                                                    <span class="red">
+                                                        <c:out value="${error.getErrorBody()}"/>
+                                                        <span  id  = "enableCoockies"></span>
+                                                    </span>
                                                 </th>
                                                 <tr>
 
@@ -155,8 +171,8 @@
 
                                                 </tr>
                                                 <tr>
+                                                    <td></td>
                                                     <td><input type="button" value="Sign in" id="myButton4" onclick="submitMethod()"/></td>
-                                                    <td><input type="reset" value="Cancel" id="myButton3"/></td>
                                                 </tr>
 
                                             </table><br>
@@ -179,10 +195,7 @@
 
         </div>
 
-        <div id="copyright" class="5grid-layout">
-            <section>
-            </section>
-        </div>
+
     </body>
 </html>
 

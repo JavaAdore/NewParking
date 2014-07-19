@@ -35,23 +35,14 @@ public class GarageOverView {
 
     @POST
     @Produces(MediaType.TEXT_PLAIN)
-    public String getGarageOverView(@FormParam(value = "garageId") final String gId, @FormParam(value = "userId") final String uId, @FormParam(value = "increase") final String increaseNumberOfVisits) {
+    public String getGarageOverView(@FormParam(value = "garageId") final String gId, @FormParam(value = "userId") final String uId) {
 
         System.out.println("garage id = " + gId + " userId= " + uId);
         if (gId != null) {
             final int garageId = Integer.parseInt(gId);
             if (uId != null) {
                 final int userId = Integer.parseInt(uId);
-                new Thread() {
-                    @Override
-                    public void run() {
-                        if (increaseNumberOfVisits != null) {
-                            if (increaseNumberOfVisits.equals("1")) {
-                                UserImp.getInstance().addVisit(new Users(userId), new Garage(garageId));
-                            }
-                        }
-                    }
-                }.start();
+                
 
             }
             return Utils.prepareGarageOverView(garageId).toString();

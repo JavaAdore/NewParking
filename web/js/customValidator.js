@@ -8,7 +8,7 @@ function isEmail(emailId, emailErrorId)
         var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,3}$/
         if (!x.match(regex))
         {
-            error.innerHTML = "Please enter valid email address like someone@oracle.com";
+            error.innerHTML = "email like someone@oracle.com";
             return false;
         }
         else {
@@ -25,7 +25,7 @@ function isEmailWithValidation(emailId, emailErrorId)
         var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,3}$/
         if (!regex.test($(emailId).val()))
         {
-            $(emailErrorId).html("Please enter valid email address like someone@oracle.com");
+            $(emailErrorId).html("mail like someone@oracle.com");
             return false;
         }
         else {
@@ -59,21 +59,26 @@ function validateLength(elementId, errorId)
 
 function isText(fieldId, fieldError)
 {
-    if ($(fieldId).val() != null)
+    if ($(fieldId).val().length == 0)
     {
-        var regex = /^[A-Za-z]+$/
+        $(fieldError).html("(Required)");
+        return false;
+    }
+    var regex = /^[A-Za-z]+$/
 
-        if (regex.test($(fieldId).val()) && $(fieldId).val().trim().length < 25)
-        {
-            $(fieldError).html("");
+    if (regex.test($(fieldId).val()) && $(fieldId).val().trim().length < 25)
+    {
+        $(fieldError).html("");
 
-            return true;
-        }
-        else
-            $(fieldError).html("Please enter this field maximum charactes are (25)");
+        return true;
+    }
+    else
+    {
+        $(fieldError).html("maximum length(25) characters");
 
         return false;
     }
+
 }
 
 function areTheSame(firstField, secondField, errorField)
@@ -94,12 +99,23 @@ function areTheSame(firstField, secondField, errorField)
 
 function isAdate(dateField, dateError)
 {
+    if ($(dateField).val().length == 0)
+    {
+
+        $(dateError).html("valid date like 12/31/2014 ");
+
+        return false;
+
+
+    }
     var matches = /^(\d{2})[-\/](\d{2})[-\/](\d{4})$/.exec($(dateField).val());
 
 
     if (matches == null)
     {
-        $(dateError).html("Please enter valid date like 12/31/2014 ");
+
+
+        $(dateError).html("valid date like 12/31/2014 ");
         return false;
     }
     $(dateError).html("");
@@ -122,7 +138,8 @@ function isAReportDate(dateField, dateError)
     var matches = /^(\d{2})[-\/](\d{2})[-\/](\d{4})$/.exec($(dateField).val());
     if (matches === null)
     {
-        $(dateError).html("Please enter valid date like 12/31/2013 ");
+
+        $(dateError).html("date like 12/31/2013 ");
         return false;
     }
     $(dateError).html("");
@@ -177,7 +194,7 @@ function isAnumber(fieldId, feedback, min, max)
             return true;
         }
     }
-    $(feedback).html("Please enter a number between " + min + "and " + max);
+    $(feedback).html("number between " + min + "and " + max);
     return false;
 
 }
@@ -203,7 +220,7 @@ function isImage(fileId, fileError)
         }
 
     }
-    $(fileError).html("Please choose an image to upload as garage map");
+    $(fileError).html("choose an image to upload as garage map");
     return false;
 }
 
@@ -231,14 +248,14 @@ function isGarageNameAvailable(garage, feedback)
         return flag;
     }
 }
-function isGarageNameAvailableForUpdate(garage, garageId ,feedback)
+function isGarageNameAvailableForUpdate(garage, garageId, feedback)
 {
     if (isText(garage, feedback))
     {
         var flag = false;
-       
+
         $.ajax(
-                {url: "CheckGarageName", async: false, data: 'newGarageName=' + $(garage).val()+"&garageId="+garageId, success: function(result)
+                {url: "CheckGarageName", async: false, data: 'newGarageName=' + $(garage).val() + "&garageId=" + garageId, success: function(result)
                     {
                         switch (result)
                         {
@@ -253,7 +270,7 @@ function isGarageNameAvailableForUpdate(garage, garageId ,feedback)
                         }
                     }
                 });
-                
+
         return flag;
     }
 }
@@ -271,7 +288,7 @@ function isTextWithSpace(fieldId, fieldError)
             return true;
         }
         else
-            $(fieldError).html("Please enter this field maximum charactes are (25)");
+            $(fieldError).html("Required maximum length(25) characters");
 
         return false;
     }
@@ -317,13 +334,14 @@ function isPassword(password, error)
     {
         if ($(password).val().length < 8 || $(password).val().length > 25)
         {
-            $(error).html("password should be between 8 - 25  characters containing at least one number, one lowercase and one uppercase letter ");
-            return false;F
+            $(error).html("password should be between 8-25 characters ");
+            return false;
+            F
         }
         var regex = /^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{8,}$/
         if (!$(password).val().match(regex))
         {
-            $(error).html("password should be between 8 - 25  characters containing at least one number, one lowercase and one uppercase letter ");
+            $(error).html(" should contains numbers , capital & small characters ");
             return false;
         }
         else {
@@ -335,4 +353,27 @@ function isPassword(password, error)
 
 
 
+}
+
+function isPhoneNumber(phoneNumber, minLength, maxLength)
+{   
+    var regex = /^(0|[0-9][0-9]*)$/;
+    if (regex.test(phoneNumber) && phoneNumber.length >= minLength && phoneNumber.length <= maxLength)
+    {
+        
+        return true;
+    }
+    alert('Please enter correct number');
+    return false;
+}
+function isAnEmail(email)
+{
+
+    var regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,3}$/
+    if (!email.match(regex))
+    {
+        return false;
+    }
+    else
+        return true;
 }

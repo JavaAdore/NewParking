@@ -20,6 +20,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import pojo.ApplicationFeedback;
 import pojo.ContactNumber;
 import pojo.DailyHistory;
 import pojo.EmailAddress;
@@ -30,7 +31,7 @@ import pojo.Garage;
 import pojo.GarageStatus;
 import pojo.Map;
 import pojo.Users;
-import reportsClasses.ReportHistoryRecord;
+import report.ReportHistoryRecord;
 
 public class Utils {
 
@@ -164,8 +165,7 @@ public class Utils {
 
     public static void main(String[] args) {
 
-        HashMap<GarageStatus, List<ReportsInterface>> detailed = detailed(164);
-        System.out.println();
+        UserImp.getInstance().addApplciationFeedback(1, "your applicatin is not easy to user");
 //       
     }
 
@@ -264,6 +264,25 @@ public class Utils {
         return stringBuilder.toString();
     }
 
+    private static String toTimeString(Date feedbackDate) {
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(feedbackDate);
+        return String.format("%d-%d-%d %d:%d:%d %s", c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR), c.get(Calendar.HOUR), c.get(Calendar.MINUTE), c.get(Calendar.SECOND), (c.get(Calendar.HOUR_OF_DAY) > 12) ? "PM" : "AM");
+
+    }
+
+    public static Object numberOfInActiveEmployees(ArrayList<EmployeeWrapper> allAdminsInfo) {
+        int counter = 0;
+        for (EmployeeWrapper emp : allAdminsInfo) {
+            if (emp.getActive() == 0) {
+                counter++;
+            }
+        }
+        System.out.println("number Of Inactive employees = " + counter);
+        return counter;
+    }
+
     public GeoLocation[] boundingCoordinates(double latitude, double longitude) {
         GeoLocation location = GeoLocation.fromDegrees(latitude, longitude);
         return location.boundingCoordinates(Constants.distance, 6371.01);
@@ -307,33 +326,38 @@ public class Utils {
         return tempSteps;
     }
 
-    public static boolean checkCurrentUserStatus(HttpServletRequest request) throws exceptions.CurrentClientNotAvailable {
-        boolean result = true;
-        EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
+    public static int checkCurrentUserStatus(HttpServletRequest request) throws exceptions.CurrentClientNotAvailable {
 
-        try {
+        EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
+        {
             if (emp == null) {
                 System.out.println("this is no current employee");
-                result = false;
-                //  throw new exceptions.CurrentClientNotAvailable();
+                return Constants.NOT_FOUND;
             } else {
                 Employees employee = empDao.getEmployee(emp.getEmployeeId());
                 if (employee == null) {
-                    result = false;
-                    //    throw new exceptions.CurrentClientNotAvailable();
+                    return Constants.NOT_FOUND;
                 } else {
                     if (employee.getActive() == 0) {
-                        result = false;
-                        //        throw new exceptions.CurrentClientNotAvailable();
+                        return Constants.IN_ACTIVE;
+                        
+                    } else if (!employee.getRoles().getRoleName().equalsIgnoreCase(EmployeeRole.SERVICE_PROVIDER)) {
+                        if (employee.getGarage() == null) {
+                            return Constants.NOT_ASSOCCIATED_WITH_GARAGE;
+
+                        } else if (GarageImp.getInstance().getGarage(employee.getGarage().getGarageId()).getEnabled() == 0) {
+                            return Constants.ASSOCCIATED_GARAGE_NOT_ENABLED;
+
+                        }
 
                     }
 
                 }
 
             }
-        } finally {
-            return result;
         }
+
+        return Constants.SUCCESS;
 
     }
 
@@ -632,7 +656,7 @@ public class Utils {
             for (ContactNumber contactNumber : garage.getContactNumbers()) {
                 stringBuilder.append(String.format("<tr id=%s >", contactNumber.getId()));
                 stringBuilder.append(String.format("<td>%s</td>", contactNumber.getPhoneNumber()));
-                stringBuilder.append(String.format("<td><button class=%s onclick=%s(%s,'d')> Delete </button> </td>", deleteButtonFormatingClass, deleteButtonMethod, contactNumber.getId()));
+                stringBuilder.append(String.format("<td><button class='%s' onclick=%s(%s,'d')> Delete </button> </td>", deleteButtonFormatingClass, deleteButtonMethod, contactNumber.getId()));
                 stringBuilder.append(String.format("</tr>"));
             }
         }
@@ -689,14 +713,37 @@ public class Utils {
         if (garage != null) {
 
             for (Feedback feedback : garage.getFeedbacks()) {
-                stringBuilder.append(String.format("<tr id=%s >", feedback.getId()));
-                stringBuilder.append(String.format("<td><textArea class='feedbackBody'>%s</textArea></td>", feedback.getFeedbackBody()));
-                stringBuilder.append(String.format("<td>%s</td>", feedback.getFeedbackDate()));
-                stringBuilder.append(String.format("<td><button class=%s onclick=%s(%s,'d')> Delete </button> </td>", deleteButtonFormatingClass, deleteButtonMethod, feedback.getId()));
-                stringBuilder.append(String.format("<td><textArea class='feedbackBody'>%s</textArea></td>", feedback.getFeedbackBody()));
+                stringBuilder.append(String.format("<tr id=%s  >", feedback.getId()));
+                stringBuilder.append(String.format("<td><textArea readonly  >%s</textArea></td>", feedback.getFeedbackBody()));
+                stringBuilder.append(String.format("<td>%s</td>", Utils.toTimeString(feedback.getFeedbackDate())));
+                stringBuilder.append(String.format("<td>%s</td>", feedback.getSender().getEmail()));
+                stringBuilder.append(String.format("<td><button class='%s' onclick=%s('%s')> Delete </button> </td>",deleteButtonFormatingClass, deleteButtonMethod, feedback.getId()));
 
                 stringBuilder.append(String.format("</tr>"));
             }
+        }
+        return stringBuilder.toString();
+
+    }
+
+    public static String loadFeedback(String deleteButtonFormatingClass, String deleteButtonMethod) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        ArrayList<ApplicationFeedback> feedbacks = (ArrayList<ApplicationFeedback>) EmployeesImp.getInstance().getApplicationFeedback();
+        try {
+
+            for (ApplicationFeedback feedback : feedbacks) {
+                stringBuilder.append(String.format("<tr id=%s >", feedback.getId()));
+                stringBuilder.append(String.format("<td><textArea >%s</textArea></td>", feedback.getFeedbackBody()));
+                stringBuilder.append(String.format("<td>%s</td>", Utils.toTimeString(feedback.getFeedbackDate())));
+                stringBuilder.append(String.format("<td>%s</td>", feedback.getSender().getEmail()));
+                stringBuilder.append(String.format("<td><button class='%s' onclick=%s('%s')> Delete </button> </td>", deleteButtonFormatingClass, deleteButtonMethod, feedback.getId()));
+
+                stringBuilder.append(String.format("</tr>"));
+            }
+
+        } catch (Exception ex) {
+
         }
         return stringBuilder.toString();
 

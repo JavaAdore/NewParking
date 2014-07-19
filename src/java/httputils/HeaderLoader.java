@@ -23,6 +23,8 @@ public class HeaderLoader {
         serviceProviderHeader.add(new Header("removeGarage", "Remove Garage", "LoadAllGaragesInitializer?toPage=removegarage.jsp"));
         serviceProviderHeader.add(new Header("assignEmp", "Assign Emp To Garage", "AssignAdminHandler"));
         serviceProviderHeader.add(new Header("updateProfile", "Update Profile", "LoadAllEmployeesInitializer?toPage=update.jsp"));
+        serviceProviderHeader.add(new Header("viewapplicationfeedback", "Application Feedback", "viewapplicationfeedback.jsp"));
+        
 
     }
 

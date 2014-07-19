@@ -144,9 +144,7 @@
             setActive('#viewDetailedReport');
 
 </script>
-<div class='highlyConsumed' style='position:relative;font-size: 20px; width:100%x;height:40;'>Highly Consumed</div>
-<div class="mediumConsumed" style='position:relative;font-size: 20px;width:100%px;height:40;'>Medium Consumed</div>
-<div class="rearlyConsumed" style='position:relative;font-size: 20px;width:100%px; height:40; '>Rear Consumed</div>
+
 <div id="mainDiv">
 
     <img id="background"/>

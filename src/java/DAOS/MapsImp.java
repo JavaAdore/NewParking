@@ -14,7 +14,7 @@ import pojo.Map;
  *
  * @author orcl
  */
-public class MapsImp implements MapsDAO {
+public class MapsImp  {
 
     static Session mapSession = ConnectionHandler.getMapSession();
     private static MapsImp instance;
@@ -98,10 +98,8 @@ public class MapsImp implements MapsDAO {
     }
     
        public static ArrayList<Map> getAllMaps() {
-        mapSession.beginTransaction();
         Query q = mapSession.createQuery("from Map");
         ArrayList<Map> maps = (ArrayList<Map>) q.list();
-        mapSession.getTransaction().commit();
         
         return maps;
     }

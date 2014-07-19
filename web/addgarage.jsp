@@ -203,7 +203,7 @@
             function submitMethod()
             {
 
-                if (isTextWithSpace('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isImage('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 99999) && isAnumber('#height', '#heightError', 0, 99999) && isAnumber('#ratio', '#ratioError', 0, 1) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
+                if (isGarageNameAvailable('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isImage('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 99999) && isAnumber('#height', '#heightError', 0, 99999) && isAnumber('#ratio', '#ratioError', 0, 1) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
                 {
                     if (map.getMapTypeId() == "satellite")
                     {

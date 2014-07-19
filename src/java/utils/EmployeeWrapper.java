@@ -34,6 +34,14 @@ public class EmployeeWrapper {
 
     private int active;
 
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
     
 
     public EmployeeWrapper(Integer employeeId, Roles roles, Garage garage, String firstName, String lastName, String email, int active) {

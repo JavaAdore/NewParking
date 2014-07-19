@@ -9,7 +9,7 @@
 <html>
     <head>
         <noscript>
-            <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
+        <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
         </noscript>
         <jsp:include page="headers/checkingPage.jsp"/>
         <jsp:include page="headers/header.jsp"/>
@@ -53,6 +53,13 @@
                             <form id="deleteAdminForm" method="post" action="RemoveAdminServlet"   >
                                 <table>
                                     <tr>
+                                        <td colspan="2">
+                                    <center> <c:out value="${error.getErrorBody()}"/></center>
+                                    </td>
+                                    </tr>
+                                    <tr>
+
+
                                         <td>Choose Employee email: </td>
                                         <td>
                                             <select name="adminInfo"  id="adminInfo">
@@ -64,20 +71,18 @@
 
                                                 </c:forEach>    
                                                 <c:if test="${numberOfInActiveEmployees==numberOfEmployees || (empty allEmployees)}">
-                                                    <option value="-1">currently their is no Employees</option>
+                                                    <option value="-1">currently their is no active employees</option>
 
                                                 </c:if>
                                             </select>
                                         </td>
-                                    </tr>
-                                    <tr>
+
                                         <td>
-                                            <input type="button"  id="myButton4" onclick="submitMethod()" value="Delete"/>
+                                            <input type="button"  id="myButton4" onclick="submitMethod()" value="Deactivate"/>
                                         </td>
                                     </tr>
                                 </table>
                             </form>
-                            <center> <c:out value="${error.getErrorBody()}"/></center>
                         </div>
                     </div>
                 </div>

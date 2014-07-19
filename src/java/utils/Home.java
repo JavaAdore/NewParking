@@ -26,7 +26,7 @@ import pojo.Garage;
 import pojo.GarageSlotsDoors;
 import pojo.Map;
 import pojo.Users;
-import reportsClasses.ReportHistoryRecord;
+import report.ReportHistoryRecord;
 
 /**
  *
@@ -36,14 +36,8 @@ public class Home {
 
     public static void main(String[] args) {
 
-
-        boolean garageNameAvailable = GarageImp.getInstance().isGarageNameAvailable("243", "ss");
-        System.out.println();
+//GarageImp.getInstance().addContact(530 , "01112256793", utils.Constants.PHONE);
+        UserImp.getInstance().addApplciationFeedback(1, "bad application");
     }
 }
 
-  // 30.071352,31.021236,30.071354,31.021238 ==> 29 cm
-// 30.071352,31.021236, 30.071354,31.021235 ==> 24 cm
-// 30.071352,31.021236,30.071354,31.021236   ==> 22 cm
-// int result = GarageSlotDoorsImp.getInstance().getNearestDoor(4, 30.071352, 31.021236);
-  // System.out.println(result);

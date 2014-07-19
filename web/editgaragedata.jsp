@@ -13,7 +13,6 @@
         <noscript>
         <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
         </noscript>
-
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="description" content="" />
         <meta name="keywords" content="" />
@@ -26,13 +25,48 @@
         <script src="js/ui/jquery.ui.widget.js"></script>
         <script src="js/ui/jquery.ui.datepicker.js"></script>
         <link rel = "stylesheet" href = "css/mycss/jquery.ui.all.css" >
+
         <link rel="stylesheet" href="css/mycss/demos.css">
+        <script src="css/ScrollableTable/scripts/jquery-makeTableScrollable.js" type="text/javascript"></script>
+        <link href="css/ScrollableTable/Css/Westwind.css" rel="stylesheet" type="text/css" />
+        <script src ="js/tableHandler.js"></script>
         <script type="text/javascript">
-            setActive('#editGarageData');
+            $(document).ready(function()
+            {
+
+                $("#contact").load("AdminControllingtables/contactTable.jsp");
+                $("#fax").load("AdminControllingtables/faxContact.jsp");
+                $("#email").load("AdminControllingtables/emailContact.jsp");
+                $("#feedback").load("AdminControllingtables/feedback.jsp");
+                $("#desc").load("AdminControllingtables/garagedescreption.jsp");
+                $("#website").load("AdminControllingtables/garageWebsite.jsp");
+
+
+                setActive('#editGarageData');
+
+               
+                initialize();
+            });
+
+             var tempFlag = false;
+             var timeout;
+            function initialize()
+            {
+                timeout = setTimeout("loadTables()", 7000);
+            }
+            function loadTables()
+            {
+                
+                $("#contactTable").makeTableScrollable({cssClass: "blackborder"});
+                $("#faxTable").makeTableScrollable({cssClass: "blackborder"});
+                $("#emailTable").makeTableScrollable({cssClass: "blackborder"});
+
+                //clearTimeout(timeout);
+            }
+
         </script>
     </head>
     <body>
-        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
         <div id="page-wrapper">
             <div id="page-bgtop">
@@ -41,41 +75,63 @@
                         <div id="page-content-wrapper">
                             <center>
                                 <table cellspacing="100" >
+                                    <tr>
+                                        <td>
+                                            <input  class="button"   type="button"  value="Add Phone" onclick="addContactNumber()"/>
+                                            <input  class="button" type="button"  value="Add Fax" onclick="addFaxNumber()"/>                                      
+                                            <input  class="button"  type="button"  value="Add Email" onclick="addEmail()"/>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div id="contact">
+
+                                            </div>
+                                        </td>
+                                    </tr>
 
                                     <tr>
                                         <td>
-                                            <jsp:include page="AdminControllingtables/contactTable.jsp" />
+                                            <div id="fax">
+
+
+                                            </div>
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div id="email">
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div id="desc">
+
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div id="website">
+
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div id="feedback">
+
+                                            </div>
+                                        </td>
+
+
                                     </tr>
 
-                                    <tr>
-                                        <td>
-                                            <jsp:include page="AdminControllingtables/faxContact.jsp" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <jsp:include page="AdminControllingtables/emailContact.jsp" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <jsp:include page="AdminControllingtables/garagedescreption.jsp" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <jsp:include page="AdminControllingtables/garageWebsite.jsp" />
-                                        </td>
-                                        
-                                    </tr>
-                                     <tr>
-                                        <td>
-                                            <jsp:include page="AdminControllingtables/garageWebsite.jsp" />
-                                        </td>
-                                        
-                                    </tr>
-                                    
                                 </table>
                             </center>
                         </div>

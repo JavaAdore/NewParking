@@ -33,6 +33,8 @@ public class GarageSlotImp {
 
     private GarageSlotImp() {
     }
+    
+    
 
    
 }

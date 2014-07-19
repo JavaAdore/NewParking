@@ -2,14 +2,14 @@
 <!DOCTYPE HTML>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-        <jsp:include page="headers/header.jsp"/>
+<jsp:include page="headers/header.jsp"/>
 
 <html>
     <head>
         <noscript>
         <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
         </noscript>
-         <link rel = "stylesheet" href = "css/mycss/jquery.ui.all.css" >
+        <link rel = "stylesheet" href = "css/mycss/jquery.ui.all.css" >
         <link rel="stylesheet" href="css/mycss/demos.css">
         <title>Parking System</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -23,13 +23,13 @@
         <script src="js/ui/jquery.ui.core.js"></script>
         <script src="js/ui/jquery.ui.widget.js"></script>
         <script src="js/ui/jquery.ui.datepicker.js"></script>
-        
+
 
         <script type="text/javascript">
 
             function submitMethod()
             {
-                if (isText('#firstName', '#firstNameError') && isText('#lastName', '#lastNameError') && isEmailWithValidation('#email', '#emailError') && isPassword('#password','#passwordError')&&areTheSame('#password', '#confirmPassword', '#confirmPasswordError') && isAdate('#datepicker', '#birthdateError'))
+                if (isText('#firstName', '#firstNameError') && isText('#lastName', '#lastNameError') && isEmailWithValidation('#email', '#emailError') && isPassword('#password', '#passwordError') && areTheSame('#password', '#confirmPassword', '#confirmPasswordError') && isAdate('#datepicker', '#birthdateError'))
                 {
 
                     $("#addEmployeeForm").submit();
@@ -53,13 +53,13 @@
 
             $(document).ready(function()
             {
-                $("#datepicker").datepicker({ maxDate: "-192m "});
+                $("#datepicker").datepicker({maxDate: "-192m "});
             });
 
             setActive('#addAdmin');
         </script>
 
-        
+
 
 
         <noscript>
@@ -86,28 +86,44 @@
                                             <td>First Name:</td>
                                             <td><input id ="firstName" name="firstName" type="text"   onblur="isText('#firstName', '#firstNameError')"></td>
 
-                                            <td><span id="firstNameError"></span></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td><center><span id="firstNameError"></span></center></td>
                                         </tr>
                                         <tr>
                                             <td>Last Name:</td>
                                             <td><input name="lastName" type="text" id="lastName" onblur="isText('#lastName', '#lastNameError')" ></td>
-                                            <td><span id="lastNameError"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td><center><span id="lastNameError"></span></center></td>
                                         </tr>
                                         <tr>
                                             <td>Email:</td>
                                             <td><input id="email" name="email" type="email" onblur="isEmailWithValidation('#email', '#emailError')" /> </td>
-                                            <td><span id="emailError"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td><center><span id="emailError"></span></center></td>
                                         </tr>
                                         <tr>
                                             <td>Password:</td>
                                             <td><input id="password" name="password" type="password" onblur="isPassword('#password', '#passwordError');
                                                     areTheSame('#password', '#confirmPassword', '#confirmPasswordError')" /> </td>
-                                            <td><span id="passwordError"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td><center><span id="passwordError"></span></center></td>
                                         </tr>
                                         <tr>
                                             <td>Confirm Password:</td>
                                             <td><input id="confirmPassword" name="confirmPassword" type="password" onblur="areTheSame('#password', '#confirmPassword', '#confirmPasswordError')"/> </td>
-                                            <td><span id="confirmPasswordError"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td><center><span id="confirmPasswordError"></span></center></td>
                                         </tr>
                                         <tr>
                                             <td>gender:</td>
@@ -118,20 +134,23 @@
                                         <tr>
                                             <td>Birthday:</td>
                                             <td> <input  id="datepicker" name="birthdate" readonly onchange="isAdate('#datepicker', '#birthdateError')"> </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
                                             <td><span id="birthdateError"> </span>  </td>
                                         </tr>
-
                                         <tr>
                                             <td>Role:</td>
                                             <td>
                                                 <select name="role" >
                                                     <option value="2">Administrator</option>
-    <!--                                                    <option value="3">Accountant</option>-->
                                                 </select>
                                             </td>
                                         </tr>
+                                        <tr></tr>
                                         <tr>
-                                            <td><input type="button" id="myButton" value="Register" onclick="submitMethod()" /> </td>
+                                            <td></td>
+                                            <td ><input  class="button" type="button"  value="Register" onclick="submitMethod()" /></td>
                                         </tr>
                                     </table>
                                 </form>

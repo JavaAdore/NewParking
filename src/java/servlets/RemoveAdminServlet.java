@@ -30,7 +30,7 @@ public class RemoveAdminServlet extends HttpServlet {
                 int result = employeesDao.addToDeletePlan(new DeleteEmployeeSchedule(adminId));
                 switch (result) {
                     case 0:
-                        request.setAttribute("error", new ErrorMessage(String.format("Employee deleted")));
+                        request.setAttribute("error", new ErrorMessage(String.format("Employee deactivated")));
                         break;
 
                     default:

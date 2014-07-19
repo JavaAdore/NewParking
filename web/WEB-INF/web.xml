@@ -66,7 +66,7 @@
     </servlet>
     <servlet>
         <servlet-name>EmailChecking</servlet-name>
-        <servlet-class>servlets.EmailChecking</servlet-class>
+        <servlet-class>servlets.ajax.EmailChecking</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GarageNameCheck</servlet-name>
@@ -106,7 +106,7 @@
     </servlet>
     <servlet>
         <servlet-name>ValidateDate</servlet-name>
-        <servlet-class>ajax.ValidateDate</servlet-class>
+        <servlet-class>servlets.ajax.ValidateDate</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>InitializeEmployee</servlet-name>
@@ -114,43 +114,47 @@
     </servlet>
     <servlet>
         <servlet-name>ChangeGarageAvailability</servlet-name>
-        <servlet-class>ajax.ChangeGarageAvailability</servlet-class>
+        <servlet-class>servlets.ajax.ChangeGarageAvailability</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ContactHandler</servlet-name>
-        <servlet-class>ajax.ContactHandler</servlet-class>
+        <servlet-class>servlets.ajax.ContactHandler</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GetContactList</servlet-name>
-        <servlet-class>ajax.GetContactList</servlet-class>
+        <servlet-class>servlets.ajax.GetContactList</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ValidateReportDate</servlet-name>
-        <servlet-class>ajax.ValidateReportDate</servlet-class>
+        <servlet-class>servlets.ajax.ValidateReportDate</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>InitializeReportDates</servlet-name>
-        <servlet-class>ajax.InitializeReportDates</servlet-class>
+        <servlet-class>servlets.ajax.InitializeReportDates</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CheckGarageName</servlet-name>
-        <servlet-class>ajax.CheckGarageName</servlet-class>
+        <servlet-class>servlets.ajax.CheckGarageName</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateGarageDescription</servlet-name>
-        <servlet-class>ajax.UpdateGarageDescription</servlet-class>
+        <servlet-class>servlets.ajax.UpdateGarageDescription</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateGarageWebsite</servlet-name>
-        <servlet-class>ajax.UpdateGarageWebsite</servlet-class>
+        <servlet-class>servlets.ajax.UpdateGarageWebsite</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GetFeedback</servlet-name>
-        <servlet-class>ajax.GetFeedback</servlet-class>
+        <servlet-class>servlets.ajax.GetFeedback</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>FeedbackHandler</servlet-name>
-        <servlet-class>ajax.FeedbackHandler</servlet-class>
+        <servlet-class>servlets.ajax.FeedbackHandler</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UploadImageHandler</servlet-name>
+        <servlet-class>servlets.UploadImageHandler</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -300,6 +304,10 @@
         <servlet-name>FeedbackHandler</servlet-name>
         <url-pattern>/FeedbackHandler</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadImageHandler</servlet-name>
+        <url-pattern>/UploadImageHandler</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -357,4 +365,9 @@
             listeners.StartupListener
         </listener-class>
     </listener>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errorpage.jsp</location>
+
+    </error-page>
 </web-app>

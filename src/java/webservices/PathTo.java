@@ -33,6 +33,7 @@ public class PathTo {
     @POST
     @Produces(MediaType.TEXT_HTML)
     public String giveMePathTo(@FormParam("garageid") int garageId, @FormParam("slotid") int slotId, @FormParam("lat") double lat, @FormParam("lon") double lon) {
+        System.out.println(String.format(" garage id = %s slot id =  %s ", garageId,slotId));
         int doorId = GarageSlotDoorsImp.getInstance().getNearestDoor(garageId, lat, lon);
         GarageSlotsDoors result = slotDetailsImp.getInstance().getSlotDetail(slotId, doorId);
         obj = new JSONObject();

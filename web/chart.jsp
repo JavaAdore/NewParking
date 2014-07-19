@@ -28,5 +28,5 @@
     </div>
 </center>
 <script>
-    myFunction();
+    
 </script>

@@ -16,50 +16,40 @@
 
 
 <center>
-
+ <HR>
     <c:choose>
         <c:when test="${report.getHours()!=null}">
 
 
-
-            <c:out value="${emp.getGarage().getTitle()}"/>
-            <HR>
-            <table>
-                Report of garage utilization
-
-
-                <tr>
-
-                </tr>
-                <tr>
-                    <td>
+            <span id="garageName">
+                <c:out value="${emp.getGarage().getTitle()}"/>
+            </span>
+            <br>
+           
+            <table cellpadding="10">
+                
+                               <tr>
+                    <td class="blue">
                         Total of consumed hours 
                     </td>
-                    <td>
-                        <c:out value="${report.getHours()}"/> Hour
+                    <td class="green">
+                           <c:out value="${report.getHours()}"/> Hour
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="blue">
                         Hour rate
                     </td>
-                    <td>
-                        <c:out value="${emp.getGarage().getHourRateInRush()}"/>  EGP per hour
+                    <td class="green">
+                          <c:out value="${emp.getGarage().getHourRateInRush()}"/>  EGP per hour
                     </td>
                 </tr>
+
                 <tr>
-                    <td>
-                        Average of consumption  
-                    </td>
-                    <td>
-                        <fmt:formatNumber type="percent" maxFractionDigits="2" value="${report.getAvrageOrConsumption()}" />  of total available hours 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
+                    <td class="blue">
                         Total income
                     </td>
-                    <td>
+                    <td class="green">
                         <c:out value="${report.getIncome()}"/> EGP 
                     </td>
                 </tr>
@@ -70,9 +60,9 @@
                 </tr>
             </table>
         </c:when>
-            <c:otherwise>
-                Sorry No available report for your garage yet
-            </c:otherwise>
+        <c:otherwise>
+            Sorry No available report for your garage yet
+        </c:otherwise>
     </c:choose>
 
 </center>

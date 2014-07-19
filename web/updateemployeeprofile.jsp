@@ -16,6 +16,7 @@
         </noscript> 
         <meta name="description" content="" />
         <meta name="keywords" content="" />
+        <link rel="stylesheet" href="css/CustomStyle.css" />
         <script src="css/5grid/jquery.js"></script>
         <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
         <!--[if IE 9]><link rel="stylesheet" href="css/style-ie9.css" /><![endif]-->
@@ -40,11 +41,11 @@
             }
             function submitMethod()
             {
-                if (isPassword('#password', '#passwordError')&&areTheSame('#password', '#confirmPassword', '#confirmPasswordError'))
+                if (isPassword('#password', '#passwordError') && areTheSame('#password', '#confirmPassword', '#confirmPasswordError'))
                 {
                     $(updateProfileForm).submit();
                 }
-                
+
 
             }
         </script>
@@ -87,33 +88,40 @@
                                     <table>
                                         <tr>
                                             <td>Email:</td>
-                                            <td><input name="email" type="email" readonly required class="textbox" value="${currentEmployee.getEmail()}"  ></td>
+                                            <td colspan="2"><input name="email" type="email" readonly required class="textbox" value="${currentEmployee.getEmail()}"  ></td>
                                         </tr>
 
                                         <tr>
                                             <td>Password:</td>
                                             <td><input id="password" name="password" type="password" required class="textbox" value="${currentEmployee.getPassword()}" onblur="isPassword('#password', '#passwordError')" ></td>
-                                            <td><span id="passwordError"></span></td>
 
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><span id="passwordError"></span></td>
                                         </tr>
                                         <tr>
                                             <td>Confirm Password:</td>
                                             <td><input id ="confirmPassword" name="confirmPassword" type="password" required value="${currentEmployee.getPassword()}" class="textbox" onblur="areTheSame('#password', '#confirmPassword', '#confirmPasswordError')" ></td>
-                                            <td><span id="confirmPasswordError"></span></td>
+
                                         </tr>
+                                        <tr>
+                                            <td colspan="2" ><center><span  id="confirmPasswordError"></span></center></td>
+                                        </tr>
+
                                         <c:if test="${currentEmployee.getRoles().getRoleId()!=1}">
-
-                                            <td>
-                                                Garage 
-                                            </td>
-                                            <td>
-
-                                                <select name="garage" id="garage">
-                                                    <option value="-2" >No Garage</option>
-                                                    <c:forEach items="${allGarages}" var="garage">
-                                                        <option value="${garage.getGarageId()}" <c:if test="${currentEmployee.getGarage().getGarageId()==garage.getGarageId()}" > selected </c:if> >${garage.getTitle()}</option>
-                                                    </c:forEach>
-                                            </td>
+                                            <tr>
+                                                <td>
+                                                    Garage 
+                                                </td>
+                                                <td>
+                                                    <select name="garage" id="garage">
+                                                        <option value="-2" >No Garage</option>
+                                                        <c:forEach items="${allGarages}" var="garage">
+                                                            <option value="${garage.getGarageId()}" <c:if test="${currentEmployee.getGarage().getGarageId()==garage.getGarageId()}" > selected </c:if> >${garage.getTitle()}</option>
+                                                        </c:forEach>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td>
                                                     Active
@@ -127,15 +135,10 @@
                                                 </tr>
                                         </c:if>
                                         <tr>
-                                            <td><input type="button"  value="Save Changes" onclick="submitMethod()"/></td>
+                                            <td></td><td colspan="2"><input type="button" class="button"  value="Save Changes" onclick="submitMethod()"/></td>
                                         </tr>
                                     </table>
                                 </form>
-
-
-
-
-
                             </center>
                         </div>
                     </div>

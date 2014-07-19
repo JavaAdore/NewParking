@@ -33,23 +33,34 @@
                     <div id="page" class="5grid-layout">
                         <div id="page-content-wrapper">
                             <form method="post" action="RemoveAdminServlet" id="removeadminform">
+                                <table>
+                                    <tr>
+                                        <td>
+                                    <center> <c:out value="${error.getErrorBody()}"/></center>
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <select  id='adminInfo' name='adminInfo'>
+
+                                                <c:forEach items="${employees}" var="tempEmp">
+                                                    <c:if test="${(tempEmp.getEmployeeId() != emp.getEmployeeId())&&tempEmp.getActive()==1}">
+                                                        <option value="${tempEmp.getEmployeeId()}">${tempEmp.getEmail()}</option>
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${numberOfInActiveEmployees==numberOfEmployees || (employees.size()==1)}">
+                                                    <option value="-1">currently their is no active employees</option>
+
+                                                </c:if>
+                                            </select>
+                                            <input type="button" id="myButton3" value="Deactivate" onclick="submitMethod()" />
 
 
-                                <select  id='adminInfo' name='adminInfo'>
-
-                                    <c:forEach items="${employees}" var="tempEmp">
-                                        <c:if test="${tempEmp.getEmployeeId() != emp.getEmployeeId()}">
-                                            <option value="${tempEmp.getEmployeeId()}">${tempEmp.getEmail()}</option>
-                                        </c:if>
-                                    </c:forEach>
-                                    <c:if test="${employees.size()==1}">
-                                        <option value="-1">Currently their is no employees</option>
-                                    </c:if>
-                                </select>
-                                <input type="button" id="myButton3" value="Delete Employee" onclick="submitMethod()" />
-
+                                        </td>
+                                    </tr>                    
+                                </table>  
                             </form>
-                            <center> <c:out value="${error.getErrorBody()}"/></center>
+
                         </div>
                     </div>
                 </div>

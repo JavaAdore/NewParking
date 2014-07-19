@@ -1,6 +1,17 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <jsp:include page="headers/checkingPage.jsp"/>
 <head>
     <jsp:include page="headers/header.jsp"/>
+    <noscript>
+    <link rel="stylesheet" href="css/5grid/core.css" />
+    <link rel="stylesheet" href="css/5grid/core-desktop.css" />
+    <link rel="stylesheet" href="css/5grid/core-1200px.css" />
+    <link rel="stylesheet" href="css/5grid/core-noscript.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style-desktop.css" />
+    </noscript>
     <noscript>
     <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
     </noscript>
@@ -41,18 +52,18 @@
     <script src="js/customValidator.js"></script>
     <script>
 
+
         $(document).ready(function()
         {
 
 
             $.ajax({url: "InitializeReportDates", async: false, success: function(result)
                 {
-                    alert(result);
+
                     if (result.length > 1)
                     {
-
                         dateInitializer();
-                        $("#inActive").load("deActivatedPeriods.jsp");
+                       $("#feedback").load("minMaxDate.jsp");
 
                     } else
                     {
@@ -76,61 +87,64 @@
 </head>
 <body>
     <div id="page-wrapper">
-        <div id="page-bgtop">
+        <div id="page-bgtop">   
             <div id="page-bgbtm">
                 <div id="page" class="grid-layout">
                     <center>
                         <div id="page-content-wrapper">
 
+                            <span id="feedback"></span>
 
 
                             <table>
                                 <tr>
                                     <td rowspan="3">
                                         <div id="inActive">
-                                            
+
                                         </div>
                                     </td>
                                     <td>
                                         From
                                     </td>
                                     <td>
-                                        <input  id='fromPeriod' type='text' onchange="isAReportDate('#fromPeriod', '#fromDateError')" />
+                                        <input  readonly id='fromPeriod' type='text' onchange="isAReportDate('#fromPeriod', '#fromDateError')" />
                                     </td>    
-                                    <td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
                                         <span id="fromDateError"></span> 
-                                    </td>    
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         To 
                                     </td>
                                     <td>
-                                        <input id='toPeriod' type='text' onchange="isAReportDate('#toPeriod', '#toDateError')" />
+                                        <input readonly id='toPeriod' type='text' onchange="isAReportDate('#toPeriod', '#toDateError')" />
                                     </td>  
-                                    <td>
 
-                                        <span id="toDateError">
-
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <span id="toDateError"></span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2">
+                                    <td colspan="3">
 
-                                <center>  <input type = 'button' value = 'view report' onclick="viewReport('#fromPeriod', '#toPeriod', '#fromDateError', '#toDateError')" /></center>
+                                <center>  <input type = 'button'  id="myButton4" value = 'view report' onclick="viewReport('#fromPeriod', '#toPeriod', '#fromDateError', '#toDateError')" /></center>
 
                                 </td>
                                 </tr>
                             </table>
-                            <span id="feedback"></span>
+                           
 
 
                             <div id="reportBodyDiv">
 
                             </div>
-                            <div id="chartDiv">
 
-                            </div>
                             <div id="theChart"></div>
 
                     </center>

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import pojo.GarageStatus;
-import reportsClasses.ReportHistoryRecord;
+import report.ReportHistoryRecord;
 import utils.CustomDate;
 import utils.EmployeeWrapper;
 import utils.Utils;

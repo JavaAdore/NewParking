@@ -75,7 +75,7 @@ public class LoginServlet extends HttpServlet {
                 } else {
                     initializeReport(request, response);
                     request.getSession().setAttribute("defaultPage", Constants.GARAGE_ADMIN_DEFAULT_PAGE);
-                    response.sendRedirect("editprofile.jsp");
+                    response.sendRedirect("viewreport.jsp");
                 }
 
             } else {
@@ -83,7 +83,7 @@ public class LoginServlet extends HttpServlet {
                     ErrorMessage error = new ErrorMessage("sorry you has not assigned to a garage yet");
                     request.setAttribute("error", error);
                     request.getRequestDispatcher("accountant.jsp").forward(request, response);
-                } else if (employee.getGarage().getEnabled() == 0) {
+                } else if (GarageImp.getInstance().getGarage(employee.getGarage().getGarageId()).getEnabled() == 0) {
                     request.setAttribute("error", new ErrorMessage("Sorry the garage you are assigned to is deactevated"));
                     request.getRequestDispatcher("login.jsp").forward(request, response);
                 } else {

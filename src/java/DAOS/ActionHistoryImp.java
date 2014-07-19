@@ -8,6 +8,7 @@ import Sessions.ConnectionHandler;
 import java.util.ArrayList;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import pojo.AdminsActions;
 
 /**
@@ -20,8 +21,9 @@ public class ActionHistoryImp {
 
     public int addActionHistory(pojo.AdminsActions action) {
         int result = 0;
+        Transaction actionHistoryTransaction = actionHistorySession.beginTransaction();
         try {
-            actionHistorySession.beginTransaction();
+
             {
 
                 actionHistorySession.save(action);
@@ -31,7 +33,9 @@ public class ActionHistoryImp {
             result = -1;
 
         } finally {
-            actionHistorySession.getTransaction().commit();
+            if (actionHistoryTransaction!=null) {
+                actionHistoryTransaction.commit();
+            }
         }
         return result;
     }
@@ -45,7 +49,7 @@ public class ActionHistoryImp {
         ArrayList<AdminsActions> whatHappendToMe = null;
         try {
             Query q = actionHistorySession.createQuery("from ActionHistory where employee=:employee");
-            q.setParameter("employee",  EmployeesImp.getInstance().getEmployee(employeeId));
+            q.setParameter("employee", EmployeesImp.getInstance().getEmployee(employeeId));
             whatHappendToMe = (ArrayList<AdminsActions>) q.list();
 
         } catch (Exception ex) {
@@ -59,7 +63,7 @@ public class ActionHistoryImp {
         ArrayList<AdminsActions> whatIDid = null;
         try {
             Query q = actionHistorySession.createQuery("from ActionHistory where admin=:admin");
-            q.setParameter("admin",  EmployeesImp.getInstance().getEmployee(adminId));
+            q.setParameter("admin", EmployeesImp.getInstance().getEmployee(adminId));
             whatIDid = (ArrayList<AdminsActions>) q.list();
 
         } catch (Exception ex) {

@@ -17,7 +17,7 @@ import org.hibernate.Session;
  *
  * @author Mahmoud Eltaieb
  */
-public class RoleImp implements RolesDAO {
+public class RoleImp {
 
     static Session RoleSession = ConnectionHandler.getRoleSession();
     // will be called only within another session so it's not supposed to 

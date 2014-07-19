@@ -8,6 +8,7 @@ package DAOS;
  *
  * @author orcl
  */
+import static DAOS.GarageSlotImp.garageSession;
 import Sessions.ConnectionHandler;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -39,8 +40,9 @@ public class UserImp {
 
     public int register(Users user) {
         int result = 0;
+        Transaction registerTransaction = null;
         try {
-            userSession.beginTransaction();
+            registerTransaction = userSession.beginTransaction();
             Query q = userSession.createQuery("from Users where upper(email) like ?");
             q.setString(0, user.getEmail().toUpperCase());
             Users u = (Users) q.uniqueResult();
@@ -62,7 +64,9 @@ public class UserImp {
         } catch (Exception ex) {
             return -1;
         } finally {
-            userSession.getTransaction().commit();
+            if (registerTransaction != null) {
+                registerTransaction.commit();
+            }
 
         }
         return result;
@@ -114,9 +118,9 @@ public class UserImp {
                 visit = new Visit(garage, user);
 
             }
-            userSession.beginTransaction();
+            Transaction addVisitTransaction = userSession.beginTransaction();
             userSession.persist(visit);
-            userSession.getTransaction().commit();
+            addVisitTransaction.commit();
 
         } catch (Exception ex) {
             result = -1;
@@ -125,7 +129,7 @@ public class UserImp {
     }
 
     public int updateProfile(Users user) {
-        Transaction beginTransaction = userSession.beginTransaction();
+        Transaction updateProfileTransaction = userSession.beginTransaction();
 
         Users u = (Users) userSession.get(Users.class, user.getUserId());
 
@@ -154,8 +158,8 @@ public class UserImp {
             ex.printStackTrace();
             return -1;
         } finally {
-            if (beginTransaction != null) {
-                beginTransaction.commit();
+            if (updateProfileTransaction != null) {
+                updateProfileTransaction.commit();
 
             }
 
@@ -221,9 +225,9 @@ public class UserImp {
 
     public int addApplicationFeedback(ApplicationFeedback applicationFeedback) {
         try {
-            Transaction beginTransaction = userSession.beginTransaction();
+            Transaction addApplicationFeedbackTransaction = userSession.beginTransaction();
             userSession.persist(applicationFeedback);
-            beginTransaction.commit();
+            addApplicationFeedbackTransaction.commit();
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -234,9 +238,33 @@ public class UserImp {
 
     }
 
+    public boolean deleteFeedback(int feedbackId) {
+        boolean result = true;
+        try {
+
+            Transaction beginTransaction = userSession.beginTransaction();
+            Query query = userSession.createQuery("delete from ApplicationFeedback where id = :id");
+            query.setParameter("id", feedbackId);
+            query.executeUpdate();
+            if (beginTransaction != null) {
+                beginTransaction.commit();
+            }
+
+        } catch (Exception ex) {
+
+            result = false;
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
 
         new UserImp().addApplciationFeedback(8, "Your application is so bad");
+
+    }
+
+    public int addVisit(Users users, String slotid) {
+        return addVisit(users, GarageImp.getInstance().getGarageStatus(slotid).getGarage());
 
     }
 }

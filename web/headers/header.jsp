@@ -3,9 +3,10 @@
     Created on : Jun 1, 2014, 8:22:14 AM
     Author     : orcl
 --%>
+<link rel="shortcut icon" type="image/x-icon" href="js/icon.png" />`
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<link rel="stylesheet" href="css/CustomStyle.css" />
 
 <noscript>
 <meta http-equiv="refresh" content="0; url=enablejavascript.jsp" />
@@ -45,8 +46,20 @@
 <script src="js/ui/jquery.ui.widget.js"></script>
 <script src="js/ui/jquery.ui.datepicker.js"></script>
 <script src="js/customValidator.js"></script>
+<script src="css/ScrollableTable/scripts/jquery.min.js" type="text/javascript"></script>
+<script src="css/ScrollableTable/scripts/jquery-makeTableScrollable.js" type="text/javascript"></script>
 
+<noscript>
+<link rel="stylesheet" href="css/5grid/core.css" />
+<link rel="stylesheet" href="css/5grid/core-desktop.css" />
+<link rel="stylesheet" href="css/5grid/core-1200px.css" />
+<link rel="stylesheet" href="css/5grid/core-noscript.css" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/style-desktop.css" />
+</noscript>
 
+<script src="css/5grid/jquery.js"></script>
+<script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
 <style>
     .active
     {
