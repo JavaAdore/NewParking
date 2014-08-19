@@ -27,7 +27,7 @@
         }
         return "";
     }
-    setInterval("checkCookie()", "1");
+    setInterval("checkCookie()", "10");
     function checkCookie()
     {  
         if (getCookie('seal').length === 0)

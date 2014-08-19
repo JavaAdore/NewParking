@@ -24,6 +24,8 @@ import pojo.ContactNumber;
 import pojo.DailyHistory;
 import pojo.EmailAddress;
 import pojo.Employees;
+import pojo.FaxContact;
+import pojo.Feedback;
 import pojo.Garage;
 import pojo.GarageStatus;
 import pojo.Map;
@@ -313,16 +315,16 @@ public class Utils {
             if (emp == null) {
                 System.out.println("this is no current employee");
                 result = false;
-              //  throw new exceptions.CurrentClientNotAvailable();
+                //  throw new exceptions.CurrentClientNotAvailable();
             } else {
                 Employees employee = empDao.getEmployee(emp.getEmployeeId());
                 if (employee == null) {
                     result = false;
-                //    throw new exceptions.CurrentClientNotAvailable();
+                    //    throw new exceptions.CurrentClientNotAvailable();
                 } else {
                     if (employee.getActive() == 0) {
                         result = false;
-                //        throw new exceptions.CurrentClientNotAvailable();
+                        //        throw new exceptions.CurrentClientNotAvailable();
 
                     }
 
@@ -630,7 +632,39 @@ public class Utils {
             for (ContactNumber contactNumber : garage.getContactNumbers()) {
                 stringBuilder.append(String.format("<tr id=%s >", contactNumber.getId()));
                 stringBuilder.append(String.format("<td>%s</td>", contactNumber.getPhoneNumber()));
-                stringBuilder.append(String.format("<td><button class=%s onclick=%s(%s,d)> Delete </button> </td>", deleteButtonFormatingClass, deleteButtonMethod, contactNumber.getId()));
+                stringBuilder.append(String.format("<td><button class=%s onclick=%s(%s,'d')> Delete </button> </td>", deleteButtonFormatingClass, deleteButtonMethod, contactNumber.getId()));
+                stringBuilder.append(String.format("</tr>"));
+            }
+        }
+        return stringBuilder.toString();
+
+    }
+
+    public static String loadFaxList(int garageId, String deleteButtonFormatingClass, String deleteButtonMethod) {
+        Garage garage = GarageImp.getInstance().getGarage(garageId);
+        StringBuilder stringBuilder = new StringBuilder();
+        if (garage != null) {
+
+            for (FaxContact faxContact : garage.getFaxNumbers()) {
+                stringBuilder.append(String.format("<tr id=%s >", faxContact.getId()));
+                stringBuilder.append(String.format("<td>%s</td>", faxContact.getFaxNumber()));
+                stringBuilder.append(String.format("<td><button class=%s onclick=%s(%s,'d')> Delete </button> </td>", deleteButtonFormatingClass, deleteButtonMethod, faxContact.getId()));
+                stringBuilder.append(String.format("</tr>"));
+            }
+        }
+        return stringBuilder.toString();
+
+    }
+
+    public static String loadEmailList(int garageId, String deleteButtonFormatingClass, String deleteButtonMethod) {
+        Garage garage = GarageImp.getInstance().getGarage(garageId);
+        StringBuilder stringBuilder = new StringBuilder();
+        if (garage != null) {
+
+            for (EmailAddress emailAddress : garage.getEmails()) {
+                stringBuilder.append(String.format("<tr id=%s >", emailAddress.getId()));
+                stringBuilder.append(String.format("<td>%s</td>", emailAddress.getEmail()));
+                stringBuilder.append(String.format("<td><button class=%s onclick=%s(%s,'d')> Delete </button> </td>", deleteButtonFormatingClass, deleteButtonMethod, emailAddress.getId()));
                 stringBuilder.append(String.format("</tr>"));
             }
         }
@@ -647,6 +681,25 @@ public class Utils {
         }
         System.out.println("number Of Inactive employees = " + counter);
         return counter;
+    }
+
+    public static String loadFeedback(int garageId, String deleteButtonFormatingClass, String deleteButtonMethod) {
+        Garage garage = GarageImp.getInstance().getGarage(garageId);
+        StringBuilder stringBuilder = new StringBuilder();
+        if (garage != null) {
+
+            for (Feedback feedback : garage.getFeedbacks()) {
+                stringBuilder.append(String.format("<tr id=%s >", feedback.getId()));
+                stringBuilder.append(String.format("<td><textArea class='feedbackBody'>%s</textArea></td>", feedback.getFeedbackBody()));
+                stringBuilder.append(String.format("<td>%s</td>", feedback.getFeedbackDate()));
+                stringBuilder.append(String.format("<td><button class=%s onclick=%s(%s,'d')> Delete </button> </td>", deleteButtonFormatingClass, deleteButtonMethod, feedback.getId()));
+                stringBuilder.append(String.format("<td><textArea class='feedbackBody'>%s</textArea></td>", feedback.getFeedbackBody()));
+
+                stringBuilder.append(String.format("</tr>"));
+            }
+        }
+        return stringBuilder.toString();
+
     }
 
     public static String isDateBetween(Date date, Date date1, Date date2) {

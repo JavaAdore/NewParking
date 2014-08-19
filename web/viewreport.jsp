@@ -52,6 +52,7 @@
                     {
 
                         dateInitializer();
+                        $("#inActive").load("deActivatedPeriods.jsp");
 
                     } else
                     {
@@ -85,6 +86,11 @@
 
                             <table>
                                 <tr>
+                                    <td rowspan="3">
+                                        <div id="inActive">
+                                            
+                                        </div>
+                                    </td>
                                     <td>
                                         From
                                     </td>

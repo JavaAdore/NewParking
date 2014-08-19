@@ -194,55 +194,47 @@
 </style>
 
 <script>
-    deleteButtonFormatingClass = "handleContactNumber";
-    deleteButtonMethod = "handleContactNumber";
+    deleteButtonFormatingClass = "deleteFeedback";
+    deleteButtonMethod = "deleteFeedback";
     $(document).ready(function()
 
     {
-        loadData();
+        loadEmailData();
 
     });
 
-    function loadData()
+    function loadAllFeedback()
     {
 
         $.ajax(
-                {url: "GetContactList", async: false, data: 'deleteButtonFormatingClass=deleteButtonFormatingClass&deleteButtonMethod=handleContactNumber&identifier=p', success: function(result)
+                {url: "GetFeedback", async: false, data: 'deleteButtonFormatingClass=deleteFeedback&deleteButtonMethod=deleteFeedback', success: function(result)
                     {
-                        
-                        $('#contactTable').html("<tr><td colspan='2'><input type='text'  id='contact'><input onclick=handleContactNumber($('#contact').val(),'a','phone') type='button'  value='add'/></td></tr><tr><td>Phone Number</td><td>Action</td></tr>" + result);
+
+                        $('#feedbackTable').html("<tr><td colspan='2'><tr><td>Feedback</td><td>Action</td></tr>" + result);
                     }
                 });
     }
 
-    function handleContactNumber(x,q)
+    function deleteFeedback(x)
     {
         $.ajax(
-                {url: "ContactHandler", async: false, data: 'contact='+x+'&qualifier='+q+"&type=phone", success: function(result)
+                {url: "FeedbackHandler", async: false, data: 'feedbackId=' + x, success: function(result)
                     {
-                        loadData();
+                        loadAllFeedback();
 
                     }
                 });
     }
-    
-   
+
+
 
 </script>
 <div class="CSSTableGenerator" >
-    <table id="contactTable" >
-        <tr>
-            <td colspan="2">
-                <input type="text" id="contact">
-
-                <input type="button"   onclick="handleContactNumber($('#contact').val(),'a','phone')" value="Add"/>
-            </td>
-
-
-        </tr>
+    <table id="GetFeedback" >
+       
         <tr>
             <td>
-                Phone Number 
+                Feedback
             </td>
             <td>
                 Action

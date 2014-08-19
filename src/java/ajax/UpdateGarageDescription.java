@@ -5,6 +5,7 @@
  */
 package ajax;
 
+import DAOS.GarageImp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -17,7 +18,7 @@ import utils.EmployeeWrapper;
  *
  * @author orcl
  */
-public class GetContactList extends HttpServlet {
+public class UpdateGarageDescription extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,28 +33,13 @@ public class GetContactList extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            String desc = request.getParameter("desc");
             EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-            String deleteButtonFormatingClass = request.getParameter("deleteButtonFormatingClass");
-            String deleteButtonMethod = request.getParameter("deleteButtonMethod");
-            String identifier = request.getParameter("identifier");
-            try {
-                switch (identifier) {
-                    case "p":
-                        out.print(utils.Utils.loadContacts(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
-                        break;
-                    case "f":
-                        out.print(utils.Utils.loadFaxList(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
+            if (emp != null && desc != null) {
 
-                        break;
-                    case "e":
-                        out.print(utils.Utils.loadEmailList(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
-
-                        break;
-                }
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                out.print(ex.getMessage());
+                out.print(GarageImp.getInstance().updateMyGarageDescreption(emp, desc));
+                emp.setGarage(GarageImp.getInstance().getGarage(emp.getGarage().getGarageId()));
+                request.getSession().setAttribute("emp", emp);
             }
 
         }

@@ -1,4 +1,5 @@
 <jsp:include page="headers/checkingPage.jsp"/>
+<jsp:include page="headers/header.jsp"/>
 <%-- 
     Document   : addgarage
     Created on : Mar 29, 2014, 9:09:49 PM
@@ -27,9 +28,10 @@
         </noscript> 
         <script src="css/5grid/jquery.js"></script>
         <!--        <script src="js/theMap.js"></script>-->
-        <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none">
+        <script src="css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none"></script>
 
-        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+
         <script src="js/customValidator.js"></script>
         <style>
 
@@ -95,25 +97,27 @@
 
 
         </style>
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 
 
         <script>
 
             var globalMap;
-
-
             var map;
             var mapOptions;
+            var lat = ${currentGarage.getLat()};
+            var lon = ${currentGarage.getLon()};
+            var myMap = new google.maps.LatLng(lat, lon);
             function initialize() {
-                var lat = ${currentGarage.getLat()};
-                var lon = ${currentGarage.getLon()};
+
                 mapOptions = {
-                    center: new google.maps.LatLng(lat, lon),
-                    zoom: 21
+                    zoom: 19,
+                    center: new google.maps.LatLng(lat+.0009, lon-.0025),
+                    
+                    mapTypeId: 'satellite'
                 };
                 map = new google.maps.Map(document.getElementById('map-canvas'),
                         mapOptions);
+
                 var input = /** @type {HTMLInputElement} */(
                         document.getElementById('pac-input'));
 
@@ -169,13 +173,13 @@
                 });
                 google.maps.event.addListener(map, 'zoom_changed', function() {
                     var zoomLevel = map.getZoom();
+
                     $('#latMap').val(map.getCenter().lat());
                     $('#lonMap').val(map.getCenter().lng());
                     infowindow.setContent('Zoom: ' + zoomLevel);
                 });
 
-                // Sets a listener on a radio button to change the filter type on Places
-                // Autocomplete.
+
                 function setupClickListener(id, types) {
                     var radioButton = document.getElementById(id);
                     google.maps.event.addDomListener(radioButton, 'click', function() {
@@ -205,31 +209,12 @@
 
             google.maps.event.addDomListener(window, 'load', initialize);
 
-            function getZoomLevel()
-            {
-
-
-
-
-
-            }
             function submitMethod()
             {
-//                isGarageNameAvailable('#garageTitle', '#garageTitleError');
-                isAnumber('#height', '#heightError', 0, 1000);
-//                isText('#country', '#countryError');
-//                 isText('#city', '#cityError');
-//                isImage('#file', '#fileError');
-//                isAnumber('#width', '#width', 0, 1000);
-//                isAnumber('#height', '#heightError', 0, 1000);
-//                isAnumber('#lngMap', '#lngMapError', -90, 90);
-//                isAnumber('#latMap', '#latMapError', -90, 90);
-//                isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000);
-//                isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000);
-//                isAnumber('#hourRateOutOfRushHours', '#hourRateOutOfRushHoursError', 0, 1000);
-                if (isTextWithSpace('#garageTitle', '#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000)  && isImageAcceptNull('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 3000) && isAnumber('#height', '#heightError', 0, 3000) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
+
+                if (isGarageNameAvailableForUpdate('#garageTitle',${currentGarage.getGarageId()} ,'#garageTitleError') && isAnumber('#hourRateInRushHours', '#hourRateInRushHoursError', 0, 1000) && isImageAcceptNull('#file', '#fileError') && isAnumber('#width', '#widthError', 0, 3000) && isAnumber('#height', '#heightError', 0, 3000) && isAnumber('#lngMap', '#lngMapError', -90, 90) && isAnumber('#latMap', '#latMapError', -90, 90))
                 {
-                    if (map.getMapTypeId() == "hybrid")
+                    if (map.getMapTypeId() == "satellite")
                     {
 
                         if (map.getZoom() !== 19)
@@ -241,14 +226,10 @@
                             $("#editGarageForm").submit();
 
                         }
-
                     } else
                     {
-
-
                         if (map.getZoom() !== 21)
                         {
-
                             return false;
                         } else
                         {
@@ -273,7 +254,7 @@
     <body class = "column2" >
 
 
-        <jsp:include page="headers/header.jsp"/>
+
         <div id = "page-wrapper" >
             <div id = "page-bgtop" >
                 <div id = "page-bgbtm" >
@@ -303,7 +284,7 @@
                                         </tr>
                                         <tr>
                                             <td > Garage Title </td>
-                                            <td > <input id="garageTitle" required  type = "text"  value="${currentGarage.getTitle()}" name = "title" onblur="isTextWithSpace('#garageTitle', '#garageTitleError')" /> </td>
+                                            <td > <input id="garageTitle" required  type = "text"  value="${currentGarage.getTitle()}" name = "title" onblur="isGarageNameAvailableForUpdate('#garageTitle',${currentGarage.getGarageId()} ,'#garageTitleError')" /> </td>
                                             <td>  <span id="garageTitleError" > </span></td>
 
 
@@ -382,7 +363,6 @@
                                         </tr>
                                         <tr>
                                             <td > <input type = "button" value = "update" id = "myButton1" onclick = "submitMethod()" /> </td>
-                                            <!--                                            <td > <input type = "reset" value = "Cancel" id = "myButton2"  /> </td>-->
                                         </tr>
 
                                     </table>

@@ -17,7 +17,7 @@ import utils.EmployeeWrapper;
  *
  * @author orcl
  */
-public class GetContactList extends HttpServlet {
+public class GetFeedback extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,25 +35,8 @@ public class GetContactList extends HttpServlet {
             EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
             String deleteButtonFormatingClass = request.getParameter("deleteButtonFormatingClass");
             String deleteButtonMethod = request.getParameter("deleteButtonMethod");
-            String identifier = request.getParameter("identifier");
-            try {
-                switch (identifier) {
-                    case "p":
-                        out.print(utils.Utils.loadContacts(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
-                        break;
-                    case "f":
-                        out.print(utils.Utils.loadFaxList(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
-
-                        break;
-                    case "e":
-                        out.print(utils.Utils.loadEmailList(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
-
-                        break;
-                }
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                out.print(ex.getMessage());
+            if (emp != null) {
+                out.print(utils.Utils.loadFeedback(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
             }
 
         }

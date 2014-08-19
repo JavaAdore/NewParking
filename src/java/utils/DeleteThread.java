@@ -27,51 +27,36 @@ public class DeleteThread {
 
         new Thread() {
             public void run() {
-//                for (;;)
-                {
-                    try {
-                        new Thread() {
-                            public void run() {
-                                try {
-                                    Date date = new Date();
-                                    GarageImp garageImpInstance = GarageImp.getInstance();
-                                    EmployeesImp employeesImpInstance = EmployeesImp.getInstance();
+                try {
+                    for (;;) {
+                        Date date = new Date();
+                        GarageImp garageImpInstance = GarageImp.getInstance();
+                        EmployeesImp employeesImpInstance = EmployeesImp.getInstance();
 
-                                    for (DeleteGarageSchedule deleteGarageSchedule : garageImpInstance.getDeleteGarageSchedule()) {
-                                        if (date.after(deleteGarageSchedule.getDeleteDate())) {
-                                            garageImpInstance.deleteGarage(deleteGarageSchedule.getGarageId());
-                                        }
-                                    }
-                                    for (DeleteEmployeeSchedule deleteEmployeeSchedule : employeesImpInstance.getDeleteEmployeeSchedule()) {
-                                        if (date.after(deleteEmployeeSchedule.getDeleteDate())) {
-                                            employeesImpInstance.deleteMemember(deleteEmployeeSchedule.getEmployeeId());
-                                        }
-
-                                    }
-
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
-                                }
-                                System.out.println("deleting thread is running dude");
+                        for (DeleteGarageSchedule deleteGarageSchedule : garageImpInstance.getDeleteGarageSchedule()) {
+                            System.out.println("garage "+deleteGarageSchedule.getDeleteDate().toGMTString() + " " + date.toGMTString());
+                            if (date.after(deleteGarageSchedule.getDeleteDate())) {
+                                garageImpInstance.deleteGarage(deleteGarageSchedule.getGarageId());
                             }
-                        }.start();
-                        //86400000 
-                        sleep(6000);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                        }
+                        for (DeleteEmployeeSchedule deleteEmployeeSchedule : employeesImpInstance.getDeleteEmployeeSchedule()) {
+                            System.out.println("Employee "+deleteEmployeeSchedule.getDeleteDate().toGMTString() + " " + date.toGMTString());
 
+                            if (date.after(deleteEmployeeSchedule.getDeleteDate())) {
+                                employeesImpInstance.deleteMemember(deleteEmployeeSchedule.getEmployeeId());
+                            }
+
+                        }
+                        sleep(86400000);
+                        //sleep(6000);
                     }
 
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-
+                System.out.println("deleting thread is running dude");
             }
-
         }.start();
-    }
-
-    public static void main(String[] args) {
-        new DeleteThread();
 
     }
-
 }

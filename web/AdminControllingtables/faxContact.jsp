@@ -194,33 +194,33 @@
 </style>
 
 <script>
-    deleteButtonFormatingClass = "handleContactNumber";
-    deleteButtonMethod = "handleContactNumber";
+    deleteButtonFormatingClass = "handleFaxNumber";
+    deleteButtonMethod = "handleFaxNumber";
     $(document).ready(function()
 
     {
-        loadData();
+        loadFaxData();
 
     });
 
-    function loadData()
+    function loadFaxData()
     {
 
         $.ajax(
-                {url: "GetContactList", async: false, data: 'deleteButtonFormatingClass=deleteButtonFormatingClass&deleteButtonMethod=handleContactNumber&identifier=p', success: function(result)
+                {url: "GetContactList", async: false, data: 'deleteButtonFormatingClass=deleteButtonFormatingClass&deleteButtonMethod=handleFaxNumber&identifier=f', success: function(result)
                     {
                         
-                        $('#contactTable').html("<tr><td colspan='2'><input type='text'  id='contact'><input onclick=handleContactNumber($('#contact').val(),'a','phone') type='button'  value='add'/></td></tr><tr><td>Phone Number</td><td>Action</td></tr>" + result);
+                        $('#faxTable').html("<tr><td colspan='2'><input type='text'  id='fax'><input onclick=handleFaxNumber($('#fax').val(),'a','fax') type='button'  value='add'/></td></tr><tr><td>Fax Number</td><td>Action</td></tr>" + result);
                     }
                 });
     }
 
-    function handleContactNumber(x,q)
+    function handleFaxNumber(x,q)
     {
         $.ajax(
-                {url: "ContactHandler", async: false, data: 'contact='+x+'&qualifier='+q+"&type=phone", success: function(result)
+                {url: "ContactHandler", async: false, data: 'contact='+x+'&qualifier='+q+"&type=fax", success: function(result)
                     {
-                        loadData();
+                        loadFaxData();
 
                     }
                 });
@@ -230,19 +230,19 @@
 
 </script>
 <div class="CSSTableGenerator" >
-    <table id="contactTable" >
+    <table id="faxTable" >
         <tr>
             <td colspan="2">
-                <input type="text" id="contact">
+                <input type="text" id="fax">
 
-                <input type="button"   onclick="handleContactNumber($('#contact').val(),'a','phone')" value="Add"/>
+                <input type="button"   onclick="handleFaxNumber($('#fax').val(),'a','fax')" value="Add"/>
             </td>
 
 
         </tr>
         <tr>
             <td>
-                Phone Number 
+                Fax Number 
             </td>
             <td>
                 Action

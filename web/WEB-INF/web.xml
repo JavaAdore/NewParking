@@ -132,6 +132,26 @@
         <servlet-name>InitializeReportDates</servlet-name>
         <servlet-class>ajax.InitializeReportDates</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CheckGarageName</servlet-name>
+        <servlet-class>ajax.CheckGarageName</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateGarageDescription</servlet-name>
+        <servlet-class>ajax.UpdateGarageDescription</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateGarageWebsite</servlet-name>
+        <servlet-class>ajax.UpdateGarageWebsite</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetFeedback</servlet-name>
+        <servlet-class>ajax.GetFeedback</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FeedbackHandler</servlet-name>
+        <servlet-class>ajax.FeedbackHandler</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -260,6 +280,26 @@
         <servlet-name>InitializeReportDates</servlet-name>
         <url-pattern>/InitializeReportDates</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckGarageName</servlet-name>
+        <url-pattern>/CheckGarageName</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateGarageDescription</servlet-name>
+        <url-pattern>/UpdateGarageDescription</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateGarageWebsite</servlet-name>
+        <url-pattern>/UpdateGarageWebsite</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetFeedback</servlet-name>
+        <url-pattern>/GetFeedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedbackHandler</servlet-name>
+        <url-pattern>/FeedbackHandler</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -299,7 +339,7 @@
     <filter-mapping>
         <filter-name>sessionFilter</filter-name>
         <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher> 
+        <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
     <welcome-file-list>

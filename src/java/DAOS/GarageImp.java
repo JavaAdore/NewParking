@@ -36,6 +36,7 @@ import pojo.YearlyHistory;
 import utils.AboutUs;
 import utils.Constants;
 import utils.CoordinateHelper;
+import utils.EmployeeWrapper;
 import utils.GarageUtils;
 import utils.GeoLocation;
 import utils.Regex;
@@ -48,7 +49,6 @@ import utils.WrappedGarageSlotsStatus;
  */
 public class GarageImp {
 
-    private final Session garageSession = ConnectionHandler.getGarageSession();
     private static GarageImp instance;
 
     public static GarageImp getInstance() {
@@ -65,7 +65,7 @@ public class GarageImp {
     public Garage getGarage(int garageId) {
         Garage garage = (Garage) garageSession.get(Garage.class, garageId);
         if (garage != null) {
-//            garageSession.refresh(garage);
+            garageSession.refresh(garage);
         }
         return garage;
     }
@@ -346,9 +346,9 @@ public class GarageImp {
     }
 
     public int addContact(int garageId, String contact, String type) {
-
+        Transaction beginTransaction = null;
         try {
-            garageSession.beginTransaction();
+            beginTransaction = garageSession.beginTransaction();
             System.out.println(contact);
             Garage garage = (Garage) garageSession.get(Garage.class, garageId);
             if (garage != null) {
@@ -381,11 +381,15 @@ public class GarageImp {
                         garage.getContactNumbers().add(contactNumber);
                         break;
                 }
-                garageSession.getTransaction().commit();
+
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             return Constants.FAILED;
+        } finally {
+            if (beginTransaction != null) {
+                beginTransaction.commit();
+            }
         }
         return Constants.SUCCESS;
     }
@@ -505,26 +509,94 @@ public class GarageImp {
         return str;
     }
 
-    public int deleteContact(int id, String garage) {
+    public int deleteContact(int id, String contactId, String identifier) {
+        int result = Constants.FAILED;
         try {
-            int x = Integer.parseInt(garage);
-            return deleteContact(id, x);
+
+            int x = Integer.parseInt(contactId);
+            switch (identifier) {
+                case "phone":
+                    result = deleteContact(id, x);
+                    break;
+                case "fax":
+
+                    result = deleteFax(id, x);
+                    break;
+                case "email":
+                    result = deleteEmail(id, x);
+                    break;
+            }
         } catch (Exception ex) {
-            return -1;
+            return Constants.FAILED;
         }
+        return result;
     }
 
     public int deleteContact(int id, int x) {
         Transaction beginTransaction = null;
         try {
             beginTransaction = garageSession.beginTransaction();
-            Garage g = (Garage) garageSession.get(Garage.class, id);
-            ContactNumber temp = new ContactNumber();
-            temp.setId(x);
-            for (ContactNumber c : g.getContactNumbers()) {
-                if (c.equals(temp));
-                {
-                    garageSession.delete(c);
+            Garage garage = (Garage) garageSession.get(Garage.class, id);
+            if (garage != null) {
+                for (ContactNumber c : garage.getContactNumbers()) {
+
+                    if (c.getId() == x) {
+
+                        garageSession.delete(c);
+                    }
+
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Constants.FAILED;
+        } finally {
+            if (beginTransaction != null) {
+                beginTransaction.commit();
+            }
+            return Constants.SUCCESS;
+        }
+    }
+
+    public int deleteFax(int id, int x) {
+        Transaction beginTransaction = null;
+        try {
+            beginTransaction = garageSession.beginTransaction();
+            Garage garage = (Garage) garageSession.get(Garage.class, id);
+            if (garage != null) {
+                for (FaxContact c : garage.getFaxNumbers()) {
+
+                    if (c.getId() == x) {
+
+                        garageSession.delete(c);
+                    }
+
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Constants.FAILED;
+        } finally {
+            if (beginTransaction != null) {
+                beginTransaction.commit();
+            }
+            return Constants.SUCCESS;
+        }
+    }
+
+    public int deleteEmail(int id, int x) {
+        Transaction beginTransaction = null;
+        try {
+            beginTransaction = garageSession.beginTransaction();
+            Garage garage = (Garage) garageSession.get(Garage.class, id);
+            if (garage != null) {
+                for (EmailAddress c : garage.getEmails()) {
+
+                    if (c.getId() == x) {
+
+                        garageSession.delete(c);
+                    }
+
                 }
             }
         } catch (Exception ex) {
@@ -559,7 +631,6 @@ public class GarageImp {
 
     public static Date[] getMinAndMaxDate(int garageId) {
         return null;
-
     }
 
     public String UpdateGarageSlot(int slotid, int status) {
@@ -632,5 +703,62 @@ public class GarageImp {
         query.setParameter("garage", new Garage(garageId));
         return (ArrayList<GarageStatus>) query.list();
 
+    }
+
+    public boolean isGarageNameAvailable(String garageId, String garageName) {
+
+        Garage garage = getGarage(garageName);
+        if (garage == null) {
+            return true;
+        }
+        if (garage.getGarageId() == Integer.parseInt(garageId)) {
+            return true;
+        }
+        return false;
+    }
+
+    public int updateMyGarageDescreption(EmployeeWrapper emp, String desc) {
+        Transaction beginTransaction = null;
+        int result = Constants.SUCCESS;
+        try {
+            if (emp.getGarage() != null) {
+                beginTransaction = garageSession.beginTransaction();
+                Garage garage = (Garage) garageSession.get(Garage.class, emp.getGarage().getGarageId());
+                if (garage != null) {
+                    garage.setDescription(desc);
+                }
+
+                beginTransaction.commit();
+
+            } else {
+                result = Constants.FAILED;
+            }
+        } catch (Exception ex) {
+            result = Constants.FAILED;
+        }
+        return result;
+    }
+
+    public int updateMyGarageWebSite(EmployeeWrapper emp, String url) {
+        
+        Transaction beginTransaction = null;
+        int result = Constants.SUCCESS;
+        try {
+            if (emp.getGarage() != null) {
+                beginTransaction = garageSession.beginTransaction();
+                Garage garage = (Garage) garageSession.get(Garage.class, emp.getGarage().getGarageId());
+                if (garage != null) {
+                    garage.setWebsite(url);
+                }
+
+                beginTransaction.commit();
+
+            } else {
+                result = Constants.FAILED;
+            }
+        } catch (Exception ex) {
+            result = Constants.FAILED;
+        }
+        return result;
     }
 }

@@ -36,13 +36,9 @@ public class Home {
 
     public static void main(String[] args) {
 
-        GarageImp.getInstance().deleteGarage(186);
 
-//        List<ReportsInterface> conciseReport = ReportsImp.getInstance().getConciseReport(164);
-//        System.out.println();
-//        Date[] extractMinMaxDate = utils.Utils.extractMinMaxDate(conciseReport);
-//        List<ReportsInterface> conciseReport2 = ReportsImp.getInstance().getConciseReport(164);
-//        Date[] extractMinMaxDate1 = utils.Utils.extractMinMaxDate(conciseReport2);
+        boolean garageNameAvailable = GarageImp.getInstance().isGarageNameAvailable("243", "ss");
+        System.out.println();
     }
 }
 

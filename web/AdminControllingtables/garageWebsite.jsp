@@ -194,60 +194,41 @@
 </style>
 
 <script>
-    deleteButtonFormatingClass = "handleContactNumber";
-    deleteButtonMethod = "handleContactNumber";
-    $(document).ready(function()
 
+
+    function  updateGarageWebsite()
     {
-        loadData();
-
-    });
-
-    function loadData()
-    {
-
+        if($('#garageWebsite').val().trim().length==0)
+        {
+            
+            return false;
+        }
         $.ajax(
-                {url: "GetContactList", async: false, data: 'deleteButtonFormatingClass=deleteButtonFormatingClass&deleteButtonMethod=handleContactNumber&identifier=p', success: function(result)
+                {url: "UpdateGarageWebsite", async: false, data: 'url=' + $('#garageWebsite').val().trim(), success: function(result)
                     {
-                        
-                        $('#contactTable').html("<tr><td colspan='2'><input type='text'  id='contact'><input onclick=handleContactNumber($('#contact').val(),'a','phone') type='button'  value='add'/></td></tr><tr><td>Phone Number</td><td>Action</td></tr>" + result);
+
+                        alert(result);
                     }
                 });
-    }
 
-    function handleContactNumber(x,q)
-    {
-        $.ajax(
-                {url: "ContactHandler", async: false, data: 'contact='+x+'&qualifier='+q+"&type=phone", success: function(result)
-                    {
-                        loadData();
-
-                    }
-                });
     }
-    
-   
 
 </script>
 <div class="CSSTableGenerator" >
-    <table id="contactTable" >
+    <table id="garageDescription" >
         <tr>
             <td colspan="2">
-                <input type="text" id="contact">
+                <input type="text" id="garageWebsite" value="${emp.getGarage().getWebsite()}" />
+                    
+                   
+                
 
-                <input type="button"   onclick="handleContactNumber($('#contact').val(),'a','phone')" value="Add"/>
+                <input type="button"   onclick="updateGarageWebsite()" value="Update" />
             </td>
 
 
         </tr>
-        <tr>
-            <td>
-                Phone Number 
-            </td>
-            <td>
-                Action
-            </td>
-        </tr>
+
     </table>
 
 </div>

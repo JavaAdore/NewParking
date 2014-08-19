@@ -27,9 +27,11 @@ public class HeaderLoader {
     }
 
     private static void loadAdminHeader() {
+
         adminHeader.add(new Header("editProfile", "Edit Profile", "editprofile.jsp"));
         adminHeader.add(new Header("addEmp", "Add Emp", "addadminbyadmin.jsp"));
         adminHeader.add(new Header("removeEmp", "Remove Emp", "RemoveAdminInitializer"));
+        adminHeader.add(new Header("editGarageData", "Edit Garage Data", "editgaragedata.jsp"));
         adminHeader.add(new Header("updateSlot", "Update Slot Status", "UpdateSlotInitializer"));
         adminHeader.add(new Header("viewDetailedReport", "View Detailed Report", "viewdetailedreport.jsp"));
         adminHeader.add(new Header("viewReport", "View Report", "viewreport.jsp"));
@@ -64,8 +66,7 @@ public class HeaderLoader {
         return accountatnHeader;
     }
 
-    public static void main(String[] args) 
-    {
+    public static void main(String[] args) {
         List<Header> serviceProviderHeader1 = getServiceProviderHeader();
         List<Header> adminHeader1 = getAdminHeader();
         List<Header> accountatnHeader1 = getAccountatnHeader();

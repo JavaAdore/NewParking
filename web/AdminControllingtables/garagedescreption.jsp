@@ -194,60 +194,41 @@
 </style>
 
 <script>
-    deleteButtonFormatingClass = "handleContactNumber";
-    deleteButtonMethod = "handleContactNumber";
-    $(document).ready(function()
 
+
+    function  UpdateGarageDescription()
     {
-        loadData();
-
-    });
-
-    function loadData()
-    {
-
+        if($('#garageDesc').val().trim().length==0)
+        {
+            
+            return false;
+        }
         $.ajax(
-                {url: "GetContactList", async: false, data: 'deleteButtonFormatingClass=deleteButtonFormatingClass&deleteButtonMethod=handleContactNumber&identifier=p', success: function(result)
+                {url: "UpdateGarageDescription", async: false, data: 'desc=' + $('#garageDesc').val().trim(), success: function(result)
                     {
-                        
-                        $('#contactTable').html("<tr><td colspan='2'><input type='text'  id='contact'><input onclick=handleContactNumber($('#contact').val(),'a','phone') type='button'  value='add'/></td></tr><tr><td>Phone Number</td><td>Action</td></tr>" + result);
+
+                        alert(result);
                     }
                 });
-    }
 
-    function handleContactNumber(x,q)
-    {
-        $.ajax(
-                {url: "ContactHandler", async: false, data: 'contact='+x+'&qualifier='+q+"&type=phone", success: function(result)
-                    {
-                        loadData();
-
-                    }
-                });
     }
-    
-   
 
 </script>
 <div class="CSSTableGenerator" >
-    <table id="contactTable" >
+    <table id="garageDescription" >
         <tr>
             <td colspan="2">
-                <input type="text" id="contact">
+                <textarea id="garageDesc">
+                    
+                    ${emp.getGarage().getDescription()}
+                </textarea>
 
-                <input type="button"   onclick="handleContactNumber($('#contact').val(),'a','phone')" value="Add"/>
+                <input type="button"   onclick="UpdateGarageDescription()" value="Update" />
             </td>
 
 
         </tr>
-        <tr>
-            <td>
-                Phone Number 
-            </td>
-            <td>
-                Action
-            </td>
-        </tr>
+
     </table>
 
 </div>

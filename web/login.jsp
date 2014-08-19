@@ -82,7 +82,7 @@
             function validateUserNameAndPassword()
             {
 
-                if (isEmail('email', 'emailError') && validateLength('password', 'passwordError'))
+                if (isEmail('email', 'emailError') && isPassword('#password', '#passwordError'))
                 {
                     return true;
 

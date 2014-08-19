@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package ajax;
 
 import java.io.IOException;
@@ -11,13 +12,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import utils.EmployeeWrapper;
 
 /**
  *
  * @author orcl
  */
-public class GetContactList extends HttpServlet {
+public class FeedbackHandler extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,30 +32,16 @@ public class GetContactList extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-            String deleteButtonFormatingClass = request.getParameter("deleteButtonFormatingClass");
-            String deleteButtonMethod = request.getParameter("deleteButtonMethod");
-            String identifier = request.getParameter("identifier");
-            try {
-                switch (identifier) {
-                    case "p":
-                        out.print(utils.Utils.loadContacts(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
-                        break;
-                    case "f":
-                        out.print(utils.Utils.loadFaxList(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
-
-                        break;
-                    case "e":
-                        out.print(utils.Utils.loadEmailList(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
-
-                        break;
-                }
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                out.print(ex.getMessage());
-            }
-
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet FeedbackHandler</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet FeedbackHandler at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 

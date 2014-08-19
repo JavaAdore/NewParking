@@ -5,19 +5,19 @@
  */
 package ajax;
 
+import DAOS.GarageImp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import utils.EmployeeWrapper;
 
 /**
  *
  * @author orcl
  */
-public class GetContactList extends HttpServlet {
+public class CheckGarageName extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,30 +32,18 @@ public class GetContactList extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-            String deleteButtonFormatingClass = request.getParameter("deleteButtonFormatingClass");
-            String deleteButtonMethod = request.getParameter("deleteButtonMethod");
-            String identifier = request.getParameter("identifier");
-            try {
-                switch (identifier) {
-                    case "p":
-                        out.print(utils.Utils.loadContacts(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
-                        break;
-                    case "f":
-                        out.print(utils.Utils.loadFaxList(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
 
-                        break;
-                    case "e":
-                        out.print(utils.Utils.loadEmailList(emp.getGarage().getGarageId(), deleteButtonFormatingClass, deleteButtonMethod));
+            String garageId = request.getParameter("garageId");
+            String garageName = request.getParameter("newGarageName");
 
-                        break;
-                }
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                out.print(ex.getMessage());
+            boolean result = GarageImp.getInstance().isGarageNameAvailable(garageId, garageName);
+            if(result)
+            {
+                out.print(0);
+            }else
+            {
+                out.print(-1);
             }
-
         }
     }
 

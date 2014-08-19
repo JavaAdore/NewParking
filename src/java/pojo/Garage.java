@@ -24,10 +24,8 @@ public class Garage implements java.io.Serializable {
     @Id
     @GeneratedValue
     private int garageId;
-    private String description;
-
-    private String image;
-
+    String description;
+    String image;
     private String title;
     private double lon;
     private double lat;
@@ -122,10 +120,7 @@ public class Garage implements java.io.Serializable {
     @ElementCollection(fetch = FetchType.LAZY)
     private Collection< EmailAddress> emails = new ArrayList<>();
 
-   
-
     private double hourRateInRush;
-    
 
     public Garage() {
         this.employees = new HashSet<Employees>();
@@ -271,8 +266,6 @@ public class Garage implements java.io.Serializable {
         this.description = description;
     }
 
-   
-
     public int getEnabled() {
         return enabled;
     }
@@ -288,8 +281,6 @@ public class Garage implements java.io.Serializable {
     public void setHourRateInRush(double hourRateInRush) {
         this.hourRateInRush = hourRateInRush;
     }
-
-
 
     public int getSlotWidth() {
         return slotWidth;

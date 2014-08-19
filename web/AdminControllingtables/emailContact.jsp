@@ -194,33 +194,33 @@
 </style>
 
 <script>
-    deleteButtonFormatingClass = "handleContactNumber";
-    deleteButtonMethod = "handleContactNumber";
+    deleteButtonFormatingClass = "handleEmailAddress";
+    deleteButtonMethod = "handleEmailAddress";
     $(document).ready(function()
 
     {
-        loadData();
+        loadEmailData();
 
     });
 
-    function loadData()
+    function loadEmailData()
     {
 
         $.ajax(
-                {url: "GetContactList", async: false, data: 'deleteButtonFormatingClass=deleteButtonFormatingClass&deleteButtonMethod=handleContactNumber&identifier=p', success: function(result)
+                {url: "GetContactList", async: false, data: 'deleteButtonFormatingClass=deleteButtonFormatingClass&deleteButtonMethod=handleEmailAddress&identifier=e', success: function(result)
                     {
                         
-                        $('#contactTable').html("<tr><td colspan='2'><input type='text'  id='contact'><input onclick=handleContactNumber($('#contact').val(),'a','phone') type='button'  value='add'/></td></tr><tr><td>Phone Number</td><td>Action</td></tr>" + result);
+                        $('#emailTable').html("<tr><td colspan='2'><input type='text'  id='email'><input onclick=handleEmailAddress($('#email').val(),'a','email') type='button'  value='add'/></td></tr><tr><td>Email Address</td><td>Action</td></tr>" + result);
                     }
                 });
     }
 
-    function handleContactNumber(x,q)
+    function handleEmailAddress(x,q)
     {
         $.ajax(
-                {url: "ContactHandler", async: false, data: 'contact='+x+'&qualifier='+q+"&type=phone", success: function(result)
+                {url: "ContactHandler", async: false, data: 'contact='+x+'&qualifier='+q+"&type=email", success: function(result)
                     {
-                        loadData();
+                        loadEmailData();
 
                     }
                 });
@@ -230,19 +230,19 @@
 
 </script>
 <div class="CSSTableGenerator" >
-    <table id="contactTable" >
+    <table id="emailTable" >
         <tr>
             <td colspan="2">
-                <input type="text" id="contact">
+                <input type="text" id="email">
 
-                <input type="button"   onclick="handleContactNumber($('#contact').val(),'a','phone')" value="Add"/>
+                <input type="button"   onclick="handleEmailAddress($('#email').val(),'a')" value="Add"/>
             </td>
 
 
         </tr>
         <tr>
             <td>
-                Phone Number 
+                Email
             </td>
             <td>
                 Action

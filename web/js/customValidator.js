@@ -63,7 +63,7 @@ function isText(fieldId, fieldError)
     {
         var regex = /^[A-Za-z]+$/
 
-        if (regex.test($(fieldId).val()) && $(fieldId).val().length < 25)
+        if (regex.test($(fieldId).val()) && $(fieldId).val().trim().length < 25)
         {
             $(fieldError).html("");
 
@@ -231,6 +231,32 @@ function isGarageNameAvailable(garage, feedback)
         return flag;
     }
 }
+function isGarageNameAvailableForUpdate(garage, garageId ,feedback)
+{
+    if (isText(garage, feedback))
+    {
+        var flag = false;
+       
+        $.ajax(
+                {url: "CheckGarageName", async: false, data: 'newGarageName=' + $(garage).val()+"&garageId="+garageId, success: function(result)
+                    {
+                        switch (result)
+                        {
+                            case "0":
+                                $(feedback).html("<h3 style 'color:red'>" + $(garage).val() + " accepted</h3>");
+                                flag = true;
+                                break;
+                            case "-1" :
+                                $(feedback).html("<h3 style 'color:red'>" + $(garage).val() + " not accepted</h3>");
+
+                                flag = false;
+                        }
+                    }
+                });
+                
+        return flag;
+    }
+}
 
 function isTextWithSpace(fieldId, fieldError)
 {
@@ -238,7 +264,7 @@ function isTextWithSpace(fieldId, fieldError)
     {
         var regex = /^[A-Za-z\d\s]+$/
 
-        if (regex.test($(fieldId).val()) && $(fieldId).val().length < 25)
+        if (regex.test($(fieldId).val()) && $(fieldId).val().trim().length < 25)
         {
             $(fieldError).html("");
 

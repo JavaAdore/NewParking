@@ -26,19 +26,23 @@ public class ContactHandler extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
 
             EmployeeWrapper emp = (EmployeeWrapper) request.getSession().getAttribute("emp");
-            if (emp!=null) {
+            if (emp != null) {
                 String contact = request.getParameter("contact");
                 String contactType = request.getParameter("type");
                 String qualifier = request.getParameter("qualifier");
+
                 if (qualifier != null) {
                     switch (qualifier) {
                         case "a":
-                            if ( contact != null && contactType != null) {
+                            if (contact != null && contactType != null) {
                                 try {
                                     int gId = emp.getGarage().getGarageId();
                                     switch (contactType) {
                                         case "phone":
                                             out.print(GarageImp.getInstance().addContact(gId, contact, utils.Constants.PHONE));
+                                            break;
+                                        case "fax":
+                                            out.print(GarageImp.getInstance().addContact(gId, contact, utils.Constants.FAX));
                                             break;
                                         case "email":
                                             out.print(GarageImp.getInstance().addContact(gId, contact, utils.Constants.EMAIL));
@@ -51,9 +55,10 @@ public class ContactHandler extends HttpServlet {
                             }
                             break;
                         case "d":
-                            int result = GarageImp.getInstance().deleteContact(emp.getGarage().getGarageId(),contact);
+                            int result = GarageImp.getInstance().deleteContact(emp.getGarage().getGarageId(), contact, contactType);
                             out.print(result);
                             break;
+
                     }
                 }
             }
